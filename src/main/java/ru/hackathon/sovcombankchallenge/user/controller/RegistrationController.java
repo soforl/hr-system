@@ -1,5 +1,11 @@
 package ru.hackathon.sovcombankchallenge.user.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +26,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
+    @Operation(summary = "Registration user")
     public ResponseEntity<?> registration(@RequestBody CreateUser createUser) {
         User newUser = userService.createUser(createUser.getEmail(), createUser.getPassword());
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
