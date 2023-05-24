@@ -21,7 +21,8 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public ResponseEntity<?> registration(@RequestBody CreateUser createUser) {
-        User newUser = userService.createUser(createUser.getEmail(), createUser.getPassword());
+        User newUser = userService.createUser(createUser.getEmail(), createUser.getPassword(), createUser.getName(),
+                createUser.getPhoneNumber());
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 

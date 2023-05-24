@@ -14,6 +14,7 @@ import ru.hackathon.sovcombankchallenge.user.repository.UserRepository;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -37,8 +38,8 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public User createUser(String username, String password) {
-        var newUser = new User(username, password);
+    public User createUser(String username, String password, String name, String phoneNumber) {
+        var newUser = new User(username, password, name, phoneNumber);
         // TODO: доделать роли
 //        newUser.setRoles();
         return this.saveUser(newUser);
@@ -61,7 +62,7 @@ public class UserService implements UserDetailsService {
             return null;
         }
 
-        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        user.setRoles(Collections.singleton(new Role( "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

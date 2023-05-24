@@ -1,54 +1,34 @@
 package ru.hackathon.sovcombankchallenge.user.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    @Getter
+    @Setter
     private String name;
     @Transient
     @ManyToMany(mappedBy = "roles")
+    @Getter
+    @Setter
     private Set<User> users;
     public Role() {
     }
 
-    public Role(Long id) {
-        this.id = id;
-    }
-
-    public Role(Long id, String name) {
-        this.id = id;
+    public Role(String name) {
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<ru.hackathon.sovcombankchallenge.user.models.User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<ru.hackathon.sovcombankchallenge.user.models.User> users) {
-        this.users = users;
     }
 
     @Override
