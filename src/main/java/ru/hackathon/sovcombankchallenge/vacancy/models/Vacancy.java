@@ -8,6 +8,7 @@ import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.WorkExperience;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,4 +35,11 @@ public class Vacancy {
     @Getter
     @Setter
     private WorkExperience workExperience;
+
+    public Vacancy(String description, VacancyStatus vacancyStatus, WorkExperience workExperience) {
+        this.description = description;
+        this.vacancyStatus = vacancyStatus;
+        this.stages = new ArrayList<>();
+        this.workExperience = workExperience;
+    }
 }

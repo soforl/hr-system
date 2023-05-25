@@ -10,6 +10,7 @@ import ru.hackathon.sovcombankchallenge.user.models.User;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +29,15 @@ public class Response {
     @Getter
     @Setter
     private Vacancy vacancy;
+
+    public Response(User candidate, Vacancy vacancy) {
+        this.candidate = candidate;
+        this.vacancy = vacancy;
+        this.stageResults = new ArrayList<>();
+        this.responseStatus = ResponseStatus.Generated;
+        this.creationDate = LocalDate.now();
+    }
+
     @OneToMany(fetch = FetchType.EAGER)
     @Getter
     @Setter
