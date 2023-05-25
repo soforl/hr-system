@@ -71,7 +71,7 @@ public class HRController { // не должен ли hr быть завязан
     })
     @GetMapping("/allUsers")
     public ResponseEntity<?> getAllUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.allUsers());
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
     }
 
     @Operation(summary = "Add stage to user")

@@ -20,13 +20,13 @@ import java.util.UUID;
 @Getter
 @Setter
 public class Response {
-    //TODO: добавить вакансии список откликов, здесь прописать джойн тейбл
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @ManyToOne
     private User candidate;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "vacancy_id", nullable = false)
     private Vacancy vacancy;
 
     public Response(User candidate, Vacancy vacancy) {

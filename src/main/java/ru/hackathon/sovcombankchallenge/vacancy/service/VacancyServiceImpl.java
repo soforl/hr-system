@@ -24,10 +24,10 @@ public class VacancyServiceImpl implements VacancyService{
         vacancyRepository.save(vacancy);
     }
 
+    // TODO: реализовать после того, как будет реализован StageService
     @Override
     public void addStage(UUID vacancyId, UUID stageId) {
-//        Vacancy vacancy = this.getById(vacancyId);
-//        vacancy.getStages().add();
+        return;
     }
 
     @Override
@@ -44,9 +44,9 @@ public class VacancyServiceImpl implements VacancyService{
 
     @Override
     public List<Response> getResponsesByVacancy(UUID vacancyId) {
-//        Vacancy vacancy = this.getById(vacancyId);
-//        List<Response> responses = vacancy.
-        return null;
+        Vacancy vacancy = this.getById(vacancyId);
+        List<Response> responses = vacancy.getResponses();
+        return responses;
     }
 
     @Override

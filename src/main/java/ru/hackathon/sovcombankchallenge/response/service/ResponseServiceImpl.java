@@ -32,11 +32,4 @@ public class ResponseServiceImpl implements ResponseService{
         List<Response> responses = responseRepository.findAll();
         return responses;
     }
-
-    @Override
-    public List<Response> getResponsesByVacancy(UUID vacancyId) {
-//        Vacancy vacancy = vacancyService.getById(vacancyId);
-//        List<Response> responses = responseRepository.findAllById(vacancy);
-        return null;
-    }
 }
