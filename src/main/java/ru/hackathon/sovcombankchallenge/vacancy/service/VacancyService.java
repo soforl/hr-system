@@ -15,9 +15,9 @@ public interface VacancyService {
     void addStage(UUID vacancyId, UUID stageId);
     List<Vacancy> getAll();
     Vacancy getById(UUID vacancyId);
-    List<Response> getResponsesByVacancy(UUID vacancyId);
     List<Stage> getStages(UUID vacancyId);
     void updateStatus(UUID vacancyId, VacancyStatus status);
+    List<Response> getResponsesByVacancy(UUID vacancyId);
 //    List<Vacancy> getByStatus(VacancyStatus status);
 //    List<Vacancy> getByName(String name);
 

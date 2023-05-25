@@ -15,25 +15,19 @@ import java.util.UUID;
 @Entity
 @Table(name = "vacancies")
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class Vacancy {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @Column(name = "DESCRIPTION")
-    @Getter
-    @Setter
     private String description;
     @Column(name = "VACANCY_STATUS")
-    @Getter
-    @Setter
     private VacancyStatus vacancyStatus;
     @OneToMany(fetch = FetchType.EAGER)
-    @Getter
-    @Setter
     private List<Stage> stages;
     @Column(name = "WORK_EXPERIENCE")
-    @Getter
-    @Setter
     private WorkExperience workExperience;
 
     public Vacancy(String description, VacancyStatus vacancyStatus, WorkExperience workExperience) {

@@ -10,9 +10,9 @@ import lombok.Setter;
 @Entity
 @Table(name = "open_questions")
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class OpenQuestion extends Question {
     @Column(name = "ANSWER")
-    @Getter
-    @Setter
     private String answer;
 }

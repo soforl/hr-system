@@ -10,9 +10,9 @@ import lombok.Setter;
 @Entity
 @Table(name = "interviews")
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class Interview extends Stage {
     @Column(name = "COMMENTS")
-    @Getter
-    @Setter
     private String comments;
 }

@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface ResponseService {
     void create(UUID candidateId, UUID vacancyId);
     List<Response> getAll();
+    List<Response> getResponsesByVacancy(UUID vacancyId);
 }

@@ -11,17 +11,13 @@ import java.util.List;
 @Entity
 @Table(name = "test_stages")
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class TestStage extends Stage {
     @Column(name = "DEADLINE")
-    @Getter
-    @Setter
     private LocalDateTime deadline;
     @Column(name = "DURATION")
-    @Getter
-    @Setter
     private Duration duration;
     @OneToMany(fetch = FetchType.EAGER)
-    @Getter
-    @Setter
     private List<Question> questions;
 }
