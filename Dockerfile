@@ -1,10 +1,13 @@
-FROM maven:3.8.6-openjdk-18 AS build
-WORKDIR /build
-COPY . .
-RUN mvn clean package -DskipTests
+FROM gradle:7.5.1 AS build
+COPY --chown=gradle:gradle . /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle build --no-daemon -x test
 
 FROM openjdk:18.0.2-jdk
-WORKDIR /java
-COPY --from=build /build/target/springboot-backend-0.0.1-SNAPSHOT.jar /java/backend.jar
 EXPOSE 8080
-CMD ["java", "-jar", "/java/backend.jar"]
+RUN mkdir /backend
+#COPY --from=build /home/gradle/src/build/libs/*.jar /backend/spring-boot-application.jar
+#ENTRYPOINT ["java","-jar","/backend/spring-boot-application.jar"]
+
+COPY /build/libs/*.jar /backend/
+CMD ["java","-jar","/backend/SovcombankChallenge-0.0.1.jar"]

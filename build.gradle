@@ -2,11 +2,12 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.0'
     id 'io.spring.dependency-management' version '1.1.0'
+    id "com.palantir.docker" version "0.27.0"
 
 }
 
 group = 'ru.hackathon'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '17'
 
 configurations {
@@ -37,4 +38,20 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ru.hackathon.sovcombankchallenge.SovcombankChallengeApplication'
+    }
+}
+
+docker {
+    name "sovkombank-backend:${project.version}"
+    copySpec.with {
+        from('.') {
+            include 'build/**'
+            into '.'
+        }
+    }
 }

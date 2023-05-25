@@ -46,7 +46,7 @@ public class StageController {
                     description = "Bad Request"
             )
     })
-    @PostMapping("/createNewStageInVacancy")
+    @PostMapping("/addStageToVacancy")
     public ResponseEntity<?> addStageToVacancy(@RequestBody AddStageToVacancyDto dto){
         return null;
     }
@@ -79,7 +79,7 @@ public class StageController {
                     description = "Bad Request"
             )
     })
-    @PostMapping("/addTask")
+    @PostMapping("/addTask/open")
     public ResponseEntity<?> addQuestion(@RequestBody String question){
         return null;
     }
@@ -95,7 +95,7 @@ public class StageController {
                     description = "Bad Request"
             )
     })
-    @PostMapping("/addTask")
+    @PostMapping("/addTask/close")
     public ResponseEntity<?> addCloseAnswers(@RequestBody String answer){
         return null;
     }
