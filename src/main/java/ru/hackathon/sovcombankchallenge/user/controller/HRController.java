@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hackathon.sovcombankchallenge.user.dto.AddStageToUserDto;
 import ru.hackathon.sovcombankchallenge.user.models.User;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
 
@@ -85,7 +86,7 @@ public class HRController { // не должен ли hr быть завязан
             )
     })
     @PostMapping("/addStageToUser")
-    public ResponseEntity<?> addStageToUser(@RequestParam Long stageId,@RequestParam Long userId){
+    public ResponseEntity<?> addStageToUser(@RequestBody AddStageToUserDto dto){
         return null;
     }
 }

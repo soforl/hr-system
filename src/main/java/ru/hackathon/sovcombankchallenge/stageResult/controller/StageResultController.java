@@ -45,4 +45,23 @@ public class StageResultController {
     public ResponseEntity<?> getTestResult(@RequestParam Long responseId){
         return null;
     }
+
+    @Operation(summary = "give to User result of all tests: offer or else")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Result was found"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request"
+            )
+    })
+    @PostMapping("/giveResultToUser")
+    public ResponseEntity<?> giveResultToUser(@RequestParam Long stageResultId){
+        return null;
+    }
+
+
+
 }

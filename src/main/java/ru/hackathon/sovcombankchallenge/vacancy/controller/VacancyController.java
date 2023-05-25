@@ -8,7 +8,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hackathon.sovcombankchallenge.stage.task.dto.CreateStageDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.CreateVacancyDto;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.UpdateVacancyStatusDto;
 
 @RestController
 @RequestMapping("/api/vacancy")
@@ -51,7 +53,7 @@ public class VacancyController {
         return null;
     }
 
-    @Operation(summary = "get responses from certain vacancy")
+    @Operation(summary = "get responses for certain vacancy")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -67,6 +69,55 @@ public class VacancyController {
         return null;
     }
 
+    @Operation(summary = "get vacancy by id(when you click on button look at vacancy info)")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Vacancy info were found"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request"
+            )
+    })
+    @GetMapping("/getVacancyInfo")
+    public ResponseEntity<?> getVacancyInfo(@RequestParam Long vacancyId){
+        return null;
+    }
+
+    @Operation(summary = "get stages for certain vacancy, for example, roadmap")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Vacancies were found"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request"
+            )
+    })
+    @GetMapping("/getVacancyStages")
+    public ResponseEntity<?> getVacancyStages(@RequestParam Long vacancyId){
+        return null;
+    }
+
+    @Operation(summary = "change vacancy status")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Stage was saved"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request"
+            )
+    })
+    @PutMapping("/updateVacancyStatus")
+    public ResponseEntity<?> updateVacancyStatus(@RequestParam UpdateVacancyStatusDto dto){
+        return null;
+    }
+
+    // TODO: настроить фильтрацию нормально
     @Operation(summary = "get vacancies by status")
     @ApiResponses(value = {
             @ApiResponse(
@@ -94,24 +145,8 @@ public class VacancyController {
                     description = "Bad Request"
             )
     })
-    @GetMapping("/filterVacanciesByStatus")
+    @GetMapping("/filterVacanciesByItsName")
     public ResponseEntity<?> getVacanciesByItsName(@RequestParam String name){
-        return null;
-    }
-
-    @Operation(summary = "add new stage to vacancy")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "Stage was created"
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    @PostMapping("/createVacancyStage")
-    public ResponseEntity<?> addStageToVacancy(@RequestParam Long stageId69, @RequestParam Long vacancyId){
         return null;
     }
 
@@ -128,22 +163,6 @@ public class VacancyController {
     })
     @GetMapping("/filterVacanciesByStage")
     public ResponseEntity<?> getVacanciesByStage(@RequestParam String stage){
-        return null;
-    }
-
-    @Operation(summary = "change stage info in vacancy")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "Stage was saved"
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    @PutMapping("/changeVacancyStage")
-    public ResponseEntity<?> changeVacancyStageInfo(@RequestParam Long stageId, @RequestBody Long vacancyId){
         return null;
     }
 }
