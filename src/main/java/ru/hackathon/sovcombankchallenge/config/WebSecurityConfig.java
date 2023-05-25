@@ -17,7 +17,7 @@ public class WebSecurityConfig {
 
                 .authorizeHttpRequests((requests) -> requests
                         // Отркываю доступ к свагеру всем!
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**" ).permitAll()
+                        .requestMatchers("/swagger-ui**", "/v3/api-docs/**" ).permitAll()
                         // Доступ к контроллеру USer
                         .requestMatchers("/api/user/registration/", "/api/user/registration").permitAll()
                         // Запрещаю все остальное
