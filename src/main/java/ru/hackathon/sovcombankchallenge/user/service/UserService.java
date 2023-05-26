@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
         return this.saveUser(newUser);
     }
 
-    public User findUserById(Long userId) {
+    public User findUserById(UUID userId) {
         Optional<User> userFromDb = userRepository.findById(userId);
         return userFromDb.orElse(new User());
     }
@@ -67,7 +67,7 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public boolean deleteUser(Long userId) {
+    public boolean deleteUser(UUID userId) {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
             return true;

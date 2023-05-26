@@ -12,19 +12,29 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.response.dto.CreateResponseDto;
+import ru.hackathon.sovcombankchallenge.response.models.Response;
+import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.user.dto.AddStageToUserDto;
 import ru.hackathon.sovcombankchallenge.user.dto.AddUserAnswerDto;
+import ru.hackathon.sovcombankchallenge.user.dto.saveUserAnswersToStageDto;
 import ru.hackathon.sovcombankchallenge.user.models.User;
+import ru.hackathon.sovcombankchallenge.user.repository.UserRepository;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import ru.hackathon.sovcombankchallenge.user.specification.UserSpecification;
+import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
+import ru.hackathon.sovcombankchallenge.vacancy.specifications.VacancySpecification;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/userInfo")
 public class UserController {
-    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
 
@@ -32,8 +42,12 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Phone number changed"
-                    ),
+                    description = "Phone number changed",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = User.class))
+                    }), // или возвращать информацию только о телефоне?
             @ApiResponse(
                     responseCode = "400",
                     description = "Bad Request"
@@ -48,7 +62,12 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Password changed"
+                    description = "Password changed",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = User.class))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -65,7 +84,12 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Response was created"
+                    description = "Response was created",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Response.class))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -81,14 +105,19 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Response was created"
+                    description = "Response was created",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = Response.class)))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
                     description = "Bad Request"
             )
     })
-    public ResponseEntity<?> getUsersResponses(@RequestParam Long userId){
+    public ResponseEntity<?> getUsersResponses(@RequestParam UUID userId){
         return null;
     }
 
@@ -98,14 +127,19 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Response was created"
+                    description = "Response was created",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = User.class))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
                     description = "Bad Request"
             )
     })
-    public ResponseEntity<?> getUsersInfo(@RequestParam Long userId){
+    public ResponseEntity<?> getUsersInfo(@RequestParam UUID userId){
         return null;
     }
 
@@ -114,14 +148,19 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Response was created"
+                    description = "Response was created",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = User.class))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
                     description = "Bad Request"
             )
     })
-    public ResponseEntity<?> getUsersChallenges(@RequestParam Long userId){
+    public ResponseEntity<?> getUsersChallenges(@RequestParam UUID userId){
         return null;
     }
 
@@ -130,7 +169,12 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Response was created"
+                    description = "Response was created",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = User.class))
+                    } // TODO: подумать что здесь надо возвращать... и нужно ли это
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -141,12 +185,39 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("/getCertainStageForUser")
+
+    @PostMapping("/saveUserAnswersToStage")
+    @Operation(summary = "Here we save user's answers for whole stage")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Response was created",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Response.class))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request"
+            )
+    })
+    public ResponseEntity<?> saveUserAnswersToStage(@RequestBody saveUserAnswersToStageDto dto){
+        return null;
+    }
+
+    @PostMapping("/getCertainStageForUser")
     @Operation(summary = "Here user get his certain task, for example, when he choose stage and click on it")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Response was created"
+                    description = "Response was created",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = User.class))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -155,5 +226,30 @@ public class UserController {
     })
     public ResponseEntity<?> getCertainStageForUser(@RequestBody AddStageToUserDto dto){
         return null;
+    }
+
+
+    @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Result was found",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = User.class)))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request"
+            )
+    })
+    @PostMapping("/userSpecification")
+    public ResponseEntity<?> specification(@RequestBody List<SearchCriteria> searchCriteria) {
+        UserSpecification userSpecification = new UserSpecification();
+        searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(userSpecification::add);
+        List<User> msGenreList = userRepository.findAll(userSpecification);
+        return ResponseEntity.status(HttpStatus.OK).body(msGenreList);
     }
 }

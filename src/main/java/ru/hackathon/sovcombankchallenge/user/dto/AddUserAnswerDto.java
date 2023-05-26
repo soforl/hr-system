@@ -2,9 +2,11 @@ package ru.hackathon.sovcombankchallenge.user.dto;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class AddUserAnswerDto {
-    private Long userId;
+    private UUID userId;
     private String answer;
-    private Long questionId;
+    private UUID questionId;
 }

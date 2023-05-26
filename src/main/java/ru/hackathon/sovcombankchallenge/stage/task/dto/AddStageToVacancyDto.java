@@ -2,8 +2,10 @@ package ru.hackathon.sovcombankchallenge.stage.task.dto;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class AddStageToVacancyDto {
-    private Long vacancyId;
-    private Long stageId;
+    private UUID vacancyId;
+    private UUID stageId;
 }
