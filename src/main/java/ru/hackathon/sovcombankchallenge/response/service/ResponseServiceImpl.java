@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.repository.ResponseRepository;
+import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 import ru.hackathon.sovcombankchallenge.user.models.User;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -31,5 +33,17 @@ public class ResponseServiceImpl implements ResponseService{
     public List<Response> getAll() {
         List<Response> responses = responseRepository.findAll();
         return responses;
+    }
+
+    @Override
+    public Response getById(UUID responseId) {
+        Optional<Response> response = responseRepository.findById(responseId);
+        return response.get();
+    }
+
+    @Override
+    public List<StageResult> getResults(UUID responseId) {
+        Response response = this.getById(responseId);
+        return response.getStageResults();
     }
 }

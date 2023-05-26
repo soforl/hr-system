@@ -15,4 +15,8 @@ import lombok.Setter;
 public class OpenQuestion extends Question {
     @Column(name = "ANSWER")
     private String answer;
+
+    public OpenQuestion(String text) {
+        super(text);
+    }
 }

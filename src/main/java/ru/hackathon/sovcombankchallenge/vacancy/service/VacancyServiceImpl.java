@@ -3,7 +3,9 @@ package ru.hackathon.sovcombankchallenge.vacancy.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
+import ru.hackathon.sovcombankchallenge.stage.models.Question;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.stage.service.StageService;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.WorkExperience;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
@@ -17,6 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class VacancyServiceImpl implements VacancyService{
     private final VacancyRepository vacancyRepository;
+    private final StageService stageService;
 
     @Override
     public void create(String description, VacancyStatus status, WorkExperience experience) {
@@ -24,10 +27,14 @@ public class VacancyServiceImpl implements VacancyService{
         vacancyRepository.save(vacancy);
     }
 
-    // TODO: реализовать после того, как будет реализован StageService
     @Override
     public void addStage(UUID vacancyId, UUID stageId) {
-        return;
+        Vacancy vacancy = this.getById(vacancyId);
+        Stage stage = stageService.getById(stageId);
+        List<Stage> stages = vacancy.getStages();
+        stages.add(stage);
+        vacancy.setStages(stages);
+        vacancyRepository.save(vacancy);
     }
 
     @Override

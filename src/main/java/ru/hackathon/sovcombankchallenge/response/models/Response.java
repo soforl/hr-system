@@ -40,6 +40,7 @@ public class Response {
     @OneToMany(fetch = FetchType.EAGER)
     private List<StageResult> stageResults;
     @Column(name = "RESPONSE_STATUS")
+    @Enumerated(EnumType.STRING)
     private ResponseStatus responseStatus;
     @Column(name = "CREATION_DATE")
     private LocalDate creationDate;

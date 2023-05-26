@@ -7,12 +7,21 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 @Entity
 @Table(name = "interviews")
-@RequiredArgsConstructor
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class Interview extends Stage {
     @Column(name = "COMMENTS")
     private String comments;
+
+    public Interview(String name, String comments) {
+        super(name);
+        this.comments = comments;
+    }
 }

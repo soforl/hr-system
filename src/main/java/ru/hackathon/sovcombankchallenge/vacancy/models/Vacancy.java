@@ -27,10 +27,12 @@ public class Vacancy {
     @Column(name = "DESCRIPTION")
     private String description;
     @Column(name = "VACANCY_STATUS")
+    @Enumerated(EnumType.STRING)
     private VacancyStatus vacancyStatus;
     @OneToMany(fetch = FetchType.EAGER)
     private List<Stage> stages;
     @Column(name = "WORK_EXPERIENCE")
+    @Enumerated(EnumType.STRING)
     private WorkExperience workExperience;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "vacancy")

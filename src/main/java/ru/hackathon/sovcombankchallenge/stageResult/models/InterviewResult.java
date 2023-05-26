@@ -21,4 +21,8 @@ public class InterviewResult extends StageResult {
     private LocalDate date;
     @Column(name = "LINK_TO_ZOOM")
     private String linkToZoom;
+
+    public InterviewResult(String summary, LocalDate date, String linkToZoom) {
+        super();
+    }
 }

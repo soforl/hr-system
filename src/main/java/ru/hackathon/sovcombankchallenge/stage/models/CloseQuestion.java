@@ -9,7 +9,6 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "close_questions")
-@RequiredArgsConstructor
 @Getter
 @Setter
 public class CloseQuestion extends Question {
