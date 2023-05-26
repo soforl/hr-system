@@ -22,4 +22,7 @@ public class CloseQuestion extends Question {
     private String var4;
     @Column(name = "RIGHT_CHOOSE")
     private int rightChoose;
+
+    public CloseQuestion(String text, String var1, String var2, String var3, String var4, int rightChoose) {
+    }
 }

@@ -2,6 +2,7 @@ package ru.hackathon.sovcombankchallenge.stage.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.hackathon.sovcombankchallenge.stage.models.CloseQuestion;
 import ru.hackathon.sovcombankchallenge.stage.models.OpenQuestion;
 import ru.hackathon.sovcombankchallenge.stage.models.Question;
 import ru.hackathon.sovcombankchallenge.stage.repository.QuestionRepository;
@@ -17,6 +18,11 @@ public class QuestionService {
 
     public void createOpenQuestion(String text) {
         OpenQuestion question = new OpenQuestion(text);
+        questionRepository.save(question);
+    }
+
+    public void createCloseQuestion(String text, String var1, String var2, String var3, String var4, int rightChoose) {
+        CloseQuestion question = new CloseQuestion(text, var1, var2, var3, var4, rightChoose);
         questionRepository.save(question);
     }
 
