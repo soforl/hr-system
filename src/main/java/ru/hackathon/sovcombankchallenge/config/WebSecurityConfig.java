@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -16,19 +17,20 @@ public class WebSecurityConfig {
         http.cors().disable().csrf().disable()
 
                 .authorizeHttpRequests((requests) -> requests
+
+
                         // Отркываю доступ к свагеру всем!
-                        .requestMatchers("/swagger-ui**", "/v3/api-docs/**" ).permitAll()
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**" ).permitAll()
                         // Доступ к контроллеру USer
                         .requestMatchers("/api/user/registration/", "/api/user/registration").permitAll()
                         // Запрещаю все остальное
-                        .anyRequest().authenticated()
+                                .anyRequest().authenticated()
 
                 )
 
                 .formLogin(Customizer.withDefaults())
-                .logout((logout) -> logout.permitAll());
+                .logout(LogoutConfigurer::permitAll);
 
         return http.build();
     }
-
 }
