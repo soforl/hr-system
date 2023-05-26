@@ -34,6 +34,12 @@ public class StageServiceImpl implements StageService{
     }
 
     @Override
+    public List<Question> getQuestions(UUID stageId) {
+        TestStage stage = (TestStage) this.getById(stageId);
+        return stage.getQuestions();
+    }
+
+    @Override
     public void addQuestion(UUID stageId, UUID questionId) {
         Question question = questionService.getById(questionId);
         TestStage stage = (TestStage) this.getById(stageId);
