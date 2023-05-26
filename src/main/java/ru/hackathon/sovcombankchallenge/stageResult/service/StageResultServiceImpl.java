@@ -3,11 +3,15 @@ package ru.hackathon.sovcombankchallenge.stageResult.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hackathon.sovcombankchallenge.stage.models.Question;
+import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stageResult.models.InterviewResult;
+import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.models.TestStageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.repository.StageResultRepository;
 
 import java.time.LocalDate;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,5 +29,11 @@ public class StageResultServiceImpl implements StageResultService{
     public void createInterviewResult(String summary, LocalDate date, String linkToZoom) {
         InterviewResult interviewResult = new InterviewResult(summary, date, linkToZoom);
         stageResultRepository.save(interviewResult);
+    }
+
+    @Override
+    public StageResult getById(UUID resultId) {
+        Optional<StageResult> result = stageResultRepository.findById(resultId);
+        return result.get();
     }
 }
