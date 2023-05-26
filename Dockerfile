@@ -1,10 +1,14 @@
-FROM maven:3.8.6-openjdk-18 AS build
-WORKDIR /build
-COPY . .
-RUN mvn clean package -DskipTests
-
-FROM openjdk:18.0.2-jdk
-WORKDIR /java
-COPY --from=build /build/target/springboot-backend-0.0.1-SNAPSHOT.jar /java/backend.jar
+FROM gradle:8-jdk17
+VOLUME gradle-cache:/home/gradle/.gradle
+VOLUME /tmp
+USER root
+ADD . /home/gradle/project
+WORKDIR /home/gradle/project
+RUN chown gradle:gradle -R /home/gradle
+USER gradle
+RUN gradle bootJar -x test
+#Start from a java:8
+RUN mv /home/gradle/project/build/libs/*.jar /home/gradle/project/
+RUN echo $(ls /home/gradle/project/)
 EXPOSE 8080
-CMD ["java", "-jar", "/java/backend.jar"]
+ENTRYPOINT ["java","-Dspring.profiles.active=prod","-Djava.security.egd=file:/dev/./urandom","-jar","/home/gradle/project/SovcombankChallenge-0.0.1.jar"]
