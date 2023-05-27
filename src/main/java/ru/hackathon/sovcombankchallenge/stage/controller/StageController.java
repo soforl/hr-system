@@ -14,18 +14,13 @@ import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.stage.models.Question;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stage.repository.StageRepository;
+import ru.hackathon.sovcombankchallenge.stage.service.QuestionService;
+import ru.hackathon.sovcombankchallenge.stage.service.StageService;
 import ru.hackathon.sovcombankchallenge.stage.specification.StageSpecification;
 import ru.hackathon.sovcombankchallenge.stage.task.dto.*;
-import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
-import ru.hackathon.sovcombankchallenge.stageResult.repository.StageResultRepository;
-import ru.hackathon.sovcombankchallenge.stageResult.specification.StageResultSpecification;
-import ru.hackathon.sovcombankchallenge.user.models.User;
-import ru.hackathon.sovcombankchallenge.user.service.UserService;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
+import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +30,13 @@ public class StageController {
 
     @Autowired
     private StageRepository stageRepository;
-    @Operation(summary = "add new stage to vacancy")
+    @Autowired
+    private StageService stageService;
+    @Autowired
+    private VacancyService vacancyService;
+    @Autowired
+    private QuestionService questionService;
+    @Operation(summary = "add test stage to vacancy")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
@@ -51,9 +52,34 @@ public class StageController {
                     description = "Bad Request"
             )
     })
-    @PostMapping("/createNewStageInVacancy")
-    public ResponseEntity<?> addNewStageToVacancy(@RequestBody CreateStageDto dto){
-        return null;
+    @PostMapping("/createTestStageInVacancy")
+    public ResponseEntity<?> addTestStageToVacancy(@RequestBody CreateTestStageDto dto){
+        Stage stage = stageService.createTestStage(dto.getStageName(), dto.getDeadline(), dto.getDuration());
+        vacancyService.addStage(dto.getVacancyId(), stage.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(vacancyService.getById(dto.getVacancyId()));
+    }
+
+    @Operation(summary = "add interview stage to vacancy")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Stage was created",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Vacancy.class))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request"
+            )
+    })
+    @PostMapping("/createInterviewStageInVacancy")
+    public ResponseEntity<?> addInterviewStageToVacancy(@RequestBody CreateInterviewStageDto dto){
+        Stage stage = stageService.createInterview(dto.getStageName(), dto.getComments());
+        vacancyService.addStage(dto.getVacancyId(), stage.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(vacancyService.getById(dto.getVacancyId()));
     }
 
     @Operation(summary = "add existing stage to vacancy")
@@ -74,41 +100,15 @@ public class StageController {
     })
     @PostMapping("/addStageToVacancy")
     public ResponseEntity<?> addStageToVacancy(@RequestBody AddStageToVacancyDto dto){
-        return null;
+        vacancyService.addStage(dto.getVacancyId(), dto.getStageId()); // TODO: check if stage exists
+        return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getById(dto.getVacancyId()));
     }
 
-
-    @Operation(summary = "choose type of task(open, close, etc)")
+    @Operation(summary = "add open task to stage")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Task was added to stage",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = Question.class))
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    @PostMapping("/chooseTaskType")
-    public ResponseEntity<?> chooseTaskType(@RequestBody String typeOfTask){
-        return null;
-    }
-
-    @Operation(summary = "add task to stage")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Task was added to stage",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = Question.class))
-                    }
+                    description = "Task was added to stage"
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -116,11 +116,19 @@ public class StageController {
             )
     })
     @PostMapping("/addTask/open")
-    public ResponseEntity<?> addQuestion(@RequestBody String question){
-        return null;
+    public ResponseEntity<?> addQuestion(@RequestBody CreateOpenQuestionDto dto){
+        try {
+            Question question = questionService.createOpenQuestion(dto.getQuestion());
+            stageService.addQuestion(dto.getStageId(),question.getId());
+        }
+        catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "add task to stage")
+    @Operation(summary = "add close task to stage")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -137,50 +145,19 @@ public class StageController {
             )
     })
     @PostMapping("/addTask/close")
-    public ResponseEntity<?> addCloseAnswers(@RequestBody String answer){
-        return null;
-    }
+    public ResponseEntity<?> addCloseTask(@RequestBody CreateCloseTaskDto dto){
+        try {
+            Question question = questionService.createCloseQuestion(dto.getQuestion(),
+                    dto.getVar1(), dto.getVar2(),
+                    dto.getVar3(), dto.getVar4(),
+                    dto.getRightChoose());
+            stageService.addQuestion(dto.getStageId(),question.getId());
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
 
-    @Operation(summary = "set time for passing stage")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Time is set",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = Stage.class))
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    @PostMapping("/setTimeToStage")
-    public ResponseEntity<?> setTestingTime(@RequestBody SetTimeToStageDto dto){
-        return null;
-    }
-
-    @Operation(summary = "set last day for passing stage")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Last Day is set",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = Stage.class))
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    @PostMapping("/setDayToStage")
-    public ResponseEntity<?> setFinalPassingDate(@RequestBody SetDateToStageDto dto){
-        return null;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Operation(summary = "get Stage by id, in some cases, for example, to get all tasks from stage")
@@ -201,28 +178,7 @@ public class StageController {
     })
     @GetMapping("/getStageById")
     public ResponseEntity<?> getStageById(@RequestBody UUID stageId){
-        return null;
-    }
-
-    @Operation(summary = "save Stage, when hr added all questions to it and click on button- finish")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Stage is saved",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = Stage.class))
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    @PutMapping("/saveStageChanges")
-    public ResponseEntity<?> saveStageChanges(@RequestBody UUID stageId){
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(stageService.getById(stageId));
     }
 
     @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")

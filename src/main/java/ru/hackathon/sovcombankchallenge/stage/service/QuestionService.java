@@ -16,14 +16,14 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
 
-    public void createOpenQuestion(String text) {
+    public Question createOpenQuestion(String text) {
         OpenQuestion question = new OpenQuestion(text);
-        questionRepository.save(question);
+        return questionRepository.save(question);
     }
 
-    public void createCloseQuestion(String text, String var1, String var2, String var3, String var4, int rightChoose) {
+    public Question createCloseQuestion(String text, String var1, String var2, String var3, String var4, int rightChoose) {
         CloseQuestion question = new CloseQuestion(text, var1, var2, var3, var4, rightChoose);
-        questionRepository.save(question);
+        return questionRepository.save(question);
     }
 
     public Question getById(UUID questionId) {
