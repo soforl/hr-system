@@ -38,7 +38,8 @@ public class Vacancy {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "vacancy")
     private List<Response> responses;
 
-    public Vacancy(String description, VacancyStatus vacancyStatus, WorkExperience workExperience) {
+    public Vacancy(String name, String description, VacancyStatus vacancyStatus, WorkExperience workExperience) {
+        this.name = name;
         this.description = description;
         this.vacancyStatus = vacancyStatus;
         this.stages = new ArrayList<>();

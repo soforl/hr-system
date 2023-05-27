@@ -15,43 +15,11 @@ import ru.hackathon.sovcombankchallenge.user.service.UserService;
 
 @RestController
 @RequestMapping("/api/hr")
-public class HRController { // не должен ли hr быть завязан на вакансии?
+public class HRController {
     private final UserService userService;
 
     public HRController(UserService userService) {
         this.userService = userService;
-    }
-
-    @Operation(summary = "get Users by name for search")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Users are found"
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    @GetMapping("/usersByName")
-    public ResponseEntity<?> getUsersByName(@RequestParam String name){
-        return null;
-    }
-
-    @Operation(summary = "change user's email")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Password changed"
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    @PatchMapping("/changeEmail")
-    public ResponseEntity<?> changeEmail(@RequestParam String email){
-        return null;
     }
 
     @Operation(summary = "Get all users")
@@ -78,7 +46,12 @@ public class HRController { // не должен ли hr быть завязан
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Stage was added"
+                    description = "Stage was added",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = User.class)))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",

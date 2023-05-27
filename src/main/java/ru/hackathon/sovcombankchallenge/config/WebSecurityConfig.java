@@ -24,7 +24,9 @@ public class WebSecurityConfig {
                         // Доступ к контроллеру USer
                         .requestMatchers("/api/user/registration/", "/api/user/registration").permitAll()
                         // Запрещаю все остальное
-                                .anyRequest().authenticated()
+
+                        .anyRequest().authenticated()
+
 
                 )
 

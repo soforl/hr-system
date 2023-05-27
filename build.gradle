@@ -32,6 +32,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.0.4'
     runtimeOnly 'org.postgresql:postgresql'
+    implementation group: 'com.google.guava', name: 'guava', version: '21.0'
 
 }
 

@@ -6,21 +6,37 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hackathon.sovcombankchallenge.stage.task.dto.CreateStageDto;
+import ru.hackathon.sovcombankchallenge.response.models.Response;
+import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.CreateVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.UpdateVacancyStatusDto;
+import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
+import ru.hackathon.sovcombankchallenge.vacancy.repository.VacancyRepository;
+import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
+import ru.hackathon.sovcombankchallenge.vacancy.specifications.VacancySpecification;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/vacancy")
 public class VacancyController {
+    @Autowired
+    private VacancyRepository vacancyRepository;
 
     @Operation(summary = "Create vacancy")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "Vacancy created"
+                    description = "Vacancy created",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Vacancy.class))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -30,18 +46,19 @@ public class VacancyController {
     @PostMapping("/createVacancy")
     public ResponseEntity<?> createVacancy(@RequestBody CreateVacancyDto dto) {
         return null;
+//        return ResponseEntity.status(HttpStatus.OK).body(serv.createVacancy(dto.getName(), dto.getDescription(), dto.getWorkExperience(), dto.getVacancyStatus()));
     }
 
     @Operation(summary = "get all vacancies")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Vacancies were found"
-//                    content = {
-//                            @Content(
-//                                    mediaType = "application/json",
-//                                    array = @ArraySchema(schema = @Schema(implementation = Vacancy.class)))
-//                    }
+                    description = "Vacancies were found",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = Vacancy.class)))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -57,7 +74,12 @@ public class VacancyController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Responses were found"
+                    description = "Responses were found",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = Response.class)))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -65,7 +87,7 @@ public class VacancyController {
             )
     })
     @GetMapping("/getResponsesByVacancy")
-    public ResponseEntity<?> getResponsesByVacancy(@RequestParam Long vacancyId){ //или мб Vacancy передавать(?)
+    public ResponseEntity<?> getResponsesByVacancy(@RequestParam UUID vacancyId){ //или мб Vacancy передавать(?)
         return null;
     }
 
@@ -73,7 +95,12 @@ public class VacancyController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Vacancy info were found"
+                    description = "Vacancy info were found",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Vacancy.class))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -81,7 +108,7 @@ public class VacancyController {
             )
     })
     @GetMapping("/getVacancyInfo")
-    public ResponseEntity<?> getVacancyInfo(@RequestParam Long vacancyId){
+    public ResponseEntity<?> getVacancyInfo(@RequestParam UUID vacancyId){
         return null;
     }
 
@@ -89,7 +116,12 @@ public class VacancyController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Vacancies were found"
+                    description = "Vacancies were found",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = Stage.class)))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -97,7 +129,7 @@ public class VacancyController {
             )
     })
     @GetMapping("/getVacancyStages")
-    public ResponseEntity<?> getVacancyStages(@RequestParam Long vacancyId){
+    public ResponseEntity<?> getVacancyStages(@RequestParam UUID vacancyId){
         return null;
     }
 
@@ -105,7 +137,12 @@ public class VacancyController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "Stage was saved"
+                    description = "vacancy status was updated",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Vacancy.class))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -117,52 +154,27 @@ public class VacancyController {
         return null;
     }
 
-    // TODO: настроить фильтрацию нормально
-    @Operation(summary = "get vacancies by status")
+    @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Vacancies were found"
+                    description = "Result was found",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = Vacancy.class)))
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
                     description = "Bad Request"
             )
     })
-    @GetMapping("/filterVacanciesByStatus")
-    public ResponseEntity<?> getVacanciesByStatus(@RequestParam String status){
-        return null;
-    }
-
-    @Operation(summary = "get vacancies by its name")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Vacancies were found"
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    @GetMapping("/filterVacanciesByItsName")
-    public ResponseEntity<?> getVacanciesByItsName(@RequestParam String name){
-        return null;
-    }
-
-    @Operation(summary = "get vacancies by stage")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Vacancies were found"
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    @GetMapping("/filterVacanciesByStage")
-    public ResponseEntity<?> getVacanciesByStage(@RequestParam String stage){
-        return null;
+    @PostMapping("/vacancySpecification")
+    public ResponseEntity<?> specification(@RequestBody List<SearchCriteria> searchCriteria) {
+            VacancySpecification vacancySpecification = new VacancySpecification();
+            searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(vacancySpecification::add);
+            List<Vacancy> msGenreList = vacancyRepository.findAll(vacancySpecification);
+            return ResponseEntity.status(HttpStatus.OK).body(msGenreList);
     }
 }
