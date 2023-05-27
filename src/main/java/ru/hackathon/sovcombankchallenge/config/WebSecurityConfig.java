@@ -21,7 +21,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().disable()
+        http.cors().disable().csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
                         // Отркываю доступ к свагеру всем!
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**" ).permitAll()
@@ -30,8 +30,6 @@ public class WebSecurityConfig {
                         // Запрещаю все остальное
 
                         .anyRequest().permitAll()
-
-
                 )
                 .formLogin(Customizer.withDefaults())
                 .logout(LogoutConfigurer::permitAll);
