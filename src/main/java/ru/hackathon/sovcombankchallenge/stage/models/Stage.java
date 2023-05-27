@@ -7,7 +7,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "stages")
 public abstract class Stage {
-    @Id
+   @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @Column(name = "NAME")
@@ -19,5 +19,9 @@ public abstract class Stage {
 
     public Stage() {
 
+    }
+
+    public UUID getId() {
+        return id;
     }
 }

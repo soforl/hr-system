@@ -2,11 +2,14 @@ package ru.hackathon.sovcombankchallenge.stageResult.dto;
 
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
 public class CreateStageResultDto {
-    private UUID stageId;
+    private UUID responseId;
     private String result;
+    private LocalDate date;
+    private String linkToZoom;
 
 }

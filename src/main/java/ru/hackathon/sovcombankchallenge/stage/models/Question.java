@@ -18,4 +18,7 @@ public abstract class Question {
     public Question() {
 
     }
+    public UUID getId() {
+        return id;
+    }
 }

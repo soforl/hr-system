@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hackathon.sovcombankchallenge.stage.models.Question;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.stageResult.models.Answer;
 import ru.hackathon.sovcombankchallenge.stageResult.models.InterviewResult;
 import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.models.TestStageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.repository.StageResultRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

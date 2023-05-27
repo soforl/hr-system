@@ -104,4 +104,11 @@ public class User implements UserDetails {
     public void setRoles(Set<ru.hackathon.sovcombankchallenge.user.models.Role> roles) {
         this.roles = roles;
     }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }

@@ -74,4 +74,16 @@ public class UserService implements UserDetailsService {
         }
         return false;
     }
+
+    public void updateUserPhoneNumber(UUID userId, String phoneNumber){
+        User user = this.getById(userId);
+        user.setPhoneNumber(phoneNumber);
+        userRepository.save(user);
+    }
+
+    public void updateUserEmailNumber(UUID userId, String email){
+        User user = this.getById(userId);
+        user.setUsername(email);
+        userRepository.save(user);
+    }
 }

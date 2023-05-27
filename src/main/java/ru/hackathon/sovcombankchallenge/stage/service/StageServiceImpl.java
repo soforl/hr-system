@@ -7,6 +7,7 @@ import ru.hackathon.sovcombankchallenge.stage.models.Question;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
 import ru.hackathon.sovcombankchallenge.stage.repository.StageRepository;
+import ru.hackathon.sovcombankchallenge.stageResult.models.Answer;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -22,15 +23,15 @@ public class StageServiceImpl implements StageService{
     private final QuestionService questionService;
 
     @Override
-    public void createTestStage(String name, LocalDateTime deadline, Duration duration) {
+    public Stage createTestStage(String name, LocalDateTime deadline, Duration duration) {
         TestStage testStage = new TestStage(name, deadline, duration);
-        stageRepository.save(testStage);
+        return stageRepository.save(testStage);
     }
 
     @Override
-    public void createInterview(String name, String comments) {
+    public Stage createInterview(String name, String comments) {
         Interview interview = new Interview(name, comments);
-        stageRepository.save(interview);
+        return stageRepository.save(interview);
     }
 
     @Override
@@ -54,4 +55,8 @@ public class StageServiceImpl implements StageService{
         Optional<Stage> stage = stageRepository.findById(stageId);
         return stage.get();
     }
+
+//    public void saveStageResults(UUID stageId, List<Answer> answers, UUID responseId){
+//        stageRepository.findById(stageId)
+//    }
 }

@@ -17,6 +17,7 @@ import ru.hackathon.sovcombankchallenge.vacancy.dto.UpdateVacancyStatusDto;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.repository.VacancyRepository;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
+import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 import ru.hackathon.sovcombankchallenge.vacancy.specifications.VacancySpecification;
 
 import java.util.List;
@@ -27,16 +28,14 @@ import java.util.UUID;
 public class VacancyController {
     @Autowired
     private VacancyRepository vacancyRepository;
+    @Autowired
+    private VacancyService vacancyService;
 
     @Operation(summary = "Create vacancy")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "Vacancy created",
-                    content = {
-                            @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Vacancy.class))
-                    }
+                    description = "Vacancy created"
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -45,8 +44,13 @@ public class VacancyController {
     })
     @PostMapping("/createVacancy")
     public ResponseEntity<?> createVacancy(@RequestBody CreateVacancyDto dto) {
-        return null;
-//        return ResponseEntity.status(HttpStatus.OK).body(serv.createVacancy(dto.getName(), dto.getDescription(), dto.getWorkExperience(), dto.getVacancyStatus()));
+        try {
+            vacancyService.create(dto.getName(), dto.getDescription(), dto.getVacancyStatus(), dto.getWorkExperience());
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "get all vacancies")
@@ -66,8 +70,8 @@ public class VacancyController {
             )
     })
     @GetMapping("/allVacancies")
-    public ResponseEntity<?> getAllVacancies(){ //или мб Vacancy передавать(?)
-        return null;
+    public ResponseEntity<?> getAllVacancies(){
+        return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getAll());
     }
 
     @Operation(summary = "get responses for certain vacancy")
@@ -87,8 +91,8 @@ public class VacancyController {
             )
     })
     @GetMapping("/getResponsesByVacancy")
-    public ResponseEntity<?> getResponsesByVacancy(@RequestParam UUID vacancyId){ //или мб Vacancy передавать(?)
-        return null;
+    public ResponseEntity<?> getResponsesByVacancy(@RequestParam UUID vacancyId){
+        return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getResponsesByVacancy(vacancyId));
     }
 
     @Operation(summary = "get vacancy by id(when you click on button look at vacancy info)")
@@ -109,7 +113,7 @@ public class VacancyController {
     })
     @GetMapping("/getVacancyInfo")
     public ResponseEntity<?> getVacancyInfo(@RequestParam UUID vacancyId){
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getById(vacancyId));
     }
 
     @Operation(summary = "get stages for certain vacancy, for example, roadmap")
@@ -130,19 +134,14 @@ public class VacancyController {
     })
     @GetMapping("/getVacancyStages")
     public ResponseEntity<?> getVacancyStages(@RequestParam UUID vacancyId){
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getStages(vacancyId));
     }
 
     @Operation(summary = "change vacancy status")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "vacancy status was updated",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = Vacancy.class))
-                    }
+                    description = "vacancy status was updated"
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -151,7 +150,12 @@ public class VacancyController {
     })
     @PutMapping("/updateVacancyStatus")
     public ResponseEntity<?> updateVacancyStatus(@RequestParam UpdateVacancyStatusDto dto){
-        return null;
+        try{
+            vacancyService.updateStatus(dto.getVacancyId(), dto.getVacancyStatus());
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")

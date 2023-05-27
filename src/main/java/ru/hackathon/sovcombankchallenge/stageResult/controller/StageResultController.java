@@ -11,16 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
+import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
-import ru.hackathon.sovcombankchallenge.stage.models.Question;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.CreateStageResultDto;
+import ru.hackathon.sovcombankchallenge.stageResult.dto.ResultToUserDto;
 import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.repository.StageResultRepository;
+import ru.hackathon.sovcombankchallenge.stageResult.service.StageResultService;
 import ru.hackathon.sovcombankchallenge.stageResult.specification.StageResultSpecification;
-import ru.hackathon.sovcombankchallenge.user.models.User;
-import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
-import ru.hackathon.sovcombankchallenge.vacancy.repository.VacancyRepository;
-import ru.hackathon.sovcombankchallenge.vacancy.specifications.VacancySpecification;
+import ru.hackathon.sovcombankchallenge.stageResult.dto.SaveUserAnswersToStageDto;
+import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,8 +30,14 @@ import java.util.UUID;
 public class StageResultController {
     @Autowired
     private StageResultRepository stageResultRepository;
+    @Autowired
+    private StageResultService stageResultService;
+    @Autowired
+    private VacancyService vacancyService;
+    @Autowired
+    private ResponseService responseService;
 
-    @Operation(summary = "create result for the stage")
+    @Operation(summary = "create result for interview")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -47,10 +53,55 @@ public class StageResultController {
                     description = "Bad Request"
             )
     })
-    @PostMapping("/setResult")
-    public ResponseEntity<?> setResult(@RequestBody CreateStageResultDto dto){
+    @PostMapping("/setInterviewResult")
+    public ResponseEntity<?> setInterviewResult(@RequestBody CreateStageResultDto dto){
+        stageResultService.createInterviewResult(dto.getResult(), dto.getDate(), dto.getLinkToZoom());
         return null;
     }
+
+    @PostMapping("/saveUserAnswersToStage")
+    @Operation(summary = "Here we save user's answers for whole stage")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Response was created",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Response.class))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request"
+            )
+    })
+    public ResponseEntity<?> saveUserAnswersToStage(@RequestBody SaveUserAnswersToStageDto dto){
+
+        return null;
+    }
+
+//    @Operation(summary = "create result for test")
+//    @ApiResponses(value = {
+//            @ApiResponse(
+//                    responseCode = "200",
+//                    description = "Result was added",
+//                    content = {
+//                            @Content(
+//                                    mediaType = "application/json",
+//                                    schema = @Schema(implementation = StageResult.class))
+//                    }
+//            ),
+//            @ApiResponse(
+//                    responseCode = "400",
+//                    description = "Bad Request"
+//            )
+//    })
+//    @PostMapping("/setTestResult")
+//    public ResponseEntity<?> setTestResult(@RequestBody CreateStageResultDto dto){
+//        stageResultService.createTestStageResult();
+//        return null;
+//    }
 
     @Operation(summary = "get results")
     @ApiResponses(value = {
@@ -70,6 +121,7 @@ public class StageResultController {
     })
     @PostMapping("/getTestResult")
     public ResponseEntity<?> getTestResult(@RequestParam UUID responseId){
+
         return null;
     }
 
@@ -90,7 +142,7 @@ public class StageResultController {
             )
     })
     @PostMapping("/giveResultToUser")
-    public ResponseEntity<?> giveResultToUser(@RequestParam UUID stageResultId){
+    public ResponseEntity<?> giveResultToUser(@RequestBody ResultToUserDto dto){
         return null;
     }
 
