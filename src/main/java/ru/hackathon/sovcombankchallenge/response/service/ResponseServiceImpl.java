@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.repository.ResponseRepository;
 import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
-import ru.hackathon.sovcombankchallenge.user.models.User;
+import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
@@ -23,7 +23,7 @@ public class ResponseServiceImpl implements ResponseService{
 
     @Override
     public void create(UUID candidateId, UUID vacancyId) {
-        User candidate = userService.getById(candidateId);
+        CustomUser candidate = userService.getById(candidateId);
         Vacancy vacancy = vacancyService.getById(vacancyId);
         Response response = new Response(candidate, vacancy);
         responseRepository.save(response);

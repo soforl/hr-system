@@ -8,6 +8,6 @@ import java.util.UUID;
 
 public interface StageResultService {
     void createTestStageResult(Question question, String answer);
-    void createInterviewResult(String summary, LocalDate date, String linkToZoom);
+    StageResult createInterviewResult(String summary, LocalDate date, String linkToZoom);
     StageResult getById(UUID resultId);
 }

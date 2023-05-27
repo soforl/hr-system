@@ -8,7 +8,6 @@ import java.util.UUID;
 @Data
 public class CreateStageResultDto {
     private UUID responseId;
-    private String result;
     private LocalDate date;
     private String linkToZoom;
 

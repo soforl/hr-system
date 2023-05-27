@@ -7,14 +7,13 @@ import jakarta.persistence.criteria.Root;
 import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
-import ru.hackathon.sovcombankchallenge.user.models.User;
-import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
+import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class UserSpecification implements Specification<User> {
+public class UserSpecification implements Specification<CustomUser> {
     private List<SearchCriteria> list = new ArrayList<>();
 
     public void add(SearchCriteria criteria) {
@@ -22,7 +21,7 @@ public class UserSpecification implements Specification<User> {
     }
 
     @Override
-    public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+    public Predicate toPredicate(Root<CustomUser> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         List<Predicate> predicates = new ArrayList<>();
         for (SearchCriteria criteria : list) {
             switch (criteria.getOperation()) {

@@ -12,4 +12,8 @@ public abstract class StageResult {
     private UUID id;
     @OneToOne
     private Stage stage;
+
+    public UUID getId() {
+        return id;
+    }
 }

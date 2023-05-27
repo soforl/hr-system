@@ -4,14 +4,12 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class CustomUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -25,17 +23,20 @@ public class User implements UserDetails {
     private String phoneNumber;
     @Transient
     private String passwordConfirm;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles;
 
-    public User() {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ROLE_ID")
+    private Role role;
+
+    public CustomUser() {
     }
 
-    public User(String email, String password, String name, String phoneNumber) {
+    public CustomUser(String email, String password, String name, String phoneNumber, Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.role = role;
     }
 
     public UUID getId() {
@@ -44,6 +45,10 @@ public class User implements UserDetails {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -77,7 +82,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+        return null;
     }
 
     @Override
@@ -96,19 +101,15 @@ public class User implements UserDetails {
     public void setPasswordConfirm(String passwordConfirm) {
         this.passwordConfirm = passwordConfirm;
     }
-
-    public Set<ru.hackathon.sovcombankchallenge.user.models.Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<ru.hackathon.sovcombankchallenge.user.models.Role> roles) {
-        this.roles = roles;
-    }
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Role getRole() {
+        return role;
     }
 }

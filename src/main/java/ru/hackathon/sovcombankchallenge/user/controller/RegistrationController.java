@@ -1,17 +1,12 @@
 package ru.hackathon.sovcombankchallenge.user.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.user.dto.CreateUser;
-import ru.hackathon.sovcombankchallenge.user.models.User;
+import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
 
 @RestController()
@@ -25,17 +20,24 @@ public class RegistrationController {
         this.userService = userService;
     }
 
-    @PostMapping("/registration")
+    @PostMapping("/registrationUser")
     @Operation(summary = "Registration user")
-    public ResponseEntity<?> registration(@RequestBody CreateUser createUser) {
-        User newUser = userService.createUser(createUser.getEmail(), createUser.getPassword(), createUser.getName(),
-                createUser.getPhoneNumber());
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    public ResponseEntity<?> registrationUSER(@RequestBody CreateUser createUser) {
+        CustomUser newCustomUser = userService.createUser(createUser.getEmail(), createUser.getPassword(), createUser.getName(),
+                createUser.getPhoneNumber(), "USER");
+        return ResponseEntity.status(HttpStatus.CREATED).body(newCustomUser);
+    }
+
+    @PostMapping("/registrationHR")
+    @Operation(summary = "Registration HR")
+    public ResponseEntity<?> registrationHR(@RequestBody CreateUser createUser) {
+        CustomUser newCustomUser = userService.createUser(createUser.getEmail(), createUser.getPassword(), createUser.getName(),
+                createUser.getPhoneNumber(), "HR");
+        return ResponseEntity.status(HttpStatus.CREATED).body(newCustomUser);
     }
 
     @GetMapping("/test")
     public ResponseEntity<?> test() {
         return ResponseEntity.status(HttpStatus.CREATED).body("Hello");
     }
-
 }

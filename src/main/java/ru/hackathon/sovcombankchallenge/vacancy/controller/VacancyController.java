@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
@@ -43,6 +44,7 @@ public class VacancyController {
             )
     })
     @PostMapping("/createVacancy")
+//    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> createVacancy(@RequestBody CreateVacancyDto dto) {
         try {
             vacancyService.create(dto.getName(), dto.getDescription(), dto.getVacancyStatus(), dto.getWorkExperience());
@@ -50,7 +52,7 @@ public class VacancyController {
         catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Operation(summary = "get all vacancies")
@@ -70,6 +72,7 @@ public class VacancyController {
             )
     })
     @GetMapping("/allVacancies")
+//    @PreAuthorize("hasAnyRole('HR', 'USER')")
     public ResponseEntity<?> getAllVacancies(){
         return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getAll());
     }
@@ -91,6 +94,7 @@ public class VacancyController {
             )
     })
     @GetMapping("/getResponsesByVacancy")
+//    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> getResponsesByVacancy(@RequestParam UUID vacancyId){
         return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getResponsesByVacancy(vacancyId));
     }
@@ -112,6 +116,7 @@ public class VacancyController {
             )
     })
     @GetMapping("/getVacancyInfo")
+//    @PreAuthorize("hasAnyRole('HR', 'USER')")
     public ResponseEntity<?> getVacancyInfo(@RequestParam UUID vacancyId){
         return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getById(vacancyId));
     }
@@ -133,6 +138,7 @@ public class VacancyController {
             )
     })
     @GetMapping("/getVacancyStages")
+//    @PreAuthorize("hasAnyRole('HR', 'USER')") //TODO: всем ли давать доступ?
     public ResponseEntity<?> getVacancyStages(@RequestParam UUID vacancyId){
         return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getStages(vacancyId));
     }
@@ -149,6 +155,7 @@ public class VacancyController {
             )
     })
     @PutMapping("/updateVacancyStatus")
+//    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> updateVacancyStatus(@RequestParam UpdateVacancyStatusDto dto){
         try{
             vacancyService.updateStatus(dto.getVacancyId(), dto.getVacancyStatus());
@@ -175,6 +182,7 @@ public class VacancyController {
             )
     })
     @PostMapping("/vacancySpecification")
+//    @PreAuthorize("hasAnyRole('HR', 'USER')")
     public ResponseEntity<?> specification(@RequestBody List<SearchCriteria> searchCriteria) {
             VacancySpecification vacancySpecification = new VacancySpecification();
             searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(vacancySpecification::add);

@@ -7,7 +7,6 @@ import ru.hackathon.sovcombankchallenge.stage.models.Question;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
 import ru.hackathon.sovcombankchallenge.stage.repository.StageRepository;
-import ru.hackathon.sovcombankchallenge.stageResult.models.Answer;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
