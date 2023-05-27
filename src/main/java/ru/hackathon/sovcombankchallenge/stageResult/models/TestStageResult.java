@@ -11,14 +11,19 @@ import ru.hackathon.sovcombankchallenge.stage.models.Question;
 
 @Entity
 @Table(name = "test_stage_results")
-@RequiredArgsConstructor
+@Getter
+@Setter
 public class TestStageResult extends StageResult {
     @ManyToOne()
-    @Getter
-    @Setter
     private Question question;
     @Column(name = "USER_ANSWER")
-    @Getter
-    @Setter
     private String userAnswer;
+
+    public TestStageResult(Question question, String answer) {
+        super();
+    }
+
+    public TestStageResult() {
+
+    }
 }

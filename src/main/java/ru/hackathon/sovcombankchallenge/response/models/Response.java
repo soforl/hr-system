@@ -10,34 +10,38 @@ import ru.hackathon.sovcombankchallenge.user.models.User;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "responses")
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class Response {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @ManyToOne
-    @Getter
-    @Setter
     private User candidate;
-    @ManyToOne
-    @Getter
-    @Setter
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "vacancy_id", nullable = false)
     private Vacancy vacancy;
+
+    public Response(User candidate, Vacancy vacancy) {
+        this.candidate = candidate;
+        this.vacancy = vacancy;
+        this.stageResults = new ArrayList<>();
+        this.responseStatus = ResponseStatus.Generated;
+        this.creationDate = LocalDate.now();
+    }
+
     @OneToMany(fetch = FetchType.EAGER)
-    @Getter
-    @Setter
     private List<StageResult> stageResults;
     @Column(name = "RESPONSE_STATUS")
-    @Getter
-    @Setter
+    @Enumerated(EnumType.STRING)
     private ResponseStatus responseStatus;
     @Column(name = "CREATION_DATE")
-    @Getter
-    @Setter
     private LocalDate creationDate;
 }

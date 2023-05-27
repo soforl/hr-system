@@ -45,12 +45,12 @@ public class UserService implements UserDetailsService {
         return this.saveUser(newUser);
     }
 
-    public User findUserById(Long userId) {
+    public User getById(UUID userId) {
         Optional<User> userFromDb = userRepository.findById(userId);
         return userFromDb.orElse(new User());
     }
 
-    public List<User> allUsers() {
+    public List<User> getAll() {
         return userRepository.findAll();
     }
 
@@ -67,7 +67,7 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public boolean deleteUser(Long userId) {
+    public boolean deleteUser(UUID userId) {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
             return true;

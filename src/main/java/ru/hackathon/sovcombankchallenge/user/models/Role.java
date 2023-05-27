@@ -12,17 +12,15 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "roles")
+@Getter
+@Setter
 public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Getter
-    @Setter
     private String name;
     @Transient
     @ManyToMany(mappedBy = "roles")
-    @Getter
-    @Setter
     private Set<User> users;
     public Role() {
     }
