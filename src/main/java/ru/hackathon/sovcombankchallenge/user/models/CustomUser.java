@@ -4,14 +4,12 @@ import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class CustomUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -30,10 +28,10 @@ public class User implements UserDetails {
     @JoinColumn(name = "ROLE_ID")
     private Role role;
 
-    public User() {
+    public CustomUser() {
     }
 
-    public User(String email, String password, String name, String phoneNumber, Role role) {
+    public CustomUser(String email, String password, String name, String phoneNumber, Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -47,6 +45,10 @@ public class User implements UserDetails {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

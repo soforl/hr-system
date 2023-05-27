@@ -1,18 +1,17 @@
 package ru.hackathon.sovcombankchallenge.user.service;
 
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.hackathon.sovcombankchallenge.user.models.Role;
-import ru.hackathon.sovcombankchallenge.user.models.User;
+import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.repository.RoleRepository;
 import ru.hackathon.sovcombankchallenge.user.repository.UserRepository;
 
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,43 +29,55 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username);
+        CustomUser customUser = userRepository.findByEmail(username);
 
-        if (user == null) {
+        if (customUser == null) {
             throw new UsernameNotFoundException("User not found");
         }
 
-        return user;
+        return User.builder()
+                .username(customUser.getUsername())
+                .password(customUser.getPassword())
+                .roles(customUser.getRole().getName())
+                .build();
     }
 
-    public User createUser(String username, String password, String name, String phoneNumber, String roleName) {
+    public CustomUser findUserByUsername(String username){
+        CustomUser customUser = userRepository.findByEmail(username);
+        if (customUser == null){
+            throw new UsernameNotFoundException("User not found");
+        }
+        return customUser;
+    }
+
+    public CustomUser createUser(String username, String password, String name, String phoneNumber, String roleName) {
         var role = roleRepository.getRoleByName(roleName);
         if(role == null){
             role = new Role(roleName);
             roleRepository.save(role);
         }
-        var newUser = new User(username, password, name, phoneNumber, role);
+        var newUser = new CustomUser(username, password, name, phoneNumber, role);
         return this.saveUser(newUser);
     }
 
-    public User getById(UUID userId) {
-        Optional<User> userFromDb = userRepository.findById(userId);
-        return userFromDb.orElse(new User());
+    public CustomUser getById(UUID userId) {
+        Optional<CustomUser> userFromDb = userRepository.findById(userId);
+        return userFromDb.orElse(new CustomUser());
     }
 
-    public List<User> getAll() {
+    public List<CustomUser> getAll() {
         return userRepository.findAll();
     }
 
-    public User saveUser(User user) {
-        User userFromDB = userRepository.findByEmail(user.getUsername());
+    public CustomUser saveUser(CustomUser customUser) {
+        CustomUser customUserFromDB = userRepository.findByEmail(customUser.getUsername());
 
-        if (userFromDB != null) {
+        if (customUserFromDB != null) {
             // TODO: throw exception
             return null;
         }
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        customUser.setPassword(bCryptPasswordEncoder.encode(customUser.getPassword()));
+        return userRepository.save(customUser);
     }
 
     public boolean deleteUser(UUID userId) {
@@ -78,14 +89,14 @@ public class UserService implements UserDetailsService {
     }
 
     public void updateUserPhoneNumber(UUID userId, String phoneNumber){
-        User user = this.getById(userId);
-        user.setPhoneNumber(phoneNumber);
-        userRepository.save(user);
+        CustomUser customUser = this.getById(userId);
+        customUser.setPhoneNumber(phoneNumber);
+        userRepository.save(customUser);
     }
 
     public void updateUserEmailNumber(UUID userId, String email){
-        User user = this.getById(userId);
-        user.setUsername(email);
-        userRepository.save(user);
+        CustomUser customUser = this.getById(userId);
+        customUser.setUsername(email);
+        userRepository.save(customUser);
     }
 }

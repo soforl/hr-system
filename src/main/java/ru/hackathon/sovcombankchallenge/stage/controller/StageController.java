@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.stage.models.Question;
@@ -53,6 +54,7 @@ public class StageController {
             )
     })
     @PostMapping("/createTestStageInVacancy")
+//    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> addTestStageToVacancy(@RequestBody CreateTestStageDto dto){
         Stage stage = stageService.createTestStage(dto.getStageName(), dto.getDeadline(), dto.getDuration());
         vacancyService.addStage(dto.getVacancyId(), stage.getId());
@@ -76,6 +78,7 @@ public class StageController {
             )
     })
     @PostMapping("/createInterviewStageInVacancy")
+//    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> addInterviewStageToVacancy(@RequestBody CreateInterviewStageDto dto){
         Stage stage = stageService.createInterview(dto.getStageName(), dto.getComments());
         vacancyService.addStage(dto.getVacancyId(), stage.getId());
@@ -99,6 +102,7 @@ public class StageController {
             )
     })
     @PostMapping("/addStageToVacancy")
+//    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> addStageToVacancy(@RequestBody AddStageToVacancyDto dto){
         vacancyService.addStage(dto.getVacancyId(), dto.getStageId()); // TODO: check if stage exists
         return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getById(dto.getVacancyId()));
@@ -116,6 +120,7 @@ public class StageController {
             )
     })
     @PostMapping("/addTask/open")
+//    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> addQuestion(@RequestBody CreateOpenQuestionDto dto){
         try {
             Question question = questionService.createOpenQuestion(dto.getQuestion());
@@ -137,7 +142,7 @@ public class StageController {
                             @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = Question.class))
-                    } // TODO: здесь будет answer мб?
+                    }
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -145,6 +150,7 @@ public class StageController {
             )
     })
     @PostMapping("/addTask/close")
+//    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> addCloseTask(@RequestBody CreateCloseTaskDto dto){
         try {
             Question question = questionService.createCloseQuestion(dto.getQuestion(),
@@ -177,6 +183,7 @@ public class StageController {
             )
     })
     @GetMapping("/getStageById")
+//    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> getStageById(@RequestBody UUID stageId){
         return ResponseEntity.status(HttpStatus.OK).body(stageService.getById(stageId));
     }
@@ -198,6 +205,7 @@ public class StageController {
             )
     })
     @PostMapping("/stageSpecification")
+//    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> specification(@RequestBody List<SearchCriteria> searchCriteria) {
         StageSpecification stageSpecification = new StageSpecification();
         searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(stageSpecification::add);
