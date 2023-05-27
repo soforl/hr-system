@@ -6,5 +6,6 @@ import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 
 import java.util.UUID;
 
+
 public interface StageResultRepository extends JpaRepository<StageResult, UUID>, JpaSpecificationExecutor<StageResult> {
 }

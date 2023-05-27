@@ -7,6 +7,7 @@ import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 
 import java.util.UUID;
 
+
 public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
     User findByEmail(String email);
 }

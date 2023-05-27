@@ -39,7 +39,7 @@ public class HRController {
     })
     @GetMapping("/allUsers")
     public ResponseEntity<?> getAllUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.allUsers());
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
     }
 
     @Operation(summary = "Add stage to user")

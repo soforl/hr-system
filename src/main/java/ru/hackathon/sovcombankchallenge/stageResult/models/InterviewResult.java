@@ -12,17 +12,17 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "interview_results")
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class InterviewResult extends StageResult {
     @Column(name = "SUMMARY")
-    @Getter
-    @Setter
     private String summary;
     @Column(name = "DATE")
-    @Getter
-    @Setter
     private LocalDate date;
     @Column(name = "LINK_TO_ZOOM")
-    @Getter
-    @Setter
     private String linkToZoom;
+
+    public InterviewResult(String summary, LocalDate date, String linkToZoom) {
+        super();
+    }
 }
