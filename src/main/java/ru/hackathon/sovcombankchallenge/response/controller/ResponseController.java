@@ -17,9 +17,7 @@ import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.repository.ResponseRepository;
 import ru.hackathon.sovcombankchallenge.response.specification.ResponseSpecification;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
-import ru.hackathon.sovcombankchallenge.stage.models.Stage;
-import ru.hackathon.sovcombankchallenge.stage.specification.StageSpecification;
-import ru.hackathon.sovcombankchallenge.user.models.User;
+import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 
 import java.util.List;
 
@@ -37,7 +35,7 @@ public class ResponseController {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = User.class)))
+                                    array = @ArraySchema(schema = @Schema(implementation = CustomUser.class)))
                     }
             ),
             @ApiResponse(

@@ -2,7 +2,6 @@ package ru.hackathon.sovcombankchallenge.user.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -21,12 +20,12 @@ public class Role implements GrantedAuthority {
     private String name;
     @Transient
     @OneToMany(mappedBy = "ROLE", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<User> users;
+    private Set<CustomUser> customUsers;
     public Role() {
     }
 
     public Role(String name) {
-        this.name = name;
+        this.name = "ROLE_" + name;
     }
 
     @Override

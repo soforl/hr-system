@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
 import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
-import ru.hackathon.sovcombankchallenge.user.models.User;
+import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 
 import java.time.LocalDate;
@@ -24,17 +24,18 @@ public class Response {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @ManyToOne
-    private User candidate;
+    private CustomUser candidate;
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "vacancy_id", nullable = false)
     private Vacancy vacancy;
 
-    public Response(User candidate, Vacancy vacancy) {
+    public Response(CustomUser candidate, Vacancy vacancy) {
         this.candidate = candidate;
         this.vacancy = vacancy;
         this.stageResults = new ArrayList<>();
         this.responseStatus = ResponseStatus.Generated;
         this.creationDate = LocalDate.now();
+        this.stageResults = new ArrayList<>();
     }
 
     @OneToMany(fetch = FetchType.EAGER)
@@ -44,4 +45,8 @@ public class Response {
     private ResponseStatus responseStatus;
     @Column(name = "CREATION_DATE")
     private LocalDate creationDate;
+
+    public void addStageResult(StageResult stage){
+        this.stageResults.add(stage);
+    }
 }
