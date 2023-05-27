@@ -22,8 +22,8 @@ public class VacancyServiceImpl implements VacancyService{
     private final StageService stageService;
 
     @Override
-    public void create(String description, VacancyStatus status, WorkExperience experience) {
-        Vacancy vacancy = new Vacancy(description, status, experience);
+    public void create(String name, String description, VacancyStatus status, WorkExperience experience) {
+        Vacancy vacancy = new Vacancy(name, description, status, experience);
         vacancyRepository.save(vacancy);
     }
 
