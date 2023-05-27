@@ -1,5 +1,6 @@
 package ru.hackathon.sovcombankchallenge.user.service;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,10 +39,13 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public User createUser(String username, String password, String name, String phoneNumber) {
-        var newUser = new User(username, password, name, phoneNumber);
-        // TODO: доделать роли
-//        newUser.setRoles();
+    public User createUser(String username, String password, String name, String phoneNumber, String roleName) {
+        var role = roleRepository.getRoleByName(roleName);
+        if(role == null){
+            role = new Role(roleName);
+            roleRepository.save(role);
+        }
+        var newUser = new User(username, password, name, phoneNumber, role);
         return this.saveUser(newUser);
     }
 
@@ -61,8 +65,6 @@ public class UserService implements UserDetailsService {
             // TODO: throw exception
             return null;
         }
-
-        user.setRoles(Collections.singleton(new Role( "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

@@ -25,11 +25,19 @@ public class RegistrationController {
         this.userService = userService;
     }
 
-    @PostMapping("/registration")
+    @PostMapping("/registrationUser")
     @Operation(summary = "Registration user")
-    public ResponseEntity<?> registration(@RequestBody CreateUser createUser) {
+    public ResponseEntity<?> registrationUSER(@RequestBody CreateUser createUser) {
         User newUser = userService.createUser(createUser.getEmail(), createUser.getPassword(), createUser.getName(),
-                createUser.getPhoneNumber());
+                createUser.getPhoneNumber(), "USER");
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    }
+
+    @PostMapping("/registrationHR")
+    @Operation(summary = "Registration HR")
+    public ResponseEntity<?> registrationHR(@RequestBody CreateUser createUser) {
+        User newUser = userService.createUser(createUser.getEmail(), createUser.getPassword(), createUser.getName(),
+                createUser.getPhoneNumber(), "HR");
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 

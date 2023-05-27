@@ -20,7 +20,7 @@ public class Role implements GrantedAuthority {
     private UUID id;
     private String name;
     @Transient
-    @ManyToMany(mappedBy = "roles")
+    @OneToMany(mappedBy = "ROLE", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<User> users;
     public Role() {
     }

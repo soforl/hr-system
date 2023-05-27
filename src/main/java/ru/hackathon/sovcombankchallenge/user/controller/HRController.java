@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hackathon.sovcombankchallenge.stage.service.StageService;
 import ru.hackathon.sovcombankchallenge.user.dto.AddStageToUserDto;
 import ru.hackathon.sovcombankchallenge.user.models.User;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
@@ -16,7 +17,7 @@ import ru.hackathon.sovcombankchallenge.user.service.UserService;
 @RestController
 @RequestMapping("/api/hr")
 public class HRController {
-    private final UserService userService;
+    private UserService userService;
 
     public HRController(UserService userService) {
         this.userService = userService;
@@ -40,26 +41,5 @@ public class HRController {
     @GetMapping("/allUsers")
     public ResponseEntity<?> getAllUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
-    }
-
-    @Operation(summary = "Add stage to user")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Stage was added",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = User.class)))
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    @PostMapping("/addStageToUser")
-    public ResponseEntity<?> addStageToUser(@RequestBody AddStageToUserDto dto){
-        return null;
     }
 }

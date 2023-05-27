@@ -180,27 +180,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userStages);
     }
 
-    @PostMapping("/getCertainStageForUser")
-    @Operation(summary = "Here user get his certain task, for example, when he choose stage and click on it")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Response was created",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = User.class))
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    public ResponseEntity<?> getCertainStageForUser(@RequestBody AddStageToUserDto dto){
-        return null;
-    }
-
 
     @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")
     @ApiResponses(value = {
