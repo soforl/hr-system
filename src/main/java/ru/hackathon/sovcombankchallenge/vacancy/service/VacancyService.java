@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface VacancyService {
-    void create(String description, VacancyStatus status, WorkExperience experience);
+    void create(String name, String description, VacancyStatus status, WorkExperience experience);
     void addStage(UUID vacancyId, UUID stageId);
     List<Vacancy> getAll();
     Vacancy getById(UUID vacancyId);
