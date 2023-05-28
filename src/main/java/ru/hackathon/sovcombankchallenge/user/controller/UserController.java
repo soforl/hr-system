@@ -38,20 +38,22 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/userInfo")
 //@CrossOrigin(origins = "*")
 public class UserController {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private ResponseService responseService;
 
-    @Autowired
-    private VacancyService vacancyService;
+    private final UserRepository userRepository;
+    private final UserService userService;
+    private final ResponseService responseService;
 
-    @Autowired
-    private StageResultService stageResultService;
-    @Autowired
-    private VacancyService vacancyService;
+    private final VacancyService vacancyService;
+
+    private final StageResultService stageResultService;
+
+    public UserController(UserRepository userRepository, UserService userService, ResponseService responseService, VacancyService vacancyService, StageResultService stageResultService) {
+        this.userRepository = userRepository;
+        this.userService = userService;
+        this.responseService = responseService;
+        this.vacancyService = vacancyService;
+        this.stageResultService = stageResultService;
+    }
 
     @Operation(summary = "change user's phone number")
     @ApiResponses(value = {
