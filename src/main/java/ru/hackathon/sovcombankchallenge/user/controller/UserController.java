@@ -196,7 +196,7 @@ public class UserController {
 //    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getUsersInfo(@RequestParam UUID userId){
         CustomUser customUser = userService.getById(userId);
-        UserInfoDto dto = new UserInfoDto(customUser.getUsername(), customUser.getName(), customUser.getPhoneNumber(), customUser.getRole());
+        UserInfoDto dto = new UserInfoDto(customUser.getUsername(), customUser.getName(), customUser.getPhoneNumber(), customUser.getRole(), customUser.getImage_url());
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
@@ -284,7 +284,7 @@ public class UserController {
 //    @PreAuthorize("hasAnyRole('HR', 'USER')")
     public ResponseEntity<?> getUserInfo(Authentication authentication) {
         var user = userService.findUserByUsername(authentication.getName());
-        var userInfo = new UserInfoDto(user.getUsername(), user.getName(), user.getPhoneNumber(), user.getRole());
+        var userInfo = new UserInfoDto(user.getUsername(), user.getName(), user.getPhoneNumber(), user.getRole(), user.getImage_url());
         return ResponseEntity.ok().body(userInfo);
     }
 
