@@ -15,6 +15,7 @@ import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.CreateVacancyDto;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.UpdateVacancyStatusDto;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.repository.VacancyRepository;
@@ -65,7 +66,7 @@ public class VacancyController {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = Vacancy.class)))
+                                    array = @ArraySchema(schema = @Schema(implementation = ReturnVacancyDto.class)))
                     }
             ),
             @ApiResponse(
@@ -76,7 +77,7 @@ public class VacancyController {
     @GetMapping("/allVacancies")
 //    @PreAuthorize("hasAnyRole('HR', 'USER')")
     public ResponseEntity<?> getAllVacancies(){
-        return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getAll());
+        return ResponseEntity.status(HttpStatus.OK).body(vacancyService.convertToDtoVacancy(vacancyService.getAll()));
     }
 
     @Operation(summary = "get responses for certain vacancy")
@@ -166,7 +167,7 @@ public class VacancyController {
             )
     })
     @GetMapping("/getVacancyStages")
-//    @PreAuthorize("hasAnyRole('HR', 'USER')") //TODO: всем ли давать доступ?
+//    @PreAuthorize("hasAnyRole('HR', 'USER')")
     public ResponseEntity<?> getVacancyStages(@RequestParam UUID vacancyId){
         return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getStages(vacancyId));
     }
