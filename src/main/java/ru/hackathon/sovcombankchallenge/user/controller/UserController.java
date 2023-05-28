@@ -141,11 +141,12 @@ public class UserController {
             )
     })
 //    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getUsersResponses(@RequestParam UUID userId){
+    public ResponseEntity<?> getUsersResponses(Authentication authentication){
+        var user = userService.findUserByUsername(authentication.getName());
         List<Response> userResponses = new ArrayList<>();
         List<ResponseDto> dtos = new ArrayList<>();
         for (Response response: responseService.getAll()) {
-            if (response.getCandidate().getId().equals(userId)){
+            if (response.getCandidate().getId().equals(user.getId())){
                 userResponses.add(response);
             }
         }
