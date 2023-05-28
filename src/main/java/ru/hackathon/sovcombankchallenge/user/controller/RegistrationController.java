@@ -12,6 +12,7 @@ import ru.hackathon.sovcombankchallenge.user.service.UserService;
 @RestController()
 @Tag(name = "User Controller")
 @RequestMapping("/api/user")
+@CrossOrigin(origins = "*")
 public class RegistrationController {
 
     private final UserService userService;
