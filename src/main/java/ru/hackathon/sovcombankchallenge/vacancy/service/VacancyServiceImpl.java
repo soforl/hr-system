@@ -9,6 +9,7 @@ import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
 import ru.hackathon.sovcombankchallenge.stage.service.StageService;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.VacancySpecificDto;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.WorkExperience;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
@@ -91,5 +92,21 @@ public class VacancyServiceImpl implements VacancyService{
         return result;
     }
 
+    @Override
+    public List<VacancySpecificDto> returnSpecDto(List<Vacancy> vacancies){
+        var result = new ArrayList<VacancySpecificDto>();
+
+        for(var vacancy: vacancies){
+            result.add(
+                    VacancySpecificDto.builder()
+                            .vacancyName(vacancy.getName())
+                            .description(vacancy.getDescription())
+                            .vacancyStatus(vacancy.getVacancyStatus())
+                            .workExperience(vacancy.getWorkExperience())
+                            .build()
+            );
+        }
+        return result;
+    }
 
 }

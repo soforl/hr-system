@@ -216,6 +216,7 @@ public class VacancyController {
             VacancySpecification vacancySpecification = new VacancySpecification();
             searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(vacancySpecification::add);
             List<Vacancy> msGenreList = vacancyRepository.findAll(vacancySpecification);
-            return ResponseEntity.status(HttpStatus.OK).body(msGenreList);
+
+            return ResponseEntity.status(HttpStatus.OK).body(vacancyService.returnSpecDto(msGenreList));
     }
 }

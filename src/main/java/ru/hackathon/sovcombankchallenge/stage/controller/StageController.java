@@ -184,7 +184,7 @@ public class StageController {
     })
     @GetMapping("/getStageById")
 //    @PreAuthorize("hasRole('HR')")
-    public ResponseEntity<?> getStageById(@RequestBody UUID stageId){
+    public ResponseEntity<?> getStageById(@RequestParam UUID stageId){
         return ResponseEntity.status(HttpStatus.OK).body(stageService.getById(stageId));
     }
 
