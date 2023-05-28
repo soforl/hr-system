@@ -25,4 +25,8 @@ public class CloseQuestion extends Question {
 
     public CloseQuestion(String text, String var1, String var2, String var3, String var4, int rightChoose) {
     }
+
+    public CloseQuestion() {
+
+    }
 }

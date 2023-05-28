@@ -113,7 +113,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-        @GetMapping("/getUsersResponses")
+    @GetMapping("/getUsersResponses")
     @Operation(summary = "Get all responses from certain user")
     @ApiResponses(value = {
             @ApiResponse(
@@ -130,12 +130,12 @@ public class UserController {
                     description = "Bad Request"
             )
     })
-    @PreAuthorize("hasRole('USER')")
+//    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getUsersResponses(@RequestParam UUID userId){
         List<Response> userResponses = new ArrayList<>();
         List<ResponseDto> dtos = new ArrayList<>();
         for (Response response: responseService.getAll()) {
-            if (response.getCandidate() == userService.getById(userId)){
+            if (response.getCandidate().getId().equals(userId)){
                 userResponses.add(response);
             }
         }
@@ -143,7 +143,8 @@ public class UserController {
             dtos.add(new ResponseDto(response.getResponseStatus(),
                     response.getCreationDate(),
                     response.getVacancy().getName(),
-                    response.getVacancy().convertToDto()));
+                    response.getVacancy().convertToDto(),
+                    response.getVacancy().getId()));
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(dtos);
@@ -195,7 +196,7 @@ public class UserController {
     public ResponseEntity<?> getUsersChallenges(@RequestParam UUID userId){
         List<Stage> userStages = new ArrayList<>();
         for (Response response: responseService.getAll()) {
-            if (response.getCandidate() == userService.getById(userId)){
+            if (response.getCandidate().equals(userId)){
                 userStages.addAll(response.getVacancy().getStages());
             }
         }

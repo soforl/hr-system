@@ -7,6 +7,7 @@ import ru.hackathon.sovcombankchallenge.stageResult.dto.StageResultDto;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -16,4 +17,5 @@ public class ResponseDto {
     private LocalDate creationDate;
     private String vacancyName;
     private List<StageResultDto> stages;
+    private UUID vacancyId;
 }
