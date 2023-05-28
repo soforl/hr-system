@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.stage.models.Question;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
 import ru.hackathon.sovcombankchallenge.stage.repository.StageRepository;
 import ru.hackathon.sovcombankchallenge.stage.service.QuestionService;
 import ru.hackathon.sovcombankchallenge.stage.service.StageService;
@@ -122,15 +123,9 @@ public class StageController {
     @PostMapping("/addTask/open")
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> addQuestion(@RequestBody CreateOpenQuestionDto dto){
-        try {
-            Question question = questionService.createOpenQuestion(dto.getQuestion());
-            stageService.addQuestion(dto.getStageId(),question.getId());
-        }
-        catch (Exception e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        Question question = questionService.createOpenQuestion(dto.getQuestion());
+        stageService.addQuestion(dto.getStageId(),question.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(question);
     }
 
     @Operation(summary = "add close task to stage")
@@ -159,7 +154,7 @@ public class StageController {
                     dto.getRightChoose());
             stageService.addQuestion(dto.getStageId(),question.getId());
         }
-        catch (Exception e) {
+        catch (NullPointerException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
@@ -184,8 +179,20 @@ public class StageController {
     })
     @GetMapping("/getStageById")
 //    @PreAuthorize("hasRole('HR')")
-    public ResponseEntity<?> getStageById(@RequestBody UUID stageId){
-        return ResponseEntity.status(HttpStatus.OK).body(stageService.getById(stageId));
+    public ResponseEntity<?> getStageById(@RequestParam UUID stageId){
+        Stage stage = stageService.getById(stageId);
+        ReturnStageDto dto = null;
+        if (stage instanceof TestStage) {
+            dto = new ReturnStageDto(stageId, stage.getName(),
+                    ((TestStage) stage).getDeadline(),
+                    ((TestStage) stage).getDuration().toSeconds(),
+                    ((TestStage) stage).convertToDto());
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(stage);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")
@@ -208,6 +215,7 @@ public class StageController {
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> specification(@RequestBody List<SearchCriteria> searchCriteria) {
         StageSpecification stageSpecification = new StageSpecification();
+        searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(stageSpecification::add);
         searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(stageSpecification::add);
         List<Stage> msGenreList = stageRepository.findAll(stageSpecification);
         return ResponseEntity.status(HttpStatus.OK).body(msGenreList);
