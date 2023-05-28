@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/userInfo")
 //@CrossOrigin(origins = "*")
 public class UserController {
+
     private final UserRepository userRepository;
     private final UserService userService;
     private final ResponseService responseService;
