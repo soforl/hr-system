@@ -19,11 +19,13 @@ import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stageResult.service.StageResultService;
 import ru.hackathon.sovcombankchallenge.user.dto.ChangeUserInfoDto;
+import ru.hackathon.sovcombankchallenge.user.dto.ResponseDto;
 import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.repository.UserRepository;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
 import ru.hackathon.sovcombankchallenge.user.specification.UserSpecification;
+import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,8 @@ public class UserController {
     private ResponseService responseService;
     @Autowired
     private StageResultService stageResultService;
+    @Autowired
+    private VacancyService vacancyService;
 
     @Operation(summary = "change user's phone number")
     @ApiResponses(value = {
@@ -109,7 +113,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/getUsersResponses")
+        @GetMapping("/getUsersResponses")
     @Operation(summary = "Get all responses from certain user")
     @ApiResponses(value = {
             @ApiResponse(
@@ -126,15 +130,23 @@ public class UserController {
                     description = "Bad Request"
             )
     })
-//    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getUsersResponses(@RequestParam UUID userId){
         List<Response> userResponses = new ArrayList<>();
+        List<ResponseDto> dtos = new ArrayList<>();
         for (Response response: responseService.getAll()) {
             if (response.getCandidate() == userService.getById(userId)){
                 userResponses.add(response);
             }
         }
-        return ResponseEntity.status(HttpStatus.OK).body(userResponses);
+        for (Response response: userResponses){
+            dtos.add(new ResponseDto(response.getResponseStatus(),
+                    response.getCreationDate(),
+                    response.getVacancy().getName(),
+                    response.getVacancy().convertToDto()));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(dtos);
     }
 
 
@@ -171,7 +183,7 @@ public class UserController {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = CustomUser.class))
+                                    array = @ArraySchema(schema = @Schema(implementation = Stage.class)))
                     }
             ),
             @ApiResponse(
@@ -259,4 +271,6 @@ public class UserController {
     public ResponseEntity<?> getAllUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
     }
+
+
 }

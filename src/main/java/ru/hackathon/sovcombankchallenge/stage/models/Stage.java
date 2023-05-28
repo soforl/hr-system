@@ -10,6 +10,7 @@ public abstract class Stage {
    @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     @Column(name = "NAME")
     private String name;
 
@@ -23,5 +24,9 @@ public abstract class Stage {
 
     public UUID getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 }
