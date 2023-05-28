@@ -31,6 +31,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/userInfo")
+//@CrossOrigin(origins = "*")
 public class UserController {
     @Autowired
     private UserRepository userRepository;

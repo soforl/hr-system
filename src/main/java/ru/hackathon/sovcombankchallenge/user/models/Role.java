@@ -19,13 +19,13 @@ public class Role implements GrantedAuthority {
     private UUID id;
     private String name;
     @Transient
-    @OneToMany(mappedBy = "ROLE", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CustomUser> customUsers;
     public Role() {
     }
 
     public Role(String name) {
-        this.name = "ROLE_" + name;
+        this.name = name;
     }
 
     @Override
