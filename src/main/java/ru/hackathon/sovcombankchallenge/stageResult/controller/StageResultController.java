@@ -109,10 +109,11 @@ public class StageResultController {
 //            )
 //    })
 //    public ResponseEntity<?> saveUserAnswersToStage(@RequestBody SaveUserAnswersToStageDto dto){
-//        responseService.getById(dto.getResponseId()).
+//        Response response = responseService.getById(dto.getResponseId());
+////        response.
 //        return null;
 //    }
-//
+
 
     @Operation(summary = "get results")
     @ApiResponses(value = {

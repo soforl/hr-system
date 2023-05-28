@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
+import ru.hackathon.sovcombankchallenge.stageResult.dto.StageResultDto;
+import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.WorkExperience;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
@@ -44,5 +46,13 @@ public class Vacancy {
         this.vacancyStatus = vacancyStatus;
         this.stages = new ArrayList<>();
         this.workExperience = workExperience;
+    }
+
+    public List<StageResultDto> convertToDto(){
+        List<StageResultDto> dtos = new ArrayList<>();
+        for (Stage result: stages) {
+            dtos.add(new StageResultDto(result.getId(), result.getName()));
+        }
+        return dtos;
     }
 }

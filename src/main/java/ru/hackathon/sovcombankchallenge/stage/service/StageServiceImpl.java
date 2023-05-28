@@ -22,7 +22,8 @@ public class StageServiceImpl implements StageService{
     private final QuestionService questionService;
 
     @Override
-    public Stage createTestStage(String name, LocalDateTime deadline, Duration duration) {
+    public Stage createTestStage(String name, LocalDateTime deadline, Long durationSec) {
+        var duration = Duration.ofSeconds(durationSec);
         TestStage testStage = new TestStage(name, deadline, duration);
         return stageRepository.save(testStage);
     }
