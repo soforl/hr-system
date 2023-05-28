@@ -149,12 +149,27 @@ public class UserController {
                 userResponses.add(response);
             }
         }
+
+
         for (Response response: userResponses){
-            dtos.add(new ResponseDto(response.getResponseStatus(),
-                    response.getCreationDate(),
-                    response.getVacancy().getName(),
-                    response.getVacancy().convertToDto(),
-                    response.getVacancy().getId()));
+
+            var stages = response.getVacancy().getStages();
+            var stageDtoForUsers = responseService.convertToDtoTest(
+                    stages.stream()
+                            .filter(e -> e instanceof TestStage)
+                            .map(e -> (TestStage) e)
+                            .collect(Collectors.toList()));
+
+
+
+            dtos.add(ResponseDto.builder()
+                            .responseStatus(response.getResponseStatus())
+                                    .creationDate(response.getCreationDate())
+                                            .stages(stageDtoForUsers)
+                                                    .vacancyId(response.getVacancy().getId())
+                                                            .vacancyName(response.getVacancy().getName())
+                                                                    .build()
+                    );
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(dtos);
@@ -213,7 +228,7 @@ public class UserController {
                 stages.stream()
                         .filter(e -> e instanceof TestStage)
                         .map(e -> (TestStage) e)
-                        .collect(Collectors.toList()), vacancy);
+                        .collect(Collectors.toList()));
 
         // получить отклик
         // получить результаты

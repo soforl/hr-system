@@ -55,7 +55,7 @@ public class ResponseServiceImpl implements ResponseService{
 
 
     @Override
-    public List<StageDtoForUser> convertToDtoTest(List<TestStage> stages, Vacancy vacancy) {
+    public List<StageDtoForUser> convertToDtoTest(List<TestStage> stages) {
         var result = new ArrayList<StageDtoForUser>();
 
         for (var stage: stages) {
