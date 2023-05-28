@@ -1,7 +1,11 @@
 package ru.hackathon.sovcombankchallenge.response.service;
 
+import ru.hackathon.sovcombankchallenge.response.dto.StageDtoForUser;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
+import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
+import ru.hackathon.sovcombankchallenge.stageResult.models.InterviewResult;
 import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
+import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,4 +15,8 @@ public interface ResponseService {
     List<Response> getAll();
     Response getById(UUID responseId);
     List<StageResult> getResults(UUID responseId);
+
+    List<StageDtoForUser> convertToDtoTest(List<TestStage> stages, Vacancy vacancy);
+
+    List<StageDtoForUser> convertToDtoInterview(List<InterviewResult> interviewResults);
 }

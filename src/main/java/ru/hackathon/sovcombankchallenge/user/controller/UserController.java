@@ -13,10 +13,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.response.dto.CreateResponseDto;
+import ru.hackathon.sovcombankchallenge.response.dto.StageDtoForUser;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
 import ru.hackathon.sovcombankchallenge.stageResult.service.StageResultService;
 import ru.hackathon.sovcombankchallenge.user.dto.ChangeUserInfoDto;
 import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
@@ -24,10 +26,12 @@ import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.repository.UserRepository;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
 import ru.hackathon.sovcombankchallenge.user.specification.UserSpecification;
+import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/userInfo")
@@ -39,6 +43,10 @@ public class UserController {
     private UserService userService;
     @Autowired
     private ResponseService responseService;
+
+    @Autowired
+    private VacancyService vacancyService;
+
     @Autowired
     private StageResultService stageResultService;
 
@@ -172,7 +180,7 @@ public class UserController {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = CustomUser.class))
+                                    schema = @Schema(implementation = StageDtoForUser.class))
                     }
             ),
             @ApiResponse(
@@ -181,14 +189,25 @@ public class UserController {
             )
     })
 //    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getUsersChallenges(@RequestParam UUID userId){
+    public ResponseEntity<?> getUsersChallenges(@RequestParam UUID userId, @RequestParam UUID vacancyID){
         List<Stage> userStages = new ArrayList<>();
-        for (Response response: responseService.getAll()) {
-            if (response.getCandidate() == userService.getById(userId)){
-                userStages.addAll(response.getVacancy().getStages());
-            }
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(userStages);
+        var vacancy = vacancyService.getById(vacancyID);
+
+        var stages = vacancy.getStages();
+
+        var result = responseService.convertToDtoTest(
+                stages.stream()
+                        .filter(e -> e instanceof TestStage)
+                        .map(e -> (TestStage) e)
+                        .collect(Collectors.toList()), vacancy);
+
+        // получить отклик
+        // получить результаты
+        // найти интервью
+        // преобразовать в дто
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 

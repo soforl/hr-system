@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface StageService {
-    Stage createTestStage(String name, LocalDateTime deadline, Duration duration);
+    Stage createTestStage(String name, LocalDateTime deadline, Long duration);
     Stage createInterview(String name, String comments);
     void addQuestion(UUID stageId, UUID questionId);
     List<Question> getQuestions(UUID stageId);

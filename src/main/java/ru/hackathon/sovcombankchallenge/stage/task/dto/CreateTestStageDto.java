@@ -11,5 +11,5 @@ public class CreateTestStageDto {
     private String stageName;
     private UUID vacancyId;
     private LocalDateTime deadline;
-    private Duration duration;
+    private Long duration_sec;
 }
