@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import ru.hackathon.sovcombankchallenge.stage.task.dto.QuestionDto;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -27,5 +28,13 @@ public class TestStage extends Stage {
         this.deadline = deadline;
         this.duration = duration;
         this.questions = new ArrayList<>();
+    }
+
+    public List<QuestionDto> convertToDto(){
+        List<QuestionDto> dto = new ArrayList<>();
+        for (Question q: questions) {
+            dto.add(new QuestionDto(q));
+        }
+        return dto;
     }
 }
