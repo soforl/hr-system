@@ -1,6 +1,7 @@
 package ru.hackathon.sovcombankchallenge.user.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users")
+
 public class CustomUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -24,6 +26,10 @@ public class CustomUser implements UserDetails {
     @Transient
     private String passwordConfirm;
 
+    @Getter
+    @Column(name = "image_url")
+    private String image_url;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ROLE_ID")
     private Role role;
@@ -37,6 +43,7 @@ public class CustomUser implements UserDetails {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.role = role;
+        this.image_url = "https://static.rustore.ru/apk/5503167/content/ICON/585ea7fe-2cea-43e8-8575-5af080a5891c.png";
     }
 
     public UUID getId() {
