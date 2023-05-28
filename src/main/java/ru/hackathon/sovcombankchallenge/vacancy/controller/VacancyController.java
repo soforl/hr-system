@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.CreateVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.UpdateVacancyStatusDto;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
@@ -21,6 +22,7 @@ import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 import ru.hackathon.sovcombankchallenge.vacancy.specifications.VacancySpecification;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -97,6 +99,32 @@ public class VacancyController {
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> getResponsesByVacancy(@RequestParam UUID vacancyId){
         return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getResponsesByVacancy(vacancyId));
+    }
+
+    @Operation(summary = "get candidates for certain vacancy")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Candidates were found",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = CustomUser.class)))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request"
+            )
+    })
+    @GetMapping("/getCandidatesByVacancy")
+//    @PreAuthorize("hasRole('HR')")
+    public ResponseEntity<?> getCandidatesByVacancy(@RequestParam UUID vacancyId){
+        List<CustomUser> candidates = new ArrayList<>();
+        for (Response rep: vacancyService.getResponsesByVacancy(vacancyId)) {
+            candidates.add(rep.getCandidate());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(candidates);
     }
 
     @Operation(summary = "get vacancy by id(when you click on button look at vacancy info)")

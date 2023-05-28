@@ -21,6 +21,7 @@ import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
 import ru.hackathon.sovcombankchallenge.stageResult.service.StageResultService;
 import ru.hackathon.sovcombankchallenge.user.dto.ChangeUserInfoDto;
+import ru.hackathon.sovcombankchallenge.user.dto.ResponseDto;
 import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.repository.UserRepository;
@@ -49,6 +50,8 @@ public class UserController {
 
     @Autowired
     private StageResultService stageResultService;
+    @Autowired
+    private VacancyService vacancyService;
 
     @Operation(summary = "change user's phone number")
     @ApiResponses(value = {
@@ -138,12 +141,21 @@ public class UserController {
 //    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getUsersResponses(@RequestParam UUID userId){
         List<Response> userResponses = new ArrayList<>();
+        List<ResponseDto> dtos = new ArrayList<>();
         for (Response response: responseService.getAll()) {
-            if (response.getCandidate() == userService.getById(userId)){
+            if (response.getCandidate().getId().equals(userId)){
                 userResponses.add(response);
             }
         }
-        return ResponseEntity.status(HttpStatus.OK).body(userResponses);
+        for (Response response: userResponses){
+            dtos.add(new ResponseDto(response.getResponseStatus(),
+                    response.getCreationDate(),
+                    response.getVacancy().getName(),
+                    response.getVacancy().convertToDto(),
+                    response.getVacancy().getId()));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(dtos);
     }
 
 
@@ -279,4 +291,6 @@ public class UserController {
     public ResponseEntity<?> getAllUsers() {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
     }
+
+
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
+import ru.hackathon.sovcombankchallenge.stageResult.dto.StageResultDto;
 import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
@@ -49,4 +50,6 @@ public class Response {
     public void addStageResult(StageResult stage){
         this.stageResults.add(stage);
     }
+
+
 }
