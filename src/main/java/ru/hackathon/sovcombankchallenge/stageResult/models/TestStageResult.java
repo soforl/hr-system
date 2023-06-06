@@ -1,24 +1,26 @@
 package ru.hackathon.sovcombankchallenge.stageResult.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.apache.catalina.User;
 import ru.hackathon.sovcombankchallenge.stage.models.Question;
+import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
+
+import java.util.List;
 
 @Entity
-@Table(name = "test_stage_results")
 @Getter
 @Setter
 public class TestStageResult extends StageResult {
+    @ManyToOne
+    private CustomUser candidate;
     @ManyToOne()
-    private Question question;
-    @Column(name = "USER_ANSWER")
-    private String userAnswer;
-
+    private Stage stage;
+    private String answers;
+    private int points;
     public TestStageResult(Question question, String answer) {
         super();
     }

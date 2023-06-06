@@ -8,19 +8,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "close_questions")
 @Getter
 @Setter
 public class CloseQuestion extends Question {
-    @Column(name = "VAR1")
     private String var1;
-    @Column(name = "VAR2")
     private String var2;
-    @Column(name = "VAR3")
     private String var3;
-    @Column(name = "VAR4")
     private String var4;
-    @Column(name = "RIGHT_CHOOSE")
     private int rightChoose;
 
     public CloseQuestion(String text, String var1, String var2, String var3, String var4, int rightChoose) {

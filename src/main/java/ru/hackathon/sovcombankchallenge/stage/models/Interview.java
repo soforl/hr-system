@@ -12,12 +12,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Entity
-@Table(name = "interviews")
 @Getter
 @Setter
 @RequiredArgsConstructor
 public class Interview extends Stage {
-    @Column(name = "COMMENTS")
     private String comments;
 
     public Interview(String name, String comments) {
