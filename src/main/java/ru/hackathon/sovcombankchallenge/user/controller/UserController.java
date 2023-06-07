@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import ru.hackathon.sovcombankchallenge.response.dto.CreateResponseDto;
 import ru.hackathon.sovcombankchallenge.response.dto.StageDtoForUser;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
+import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
@@ -26,7 +28,6 @@ import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.repository.UserRepository;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
-import ru.hackathon.sovcombankchallenge.user.specification.UserSpecification;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
 import java.util.ArrayList;
@@ -259,10 +260,11 @@ public class UserController {
     })
     @PostMapping("/userSpecification")
 //    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> specification(@RequestBody List<SearchCriteria> searchCriteria) {
-        UserSpecification userSpecification = new UserSpecification();
-        searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(userSpecification::add);
-        List<CustomUser> msGenreList = userRepository.findAll(userSpecification);
+    public ResponseEntity<?> userSpecification(@RequestBody List<SearchCriteria> searchCriteria) {
+        CustomSpecification<CustomUser> userCustomSpecification = new CustomSpecification<>();
+        searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(userCustomSpecification::add);
+        List<CustomUser> msGenreList = userRepository.findAll(userCustomSpecification);
+
         return ResponseEntity.status(HttpStatus.OK).body(msGenreList);
     }
 

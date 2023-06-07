@@ -1,4 +1,4 @@
-package ru.hackathon.sovcombankchallenge.stageResult.specification;
+package ru.hackathon.sovcombankchallenge.specificationInfo;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -6,23 +6,20 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
-import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
-import ru.hackathon.sovcombankchallenge.stage.models.Stage;
-import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
+import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class StageResultSpecification implements Specification<StageResult> {
+public class CustomSpecification<T> implements Specification<T> {
     private List<SearchCriteria> list = new ArrayList<>();
 
     public void add(SearchCriteria criteria) {
         list.add(criteria);
     }
-
     @Override
-    public Predicate toPredicate(Root<StageResult> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+    public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         List<Predicate> predicates = new ArrayList<>();
         for (SearchCriteria criteria : list) {
             switch (criteria.getOperation()) {

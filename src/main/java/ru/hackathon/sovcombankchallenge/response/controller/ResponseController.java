@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.repository.ResponseRepository;
 import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
-import ru.hackathon.sovcombankchallenge.response.specification.ResponseSpecification;
+import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
@@ -51,7 +51,7 @@ public class ResponseController {
     })
     @PostMapping("/responseSpecification")
     public ResponseEntity<?> specification(@RequestBody List<SearchCriteria> searchCriteria) {
-        ResponseSpecification responseSpecification = new ResponseSpecification();
+        CustomSpecification<Response> responseSpecification = new CustomSpecification<>();
         searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(responseSpecification::add);
         List<Response> msGenreList = responseRepository.findAll(responseSpecification);
         return ResponseEntity.status(HttpStatus.OK).body(msGenreList);

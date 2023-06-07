@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
+import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.CreateStageResultDto;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.ResultToUserDto;
@@ -21,7 +22,6 @@ import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.models.TestStageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.repository.StageResultRepository;
 import ru.hackathon.sovcombankchallenge.stageResult.service.StageResultService;
-import ru.hackathon.sovcombankchallenge.stageResult.specification.StageResultSpecification;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.SaveUserAnswersToStageDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
@@ -183,7 +183,7 @@ public class StageResultController {
     @PostMapping("/stageResultSpecification")
 //    @PreAuthorize("hasAnyRole('HR', 'USER')")
     public ResponseEntity<?> specification(@RequestBody List<SearchCriteria> searchCriteria) {
-        StageResultSpecification stageResultSpecification = new StageResultSpecification();
+        CustomSpecification<StageResult> stageResultSpecification = new CustomSpecification<>();
         searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(stageResultSpecification::add);
         List<StageResult> msGenreList = stageResultRepository.findAll(stageResultSpecification);
         return ResponseEntity.status(HttpStatus.OK).body(msGenreList);

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.stage.models.Question;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
@@ -18,7 +19,6 @@ import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
 import ru.hackathon.sovcombankchallenge.stage.repository.StageRepository;
 import ru.hackathon.sovcombankchallenge.stage.service.QuestionService;
 import ru.hackathon.sovcombankchallenge.stage.service.StageService;
-import ru.hackathon.sovcombankchallenge.stage.specification.StageSpecification;
 import ru.hackathon.sovcombankchallenge.stage.task.dto.*;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
@@ -214,7 +214,7 @@ public class StageController {
     @PostMapping("/stageSpecification")
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> specification(@RequestBody List<SearchCriteria> searchCriteria) {
-        StageSpecification stageSpecification = new StageSpecification();
+        CustomSpecification<Stage> stageSpecification = new CustomSpecification<>();
         searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(stageSpecification::add);
         searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(stageSpecification::add);
         List<Stage> msGenreList = stageRepository.findAll(stageSpecification);
