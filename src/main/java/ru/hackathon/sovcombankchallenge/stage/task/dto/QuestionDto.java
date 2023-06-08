@@ -12,6 +12,7 @@ import java.util.UUID;
 public class QuestionDto {
     private Question question;
     private String type;
+    private int[] array = {1, 2, 3};
 
 
     public QuestionDto(Question question) {

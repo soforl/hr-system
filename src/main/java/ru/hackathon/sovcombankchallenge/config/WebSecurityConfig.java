@@ -25,14 +25,22 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().disable().csrf().disable()
-                .authorizeHttpRequests((requests) -> requests
-                        // Отркываю доступ к свагеру всем!
-                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**" ).permitAll()
-                        // Доступ к контроллеру USer
-                        .requestMatchers("/api/user/registrationUser", "/api/user/registrationHR").permitAll()
-                        // Запрещаю все остальное
-
-                        .anyRequest().permitAll()
+                .authorizeHttpRequests((requests) -> {
+                            try {
+                                requests
+                                        // Отркываю доступ к свагеру всем!
+                                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**" ).permitAll()
+                                        // Доступ к контроллеру USer
+                                        .requestMatchers("/api/user/registrationUser", "/api/user/registrationHR").permitAll()
+                                        // Запрещаю все остальное
+                
+                                        .anyRequest().permitAll()
+                                        .and()
+                                        .formLogin().loginPage("/login").permitAll();
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                 )
                 .formLogin(Customizer.withDefaults())
                 .logout(LogoutConfigurer::permitAll);

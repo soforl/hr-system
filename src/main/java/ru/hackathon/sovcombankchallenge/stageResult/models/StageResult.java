@@ -5,7 +5,6 @@ import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 
 import java.util.UUID;
 @Entity
-@Table(name = "stageResults")
 public abstract class StageResult {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

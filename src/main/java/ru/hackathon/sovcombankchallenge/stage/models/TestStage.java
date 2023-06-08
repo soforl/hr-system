@@ -11,14 +11,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
-@Table(name = "test_stages")
 @RequiredArgsConstructor
 @Getter
 @Setter
 public class TestStage extends Stage {
-    @Column(name = "DEADLINE")
     private LocalDateTime deadline;
-    @Column(name = "DURATION")
     private Duration duration;
     @OneToMany(fetch = FetchType.EAGER)
     private List<Question> questions;

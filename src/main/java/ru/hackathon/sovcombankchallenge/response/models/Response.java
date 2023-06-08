@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "responses")
 @RequiredArgsConstructor
 @Getter
 @Setter
@@ -41,10 +40,8 @@ public class Response {
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<StageResult> stageResults;
-    @Column(name = "RESPONSE_STATUS")
     @Enumerated(EnumType.STRING)
     private ResponseStatus responseStatus;
-    @Column(name = "CREATION_DATE")
     private LocalDate creationDate;
 
     public void addStageResult(StageResult stage){
