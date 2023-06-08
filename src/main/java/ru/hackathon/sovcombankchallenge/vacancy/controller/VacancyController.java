@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
+import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.CreateVacancyDto;
@@ -21,7 +22,7 @@ import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.repository.VacancyRepository;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
-import ru.hackathon.sovcombankchallenge.vacancy.specifications.VacancySpecification;
+//import ru.hackathon.sovcombankchallenge.vacancy.specifications.VacancySpecification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -213,10 +214,10 @@ public class VacancyController {
     @PostMapping("/vacancySpecification")
 //    @PreAuthorize("hasAnyRole('HR', 'USER')")
     public ResponseEntity<?> specification(@RequestBody List<SearchCriteria> searchCriteria) {
-            VacancySpecification vacancySpecification = new VacancySpecification();
-            searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(vacancySpecification::add);
-            List<Vacancy> msGenreList = vacancyRepository.findAll(vacancySpecification);
+        CustomSpecification<Vacancy> vacancyCustomSpecification = new CustomSpecification<>();
+        searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(vacancyCustomSpecification::add);
+        List<Vacancy> msGenreList = vacancyRepository.findAll(vacancyCustomSpecification);
 
-            return ResponseEntity.status(HttpStatus.OK).body(vacancyService.returnSpecDto(msGenreList));
+        return ResponseEntity.status(HttpStatus.OK).body(vacancyService.returnSpecDto(msGenreList));
     }
 }
