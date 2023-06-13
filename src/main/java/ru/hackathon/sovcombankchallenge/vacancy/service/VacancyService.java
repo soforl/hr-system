@@ -17,6 +17,7 @@ import java.util.UUID;
 public interface VacancyService {
     void create(String name, String description, VacancyStatus status, WorkExperience experience, SphereType sphere);
     void addStage(UUID vacancyId, UUID stageId);
+    void removeStage(UUID vacancyId, UUID stageId);
     List<Vacancy> getAll();
     Vacancy getById(UUID vacancyId);
     List<Stage> getStages(UUID vacancyId);

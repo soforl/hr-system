@@ -48,6 +48,15 @@ public class VacancyServiceImpl implements VacancyService{
         vacancy.setStages(stages);
         vacancyRepository.save(vacancy);
     }
+    @Override
+    public void removeStage(UUID vacancyId, UUID stageId) {
+        Vacancy vacancy = this.getById(vacancyId);
+        Stage stage = stageService.getById(stageId);
+        List<Stage> stages = vacancy.getStages();
+        stages.remove(stage);
+        vacancy.setStages(stages);
+        vacancyRepository.save(vacancy);
+    }
 
     @Override
     public List<Vacancy> getAll() {
