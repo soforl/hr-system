@@ -2,6 +2,7 @@ package ru.hackathon.sovcombankchallenge.response.service;
 
 import ru.hackathon.sovcombankchallenge.response.dto.StageDtoForUser;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
+import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
 import ru.hackathon.sovcombankchallenge.stageResult.models.InterviewResult;
 import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;

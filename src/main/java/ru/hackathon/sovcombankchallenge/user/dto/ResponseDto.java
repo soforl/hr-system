@@ -6,6 +6,7 @@ import lombok.Data;
 import ru.hackathon.sovcombankchallenge.response.dto.StageDtoForUser;
 import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.StageResultDto;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.StageResultForVacDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,10 +16,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class ResponseDto {
-    private ResponseStatus responseStatus;
-
-    private LocalDate creationDate;
-    private String vacancyName;
-    private List<StageDtoForUser> stages;
     private UUID vacancyId;
+    private String vacancyName;
+    private ResponseStatus responseStatus;
+    private UserInfoDto user;
+    private LocalDate creationDate;
+    private List<StageDtoForUser> stages;
+    private List<StageResultForVacDto> results;
+
 }

@@ -49,11 +49,11 @@ public class Vacancy {
         this.sphere = sphere;
     }
 
-    public List<StageResultDto> convertToDto(){
-        List<StageResultDto> dtos = new ArrayList<>();
-        for (Stage result: stages) {
-            dtos.add(new StageResultDto(result.getId(), result.getName()));
-        }
-        return dtos;
-    }
+//    public List<StageResultDto> convertToDto(){
+//        List<StageResultDto> dtos = new ArrayList<>();
+//        for (Stage result: stages) {
+//            dtos.add(new StageResultDto(result.getId(), result.getName()));
+//        }
+//        return dtos;
+//    }
 }

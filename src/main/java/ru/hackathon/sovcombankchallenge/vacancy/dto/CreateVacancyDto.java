@@ -11,5 +11,5 @@ public class CreateVacancyDto {
     private String description;
     private WorkExperience workExperience;
     private VacancyStatus vacancyStatus;
-    private SphereType sphereType;
+    private SphereType sphere;
 }

@@ -21,6 +21,7 @@ import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
+import ru.hackathon.sovcombankchallenge.stageResult.models.InterviewResult;
 import ru.hackathon.sovcombankchallenge.stageResult.service.StageResultService;
 import ru.hackathon.sovcombankchallenge.user.dto.ChangeUserInfoDto;
 import ru.hackathon.sovcombankchallenge.user.dto.ResponseDto;
@@ -31,8 +32,10 @@ import ru.hackathon.sovcombankchallenge.user.service.UserService;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RestController
@@ -46,17 +49,15 @@ public class UserController {
 
     private final VacancyService vacancyService;
 
-    private final StageResultService stageResultService;
-
-    public UserController(UserRepository userRepository, UserService userService, ResponseService responseService, VacancyService vacancyService, StageResultService stageResultService) {
+    @Autowired
+    public UserController(UserRepository userRepository, UserService userService, ResponseService responseService, VacancyService vacancyService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.responseService = responseService;
         this.vacancyService = vacancyService;
-        this.stageResultService = stageResultService;
     }
 
-    @Operation(summary = "change user's phone number")
+    @Operation(summary = "change user's phone number - Main page Candidate/HR")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -78,7 +79,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "change user's email")
+    @Operation(summary = "change user's email - Main Page Candidate/HR")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -156,13 +157,7 @@ public class UserController {
         for (Response response: userResponses){
 
             var stages = response.getVacancy().getStages();
-            var stageDtoForUsers = responseService.convertToDtoTest(
-                    stages.stream()
-                            .filter(e -> e instanceof TestStage)
-                            .map(e -> (TestStage) e)
-                            .collect(Collectors.toList()));
-
-
+            var stageDtoForUsers = responseService.convertToStageDto(stages);
 
             dtos.add(ResponseDto.builder()
                             .responseStatus(response.getResponseStatus())
@@ -226,11 +221,7 @@ public class UserController {
 
         var stages = vacancy.getStages();
 
-        var result = responseService.convertToDtoTest(
-                stages.stream()
-                        .filter(e -> e instanceof TestStage)
-                        .map(e -> (TestStage) e)
-                        .collect(Collectors.toList()));
+        var result = responseService.convertToStageDto(stages);
 
         // получить отклик
         // получить результаты
@@ -264,8 +255,13 @@ public class UserController {
         CustomSpecification<CustomUser> userCustomSpecification = new CustomSpecification<>();
         searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(userCustomSpecification::add);
         List<CustomUser> msGenreList = userRepository.findAll(userCustomSpecification);
-
-        return ResponseEntity.status(HttpStatus.OK).body(msGenreList);
+        var result = msGenreList.stream().map(user -> new UserInfoDto(user.getUsername(),
+                user.getName(),
+                user.getPhoneNumber(),
+                user.getRole(),
+                user.getImage_url()))
+                .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping("/getUserInformation")
@@ -309,7 +305,13 @@ public class UserController {
     @GetMapping("/allUsers")
 //    @PreAuthorize("hasAnyRole('HR')")
     public ResponseEntity<?> getAllUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getAll());
+        var users = userService.getAll().stream().map(user -> new UserInfoDto(user.getUsername(),
+                user.getName(),
+                user.getPhoneNumber(),
+                user.getRole(),
+                user.getImage_url()))
+                .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
 

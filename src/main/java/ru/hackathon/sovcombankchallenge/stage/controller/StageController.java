@@ -9,35 +9,39 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
-import ru.hackathon.sovcombankchallenge.stage.models.Question;
-import ru.hackathon.sovcombankchallenge.stage.models.Stage;
-import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
+import ru.hackathon.sovcombankchallenge.stage.models.*;
 import ru.hackathon.sovcombankchallenge.stage.repository.StageRepository;
 import ru.hackathon.sovcombankchallenge.stage.service.QuestionService;
 import ru.hackathon.sovcombankchallenge.stage.service.StageService;
 import ru.hackathon.sovcombankchallenge.stage.task.dto.*;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/stage")
 public class StageController {
+    private final StageRepository stageRepository;
+    private final StageService stageService;
+    private final VacancyService vacancyService;
+    private final QuestionService questionService;
 
     @Autowired
-    private StageRepository stageRepository;
-    @Autowired
-    private StageService stageService;
-    @Autowired
-    private VacancyService vacancyService;
-    @Autowired
-    private QuestionService questionService;
+    public StageController(StageRepository stageRepository, StageService stageService, VacancyService vacancyService, QuestionService questionService) {
+        this.stageRepository = stageRepository;
+        this.stageService = stageService;
+        this.vacancyService = vacancyService;
+        this.questionService = questionService;
+    }
+
     @Operation(summary = "add test stage to vacancy")
     @ApiResponses(value = {
             @ApiResponse(
@@ -59,7 +63,7 @@ public class StageController {
     public ResponseEntity<?> addTestStageToVacancy(@RequestBody CreateTestStageDto dto){
         Stage stage = stageService.createTestStage(dto.getStageName(), dto.getDeadline(), dto.getDuration_sec());
         vacancyService.addStage(dto.getVacancyId(), stage.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(vacancyService.getById(dto.getVacancyId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(stage); // или нужно возвращать инфу про вакансию?
     }
 
     @Operation(summary = "add interview stage to vacancy")
@@ -83,30 +87,7 @@ public class StageController {
     public ResponseEntity<?> addInterviewStageToVacancy(@RequestBody CreateInterviewStageDto dto){
         Stage stage = stageService.createInterview(dto.getStageName(), dto.getComments());
         vacancyService.addStage(dto.getVacancyId(), stage.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(vacancyService.getById(dto.getVacancyId()));
-    }
-
-    @Operation(summary = "add existing stage to vacancy")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "Stage was created",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = Vacancy.class))
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    @PostMapping("/addStageToVacancy")
-//    @PreAuthorize("hasRole('HR')")
-    public ResponseEntity<?> addStageToVacancy(@RequestBody AddStageToVacancyDto dto){
-        vacancyService.addStage(dto.getVacancyId(), dto.getStageId()); // TODO: check if stage exists
-        return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getById(dto.getVacancyId()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(stage);
     }
 
     @Operation(summary = "add open task to stage")
@@ -122,10 +103,10 @@ public class StageController {
     })
     @PostMapping("/addTask/open")
 //    @PreAuthorize("hasRole('HR')")
-    public ResponseEntity<?> addQuestion(@RequestBody CreateOpenQuestionDto dto){
+    public ResponseEntity<?> addOpenQuestion(@RequestBody CreateOpenQuestionDto dto){
         Question question = questionService.createOpenQuestion(dto.getQuestion());
         stageService.addQuestion(dto.getStageId(),question.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(question);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Operation(summary = "add close task to stage")
@@ -181,19 +162,10 @@ public class StageController {
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> getStageById(@RequestParam UUID stageId){
         Stage stage = stageService.getById(stageId);
-        ReturnStageDto dto = null;
-        if (stage instanceof TestStage) {
-            dto = new ReturnStageDto(stageId, stage.getName(),
-                    ((TestStage) stage).getDeadline(),
-                    ((TestStage) stage).getDuration().toSeconds(),
-                    ((TestStage) stage).convertToDto());
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.OK).body(stage);
-        }
-
+        ReturnStageDto dto = stageService.convertToStageDto(stage);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
-    }
+    } // todo throw exception
+    // TODO: make method save all
 
     @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")
     @ApiResponses(value = {
@@ -218,6 +190,7 @@ public class StageController {
         searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(stageSpecification::add);
         searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(stageSpecification::add);
         List<Stage> msGenreList = stageRepository.findAll(stageSpecification);
-        return ResponseEntity.status(HttpStatus.OK).body(msGenreList);
+        var result = msGenreList.stream().map(stageService::convertToStageDto);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

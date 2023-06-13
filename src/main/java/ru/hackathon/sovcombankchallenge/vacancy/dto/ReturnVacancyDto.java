@@ -15,6 +15,7 @@ import java.util.UUID;
 public class ReturnVacancyDto {
     private UUID vacancyId;
     private String vacancyName;
+    private String description;
     private VacancyStatus vacancyStatus;
     private WorkExperience workExperience;
     private SphereType sphere;
