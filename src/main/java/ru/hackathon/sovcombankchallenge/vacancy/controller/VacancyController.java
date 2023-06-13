@@ -14,12 +14,13 @@ import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
 import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
-import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
 import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.CreateVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.UpdateVacancyInfoDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.UpdateVacancyStatusDto;
+import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.repository.VacancyRepository;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
@@ -213,7 +214,40 @@ public class VacancyController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    public ResponseEntity<?> delete
+    @Operation(summary = "update Vacancy parameters, such as status, name and etc")
+    @PutMapping("/updateVacancyInfo")
+    public ResponseEntity<?> updateVacancyInfo(@RequestBody UpdateVacancyInfoDto dto){
+        Vacancy vacancy = vacancyService.getById(dto.getVacancyId());
+        if (dto.getName() != null)
+            vacancyService.updateName(dto.getVacancyId(), dto.getName());
+        if (dto.getDescription() != null)
+            vacancyService.updateDescription(dto.getVacancyId(), dto.getDescription());
+        if (dto.getVacancyStatus() != null)
+            vacancyService.updateStatus(dto.getVacancyId(), dto.getVacancyStatus());
+        if (dto.getWorkExperience() != null)
+            vacancyService.updateWorkExperience(dto.getVacancyId(), dto.getWorkExperience());
+        if (dto.getSphereType() != null)
+            vacancyService.updateSphere(dto.getVacancyId(), dto.getSphereType());
+        vacancy = vacancyService.getById(dto.getVacancyId());
+        ReturnVacancyDto vac = ReturnVacancyDto.builder()
+                .vacancyId(vacancy.getId())
+                .vacancyName(vacancy.getName())
+                .description(vacancy.getDescription())
+                .vacancyStatus(vacancy.getVacancyStatus())
+                .workExperience(vacancy.getWorkExperience())
+                .sphere(vacancy.getSphere())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(vac);
+    }
+
+
+    @Operation(summary = "delete stage in vacancy")
+    @DeleteMapping("/deleteStageInVacancy")
+    public ResponseEntity<?> deleteStageInVacancy(@RequestParam UUID stageId,
+                                                  @RequestParam UUID vacancyId){
+        vacancyService.removeStage(vacancyId, stageId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")
     @ApiResponses(value = {
@@ -246,5 +280,14 @@ public class VacancyController {
                 .sphere(vac.getSphere())
                 .build());
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @Operation(summary = "counting active vacancies")
+    @PostMapping("/countActiveVacancies")
+    public ResponseEntity<Long> countActiveVacancies(){
+        return ResponseEntity.status(HttpStatus.OK)
+                        .body(vacancyService.getAll().stream()
+                                .filter(vac -> vac.getVacancyStatus().equals(VacancyStatus.Opened))
+                                .count());
     }
 }

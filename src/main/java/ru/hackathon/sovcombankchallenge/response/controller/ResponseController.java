@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.repository.ResponseRepository;
 import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
@@ -21,6 +22,7 @@ import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
+import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,5 +96,14 @@ public class ResponseController {
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> getResponseStatus(@RequestBody UUID responseId){
         return ResponseEntity.status(HttpStatus.OK).body(responseService.getById(responseId).getResponseStatus());
+    }
+
+    @Operation(summary = "counting active responses")
+    @PostMapping("/countActiveResponses")
+    public ResponseEntity<Long> countActiveResponses(){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(responseService.getAll().stream()
+                        .filter(resp -> resp.getResponseStatus().equals(ResponseStatus.UnderConsideration))
+                        .count());
     }
 }
