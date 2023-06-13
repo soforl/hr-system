@@ -27,11 +27,11 @@ public class TestStage extends Stage {
         this.questions = new ArrayList<>();
     }
 
-    public List<QuestionDto> convertToDto(){
-        List<QuestionDto> dto = new ArrayList<>();
-        for (Question q: questions) {
-            dto.add(new QuestionDto(q));
-        }
-        return dto;
-    }
+//    public List<QuestionDto> convertToDto(){
+//        List<QuestionDto> dto = new ArrayList<>();
+//        for (Question q: questions) {
+//            dto.add(new QuestionDto(q));
+//        }
+//        return dto;
+//    }
 }

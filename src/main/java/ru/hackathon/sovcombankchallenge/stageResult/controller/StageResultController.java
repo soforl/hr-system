@@ -17,6 +17,7 @@ import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.CreateStageResultDto;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.ResultToUserDto;
+import ru.hackathon.sovcombankchallenge.stageResult.dto.StageResultDto;
 import ru.hackathon.sovcombankchallenge.stageResult.models.InterviewResult;
 import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.models.TestStageResult;
@@ -24,6 +25,7 @@ import ru.hackathon.sovcombankchallenge.stageResult.repository.StageResultReposi
 import ru.hackathon.sovcombankchallenge.stageResult.service.StageResultService;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.SaveUserAnswersToStageDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
 import java.util.List;
@@ -133,7 +135,8 @@ public class StageResultController {
     })
     @PostMapping("/getTestResult")
     public ResponseEntity<?> getTestResult(@RequestParam UUID responseId){
-        return ResponseEntity.status(HttpStatus.OK).body(responseService.getById(responseId).getStageResults());
+        return ResponseEntity.status(HttpStatus.OK).body(responseService.getById(responseId)
+                .getStageResults().stream().map(stageResultService::convertToStageResultDto));
     }
 
 //    @Operation(summary = "give to User result of all tests: offer or else")
@@ -186,6 +189,7 @@ public class StageResultController {
         CustomSpecification<StageResult> stageResultSpecification = new CustomSpecification<>();
         searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(stageResultSpecification::add);
         List<StageResult> msGenreList = stageResultRepository.findAll(stageResultSpecification);
+        var result = msGenreList.stream().map(stageResultService::convertToStageResultDto);
         return ResponseEntity.status(HttpStatus.OK).body(msGenreList);
     }
 

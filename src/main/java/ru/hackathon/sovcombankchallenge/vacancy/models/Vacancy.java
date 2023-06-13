@@ -39,19 +39,20 @@ public class Vacancy {
     @Enumerated(EnumType.STRING)
     private SphereType sphere;
 
-    public Vacancy(String name, String description, VacancyStatus vacancyStatus, WorkExperience workExperience) {
+    public Vacancy(String name, String description, VacancyStatus vacancyStatus, WorkExperience workExperience, SphereType sphere) {
         this.name = name;
         this.description = description;
         this.vacancyStatus = vacancyStatus;
         this.stages = new ArrayList<>();
         this.workExperience = workExperience;
+        this.sphere = sphere;
     }
 
-    public List<StageResultDto> convertToDto(){
-        List<StageResultDto> dtos = new ArrayList<>();
-        for (Stage result: stages) {
-            dtos.add(new StageResultDto(result.getId(), result.getName()));
-        }
-        return dtos;
-    }
+//    public List<StageResultDto> convertToDto(){
+//        List<StageResultDto> dtos = new ArrayList<>();
+//        for (Stage result: stages) {
+//            dtos.add(new StageResultDto(result.getId(), result.getName()));
+//        }
+//        return dtos;
+//    }
 }

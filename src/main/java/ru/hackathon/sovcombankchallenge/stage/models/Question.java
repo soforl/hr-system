@@ -10,6 +10,7 @@ public abstract class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private String text;
 
     public Question(String text) {
@@ -21,6 +22,9 @@ public abstract class Question {
     }
     public UUID getId() {
         return id;
+    }
+    public String getText() {
+        return text;
     }
 
 
