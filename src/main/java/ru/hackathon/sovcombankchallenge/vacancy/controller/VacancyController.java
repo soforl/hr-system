@@ -9,11 +9,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
+import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
 import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
+import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.CreateVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
@@ -31,12 +33,18 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/vacancy")
 public class VacancyController {
-    @Autowired
-    private VacancyRepository vacancyRepository;
-    @Autowired
-    private VacancyService vacancyService;
+    private final VacancyRepository vacancyRepository;
+    private final VacancyService vacancyService;
+    private final ResponseService responseService;
 
-    @Operation(summary = "Create vacancy")
+    @Autowired
+    public VacancyController(VacancyRepository vacancyRepository, VacancyService vacancyService, ResponseService responseService) {
+        this.vacancyRepository = vacancyRepository;
+        this.vacancyService = vacancyService;
+        this.responseService = responseService;
+    }
+
+    @Operation(summary = "Create vacancy = save vacancy - page where vacancy appears")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
@@ -51,7 +59,7 @@ public class VacancyController {
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> createVacancy(@RequestBody CreateVacancyDto dto) {
         try {
-            vacancyService.create(dto.getName(), dto.getDescription(), dto.getVacancyStatus(), dto.getWorkExperience());
+            vacancyService.create(dto.getName(), dto.getDescription(), dto.getVacancyStatus(), dto.getWorkExperience(), dto.getSphere());
         }
         catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -122,9 +130,9 @@ public class VacancyController {
     @GetMapping("/getCandidatesByVacancy")
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> getCandidatesByVacancy(@RequestParam UUID vacancyId){
-        List<CustomUser> candidates = new ArrayList<>();
-        for (Response rep: vacancyService.getResponsesByVacancy(vacancyId)) {
-            candidates.add(rep.getCandidate());
+        List<UserInfoDto> candidates = new ArrayList<>();
+        for (var rep: vacancyService.getResponsesByVacancy(vacancyId)) {
+            candidates.add(rep.getUser());
         }
         return ResponseEntity.status(HttpStatus.OK).body(candidates);
     }
@@ -148,7 +156,16 @@ public class VacancyController {
     @GetMapping("/getVacancyInfo")
 //    @PreAuthorize("hasAnyRole('HR', 'USER')")
     public ResponseEntity<?> getVacancyInfo(@RequestParam UUID vacancyId){
-        return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getById(vacancyId));
+        Vacancy vacancy = vacancyService.getById(vacancyId);
+        ReturnVacancyDto dto = ReturnVacancyDto.builder()
+                .vacancyId(vacancyId)
+                .vacancyName(vacancy.getName())
+                .description(vacancy.getDescription())
+                .vacancyStatus(vacancy.getVacancyStatus())
+                .workExperience(vacancy.getWorkExperience())
+                .sphere(vacancy.getSphere())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @Operation(summary = "get stages for certain vacancy, for example, roadmap")
@@ -170,7 +187,8 @@ public class VacancyController {
     @GetMapping("/getVacancyStages")
 //    @PreAuthorize("hasAnyRole('HR', 'USER')")
     public ResponseEntity<?> getVacancyStages(@RequestParam UUID vacancyId){
-        return ResponseEntity.status(HttpStatus.OK).body(vacancyService.getStages(vacancyId));
+        var result = responseService.convertToStageDto(vacancyService.getStages(vacancyId));
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @Operation(summary = "change vacancy status")
@@ -217,7 +235,14 @@ public class VacancyController {
         CustomSpecification<Vacancy> vacancyCustomSpecification = new CustomSpecification<>();
         searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(vacancyCustomSpecification::add);
         List<Vacancy> msGenreList = vacancyRepository.findAll(vacancyCustomSpecification);
-
-        return ResponseEntity.status(HttpStatus.OK).body(vacancyService.returnSpecDto(msGenreList));
+        var result = msGenreList.stream().map(vac -> ReturnVacancyDto.builder()
+                .vacancyId(vac.getId())
+                .vacancyName(vac.getName())
+                .description(vac.getDescription())
+                .vacancyStatus(vac.getVacancyStatus())
+                .workExperience(vac.getWorkExperience())
+                .sphere(vac.getSphere())
+                .build());
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

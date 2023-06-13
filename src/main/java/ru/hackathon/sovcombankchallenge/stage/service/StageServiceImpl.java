@@ -2,14 +2,14 @@ package ru.hackathon.sovcombankchallenge.stage.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hackathon.sovcombankchallenge.stage.models.Interview;
-import ru.hackathon.sovcombankchallenge.stage.models.Question;
-import ru.hackathon.sovcombankchallenge.stage.models.Stage;
-import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
+import ru.hackathon.sovcombankchallenge.stage.models.*;
 import ru.hackathon.sovcombankchallenge.stage.repository.StageRepository;
+import ru.hackathon.sovcombankchallenge.stage.task.dto.QuestionDto;
+import ru.hackathon.sovcombankchallenge.stage.task.dto.ReturnStageDto;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -54,6 +54,48 @@ public class StageServiceImpl implements StageService{
     public Stage getById(UUID stageId) {
         Optional<Stage> stage = stageRepository.findById(stageId);
         return stage.get();
+    }
+
+    @Override
+    public ReturnStageDto convertToStageDto(Stage stage) {
+        ReturnStageDto dto = null;
+        if (stage instanceof TestStage) {
+            var questions = new ArrayList<QuestionDto>();
+            ((TestStage) stage).getQuestions()
+                    .forEach(q -> {
+                        if (q instanceof OpenQuestion)
+                            questions.add(QuestionDto.builder()
+                                    .question(q.getText())
+                                    .id(q.getId())
+                                    .type("Open")
+                                    .build());
+                        else if (q instanceof CloseQuestion)
+                            questions.add(QuestionDto.builder()
+                                    .question(q.getText())
+                                    .id(q.getId())
+                                    .type("Close")
+                                    .var1(((CloseQuestion) q).getVar1())
+                                    .var2(((CloseQuestion) q).getVar2())
+                                    .var3(((CloseQuestion) q).getVar3())
+                                    .var4(((CloseQuestion) q).getVar4())
+                                    .rightChoose(((CloseQuestion) q).getRightChoose())
+                                    .build());
+                    });
+            dto = ReturnStageDto.builder()
+                    .id(stage.getId())
+                    .stageName(stage.getName())
+                    .deadline(((TestStage) stage).getDeadline())
+                    .duration(((TestStage) stage).getDuration().toSeconds())
+                    .questions(questions)
+                    .build();
+        } else if (stage instanceof Interview) {
+            dto = ReturnStageDto.builder()
+                    .id(stage.getId())
+                    .stageName(stage.getName())
+                    .comments(((Interview) stage).getComments())
+                    .build();
+        }
+        return dto;
     }
 
 //    public void saveStageResults(UUID stageId, List<Answer> answers, UUID responseId){

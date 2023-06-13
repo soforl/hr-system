@@ -2,6 +2,7 @@ package ru.hackathon.sovcombankchallenge.stage.service;
 
 import ru.hackathon.sovcombankchallenge.stage.models.Question;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.stage.task.dto.ReturnStageDto;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -14,4 +15,5 @@ public interface StageService {
     void addQuestion(UUID stageId, UUID questionId);
     List<Question> getQuestions(UUID stageId);
     Stage getById(UUID stageId);
+    ReturnStageDto convertToStageDto(Stage stage);
 }

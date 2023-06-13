@@ -15,11 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 public class TestStageResult extends StageResult {
-    @ManyToOne
-    private CustomUser candidate;
-    @ManyToOne()
-    private Stage stage;
-    private String answers;
+    private List<String> answers;
     private int points;
     public TestStageResult(Question question, String answer) {
         super();

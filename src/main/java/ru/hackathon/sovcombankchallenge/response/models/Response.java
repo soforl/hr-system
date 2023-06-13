@@ -5,15 +5,18 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
+import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.StageResultDto;
 import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.StageResultForVacDto;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @RequiredArgsConstructor

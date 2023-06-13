@@ -16,8 +16,11 @@ import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
 import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.user.dto.ResponseDto;
+import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +57,21 @@ public class ResponseController {
         CustomSpecification<Response> responseSpecification = new CustomSpecification<>();
         searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(responseSpecification::add);
         List<Response> msGenreList = responseRepository.findAll(responseSpecification);
-        return ResponseEntity.status(HttpStatus.OK).body(msGenreList);
+        var result = msGenreList.stream().map(resp -> ResponseDto.builder()
+                .vacancyId(resp.getVacancy().getId())
+                .vacancyName(resp.getVacancy().getName())
+                .responseStatus(resp.getResponseStatus())
+                .user(new UserInfoDto(resp.getCandidate().getUsername(),
+                                resp.getCandidate().getName(),
+                                resp.getCandidate().getPhoneNumber(),
+                                resp.getCandidate().getRole(),
+                                resp.getCandidate().getImage_url())
+                )
+                .creationDate(resp.getCreationDate())
+                .stages(responseService.convertToStageDto(resp.getVacancy().getStages()))
+//                .results() // todo: может добавить? убрать стейдж и добавить резалтс
+                .build());
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @Operation(summary = "get Status response")

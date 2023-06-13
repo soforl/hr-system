@@ -2,6 +2,8 @@ package ru.hackathon.sovcombankchallenge.stageResult.service;
 
 import ru.hackathon.sovcombankchallenge.stage.models.Question;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.stage.task.dto.ReturnStageDto;
+import ru.hackathon.sovcombankchallenge.stageResult.dto.StageResultDto;
 import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 
@@ -14,4 +16,5 @@ public interface StageResultService {
     StageResult getById(UUID resultId);
 
     StageResult findByVanacyAndStage(Vacancy vacancy, Stage stage);
+    StageResultDto convertToStageResultDto(StageResult result);
 }

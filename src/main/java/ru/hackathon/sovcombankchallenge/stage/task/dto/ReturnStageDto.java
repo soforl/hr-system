@@ -2,6 +2,7 @@ package ru.hackathon.sovcombankchallenge.stage.task.dto;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.cglib.core.Local;
 import ru.hackathon.sovcombankchallenge.stage.models.Question;
@@ -13,11 +14,12 @@ import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-
+@Builder
 public class ReturnStageDto {
     private UUID id;
-    private String Name;
+    private String stageName;
     private LocalDateTime deadline;
     private long duration;
-    List<QuestionDto> questions;
+    private List<QuestionDto> questions;
+    private String comments;
 }
