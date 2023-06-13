@@ -28,6 +28,7 @@ public class ResponseServiceImpl implements ResponseService{
     private final ResponseRepository responseRepository;
     private final UserService userService;
     private final VacancyService vacancyService;
+    private final StageResultService stageResultService;
 
     @Override
     public void create(UUID candidateId, UUID vacancyId) {
@@ -55,14 +56,13 @@ public class ResponseServiceImpl implements ResponseService{
         return response.getStageResults();
     }
 
-
     private StageDtoForUser convertToDtoTest(TestStage stage) {
-            var result = StageDtoForUser.builder()
-                            .id(stage.getId())
-                            .name(stage.getName())
-                            .deadline(stage.getDeadline())
-                            .duration(stage.getDuration())
-                            .build();
+        var result = StageDtoForUser.builder()
+                .id(stage.getId())
+                .name(stage.getName())
+                .deadline(stage.getDeadline())
+                .duration(stage.getDuration())
+                .build();
         return result;
     }
 
@@ -81,10 +81,10 @@ public class ResponseServiceImpl implements ResponseService{
 
     private StageDtoForUser convertToDtoInterview(Interview stage) {
         var result = StageDtoForUser.builder()
-                        .id(stage.getId())
-                        .name("Собеседование")
-                        .comments(stage.getComments())
-                        .build();
+                .id(stage.getId())
+                .name("Собеседование")
+                .comments(stage.getComments())
+                .build();
         return result;
     }
 
