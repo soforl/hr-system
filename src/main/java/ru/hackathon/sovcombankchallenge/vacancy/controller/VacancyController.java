@@ -213,6 +213,8 @@ public class VacancyController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+//    public ResponseEntity<?> delete
+
     @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")
     @ApiResponses(value = {
             @ApiResponse(

@@ -167,6 +167,30 @@ public class StageController {
     } // todo throw exception
     // TODO: make method save all
 
+
+    @Operation(summary = "get questions for certain stage- page test")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Stage result was created",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = QuestionDto.class)))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request"
+            )
+    })
+    @PostMapping("/getQuestionsForCertainStage")
+    public ResponseEntity<?> getQuestionsForCertainStage(@RequestParam UUID stageId){
+        Stage stage = stageService.getById(stageId);
+        ReturnStageDto dto = stageService.convertToStageDto(stage);
+        return ResponseEntity.status(HttpStatus.OK).body(dto.getQuestions());
+    }
+
     @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")
     @ApiResponses(value = {
             @ApiResponse(
