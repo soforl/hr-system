@@ -1,7 +1,9 @@
 package ru.hackathon.sovcombankchallenge.vacancy.enumeration;
 
 public enum VacancyStatus{
+    // HR'ы могут видеть эти вакансии, а кандидаты нет
     OnModeration,
     Opened,
-    Closed,
+    // Заархивированные вакансии
+    Closed
 }

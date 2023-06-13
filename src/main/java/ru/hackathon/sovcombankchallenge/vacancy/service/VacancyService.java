@@ -22,6 +22,15 @@ public interface VacancyService {
     Vacancy getById(UUID vacancyId);
     List<Stage> getStages(UUID vacancyId);
     void updateStatus(UUID vacancyId, VacancyStatus status);
+
+    void updateName(UUID vacancyId, String name);
+
+    void updateDescription(UUID vacancyId, String description);
+
+    void updateWorkExperience(UUID vacancyId, WorkExperience workExperience);
+
+    void updateSphere(UUID vacancyId, SphereType sphere);
+
     List<ReturnVacancyDto> convertToDtoVacancy(List<Vacancy> vacancies);
     List<ResponseDto> getResponsesByVacancy(UUID vacancyId);
     List<VacancySpecificDto> returnSpecDto(List<Vacancy> vacancies);
