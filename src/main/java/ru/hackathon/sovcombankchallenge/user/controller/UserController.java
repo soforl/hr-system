@@ -126,7 +126,7 @@ public class UserController {
     }
 
     @GetMapping("/getUsersResponses")
-    @Operation(summary = "Get all responses from certain user")
+    @Operation(summary = "Get all responses from certain user - K2 page with tasks - 2 methods in one")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
