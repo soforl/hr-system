@@ -15,6 +15,14 @@ public abstract class StageResult {
     @ManyToOne
     private CustomUser candidate;
 
+    public StageResult(Stage stage) {
+        this.stage = stage;
+    }
+
+    public StageResult() {
+
+    }
+
     public UUID getId() {
         return id;
     }

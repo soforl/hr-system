@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.apache.catalina.User;
 import ru.hackathon.sovcombankchallenge.stage.models.Question;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 
 import java.util.List;
@@ -17,11 +18,15 @@ import java.util.List;
 public class TestStageResult extends StageResult {
     private List<String> answers;
     private int points;
-    public TestStageResult(Question question, String answer) {
-        super();
+    public TestStageResult(Stage stage, CustomUser candidate, String answers) {
+        super(stage);
+        this.candidate = candidate;
+        this.answers = answers;
     }
 
-    public TestStageResult() {
-
+    // TODO: implement counting points
+    public int countPoints() {
+        return 0;
     }
+
 }

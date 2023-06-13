@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.hackathon.sovcombankchallenge.user.exception.UserAlreadyExistsException;
 import ru.hackathon.sovcombankchallenge.user.models.Role;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.repository.RoleRepository;
@@ -50,14 +51,28 @@ public class UserService implements UserDetailsService {
         return customUser;
     }
 
-    public CustomUser createUser(String username, String password, String name, String phoneNumber, String roleName) {
+    public boolean checkingUser(String username){
+        CustomUser customUser = userRepository.findByEmail(username);
+        if (customUser == null){
+            return false;
+        }
+        return true;
+    }
+
+    public CustomUser createUser(String username, String password, String name, String phoneNumber, String roleName)
+            throws Exception {
         var role = roleRepository.getRoleByName(roleName);
         if(role == null){
             role = new Role(roleName);
             roleRepository.save(role);
         }
-        var newUser = new CustomUser(username, password, name, phoneNumber, role);
-        return this.saveUser(newUser);
+        if (checkingUser(username)) {
+            throw new UserAlreadyExistsException("User with this name already exists");
+        }
+        else {
+            var newUser = new CustomUser(username, password, name, phoneNumber, role);
+            return this.saveUser(newUser);
+        }
     }
 
     public CustomUser getById(UUID userId) {

@@ -33,7 +33,8 @@ public class VacancyServiceImpl implements VacancyService{
     private final StageService stageService;
 
     @Override
-    public void create(String name, String description, VacancyStatus status, WorkExperience experience, SphereType sphere) {
+    public void create(String name, String description, VacancyStatus status, WorkExperience experience,
+                       SphereType sphere) {
         Vacancy vacancy = new Vacancy(name, description, status, experience, sphere);
         vacancyRepository.save(vacancy);
     }
@@ -116,4 +117,23 @@ public class VacancyServiceImpl implements VacancyService{
         }
         return result;
     }
+
+    @Override
+    public List<VacancySpecificDto> returnSpecDto(List<Vacancy> vacancies){
+        var result = new ArrayList<VacancySpecificDto>();
+
+        for(var vacancy: vacancies){
+            result.add(
+                    VacancySpecificDto.builder()
+                            .vacancyName(vacancy.getName())
+                            .description(vacancy.getDescription())
+                            .vacancyStatus(vacancy.getVacancyStatus())
+                            .workExperience(vacancy.getWorkExperience())
+                            .sphereType(vacancy.getSphere())
+                            .build()
+            );
+        }
+        return result;
+    }
+
 }

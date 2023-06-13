@@ -23,7 +23,7 @@ public class RegistrationController {
 
     @PostMapping("/registrationUser")
     @Operation(summary = "Registration user")
-    public ResponseEntity<?> registrationUSER(@RequestBody CreateUser createUser) {
+    public ResponseEntity<?> registrationUSER(@RequestBody CreateUser createUser) throws Exception {
         CustomUser newCustomUser = userService.createUser(createUser.getEmail(), createUser.getPassword(), createUser.getName(),
                 createUser.getPhoneNumber(), "USER");
         return ResponseEntity.status(HttpStatus.CREATED).body(newCustomUser);
@@ -31,7 +31,7 @@ public class RegistrationController {
 
     @PostMapping("/registrationHR")
     @Operation(summary = "Registration HR")
-    public ResponseEntity<?> registrationHR(@RequestBody CreateUser createUser) {
+    public ResponseEntity<?> registrationHR(@RequestBody CreateUser createUser) throws Exception {
         CustomUser newCustomUser = userService.createUser(createUser.getEmail(), createUser.getPassword(), createUser.getName(),
                 createUser.getPhoneNumber(), "HR");
         return ResponseEntity.status(HttpStatus.CREATED).body(newCustomUser);

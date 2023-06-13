@@ -24,17 +24,22 @@ import java.util.UUID;
 public class StageResultServiceImpl implements StageResultService{
 
     private final StageResultRepository stageResultRepository;
+    private final StageService stageService;
+    private final UserService userService;
 
 
     @Override
-    public void createTestStageResult(Question question, String answer) {
-        TestStageResult result = new TestStageResult(question, answer);
+    public void createTestStageResult(UUID stageId, UUID userId, String answers) {
+        Stage stage = stageService.getById(stageId);
+        CustomUser user = userService.getById(userId);
+        TestStageResult result = new TestStageResult(stage, user, answers);
         stageResultRepository.save(result);
     }
 
     @Override
-    public StageResult createInterviewResult(String summary, LocalDate date, String linkToZoom) {
-        InterviewResult interviewResult = new InterviewResult(summary, date, linkToZoom);
+    public StageResult createInterviewResult(UUID stageId, String summary, LocalDate date, String linkToZoom) {
+        Stage stage = stageService.getById(stageId);
+        InterviewResult interviewResult = new InterviewResult(stage, summary, date, linkToZoom);
         return stageResultRepository.save(interviewResult);
     }
 
