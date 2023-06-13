@@ -15,8 +15,9 @@ public abstract class StageResult {
     @ManyToOne
     private CustomUser candidate;
 
-    public StageResult(Stage stage) {
+    public StageResult(Stage stage, CustomUser candidate) {
         this.stage = stage;
+        this.candidate = candidate;
     }
 
     public StageResult() {

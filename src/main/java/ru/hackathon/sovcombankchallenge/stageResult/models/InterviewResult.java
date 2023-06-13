@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 
 import java.time.LocalDate;
 
@@ -19,8 +20,8 @@ public class InterviewResult extends StageResult {
     private LocalDate date;
     private String linkToZoom;
 
-    public InterviewResult(Stage stage, String summary, LocalDate date, String linkToZoom) {
-        super(stage);
+    public InterviewResult(Stage stage, CustomUser candidate, String summary, LocalDate date, String linkToZoom) {
+        super(stage, candidate);
         this.summary = summary;
         this.date = date;
         this.linkToZoom = linkToZoom;

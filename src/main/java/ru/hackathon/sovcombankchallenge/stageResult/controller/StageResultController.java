@@ -28,6 +28,7 @@ import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,7 +64,8 @@ public class StageResultController {
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> setInterviewResult(@RequestBody CreateStageResultDto dto){
         try{
-            StageResult stage = stageResultService.createInterviewResult(null, dto.getDate(), dto.getLinkToZoom());
+            UUID user = stageResultService.getById(dto.getStageResultId()).getCandidate().getId();
+            StageResult stage = stageResultService.createInterviewResult(dto.getStageResultId(), user,  dto.getSummary(), dto.getDate(), dto.getLinkToZoom());
             responseService.getById(dto.getResponseId()).addStageResult(stage);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

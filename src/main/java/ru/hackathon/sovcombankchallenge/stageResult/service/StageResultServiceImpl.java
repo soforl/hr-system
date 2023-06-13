@@ -3,6 +3,7 @@ package ru.hackathon.sovcombankchallenge.stageResult.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hackathon.sovcombankchallenge.stage.models.*;
+import ru.hackathon.sovcombankchallenge.stage.service.StageService;
 import ru.hackathon.sovcombankchallenge.stage.task.dto.QuestionDto;
 import ru.hackathon.sovcombankchallenge.stage.task.dto.ReturnStageDto;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.StageResultDto;
@@ -11,6 +12,8 @@ import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.models.TestStageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.repository.StageResultRepository;
 import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
+import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
+import ru.hackathon.sovcombankchallenge.user.service.UserService;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 
 import java.time.LocalDate;
@@ -29,7 +32,7 @@ public class StageResultServiceImpl implements StageResultService{
 
 
     @Override
-    public void createTestStageResult(UUID stageId, UUID userId, String answers) {
+    public void createTestStageResult(UUID stageId, UUID userId, List<String> answers) {
         Stage stage = stageService.getById(stageId);
         CustomUser user = userService.getById(userId);
         TestStageResult result = new TestStageResult(stage, user, answers);
@@ -37,9 +40,10 @@ public class StageResultServiceImpl implements StageResultService{
     }
 
     @Override
-    public StageResult createInterviewResult(UUID stageId, String summary, LocalDate date, String linkToZoom) {
+    public StageResult createInterviewResult(UUID stageId, UUID userId, String summary, LocalDate date, String linkToZoom) {
         Stage stage = stageService.getById(stageId);
-        InterviewResult interviewResult = new InterviewResult(stage, summary, date, linkToZoom);
+        CustomUser user = userService.getById(userId);
+        InterviewResult interviewResult = new InterviewResult(stage, user, summary, date, linkToZoom);
         return stageResultRepository.save(interviewResult);
     }
 

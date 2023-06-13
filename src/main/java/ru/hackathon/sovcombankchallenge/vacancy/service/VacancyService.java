@@ -21,9 +21,9 @@ public interface VacancyService {
     Vacancy getById(UUID vacancyId);
     List<Stage> getStages(UUID vacancyId);
     void updateStatus(UUID vacancyId, VacancyStatus status);
-//    List<VacancySpecificDto> returnSpecDto(List<Vacancy> vacancies);
     List<ReturnVacancyDto> convertToDtoVacancy(List<Vacancy> vacancies);
     List<ResponseDto> getResponsesByVacancy(UUID vacancyId);
+    List<VacancySpecificDto> returnSpecDto(List<Vacancy> vacancies);
 //    List<Vacancy> getByStatus(VacancyStatus status);
 //    List<Vacancy> getByName(String name);
 

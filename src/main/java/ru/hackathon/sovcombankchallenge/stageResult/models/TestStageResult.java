@@ -18,10 +18,13 @@ import java.util.List;
 public class TestStageResult extends StageResult {
     private List<String> answers;
     private int points;
-    public TestStageResult(Stage stage, CustomUser candidate, String answers) {
-        super(stage);
-        this.candidate = candidate;
+    public TestStageResult(Stage stage, CustomUser candidate, List<String> answers) {
+        super(stage, candidate);
         this.answers = answers;
+    }
+
+    public TestStageResult() {
+
     }
 
     // TODO: implement counting points
