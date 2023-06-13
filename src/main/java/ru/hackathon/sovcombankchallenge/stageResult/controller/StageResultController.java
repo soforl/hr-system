@@ -65,7 +65,7 @@ public class StageResultController {
     public ResponseEntity<?> setInterviewResult(@RequestBody CreateStageResultDto dto){
         try{
             UUID user = stageResultService.getById(dto.getStageResultId()).getCandidate().getId();
-            StageResult stage = stageResultService.createInterviewResult(dto.getStageResultId(), user,  dto.getSummary(), dto.getDate(), dto.getLinkToZoom());
+            StageResult stage = stageResultService.createInterviewResult(dto.getStageResultId(), user, dto.getSummary(), dto.getDate(), dto.getLinkToZoom());
             responseService.getById(dto.getResponseId()).addStageResult(stage);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -95,28 +95,22 @@ public class StageResultController {
 //        return null;
 //    }
 
-//    @PostMapping("/saveUserAnswersToStage")
-//    @Operation(summary = "Here we save user's answers for whole stage")
-//    @ApiResponses(value = {
-//            @ApiResponse(
-//                    responseCode = "200",
-//                    description = "Response was created",
-//                    content = {
-//                            @Content(
-//                                    mediaType = "application/json",
-//                                    schema = @Schema(implementation = Response.class))
-//                    }
-//            ),
-//            @ApiResponse(
-//                    responseCode = "400",
-//                    description = "Bad Request"
-//            )
-//    })
-//    public ResponseEntity<?> saveUserAnswersToStage(@RequestBody SaveUserAnswersToStageDto dto){
-//        Response response = responseService.getById(dto.getResponseId());
-////        response.
-//        return null;
-//    }
+    @PostMapping("/saveUserAnswersToStage")
+    @Operation(summary = "Here we save user's answers for whole stage - Page test")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Test result was created"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request"
+            )
+    })
+    public ResponseEntity<?> saveUserAnswersToStage(@RequestBody SaveUserAnswersToStageDto dto){
+        stageResultService.createTestStageResult(dto.getStageId(), dto.getCustomerId(), dto.getAnswers());
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
 
     @Operation(summary = "get results")
