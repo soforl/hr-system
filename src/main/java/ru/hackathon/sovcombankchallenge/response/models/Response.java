@@ -36,7 +36,7 @@ public class Response {
         this.candidate = candidate;
         this.vacancy = vacancy;
         this.stageResults = new ArrayList<>();
-        this.responseStatus = ResponseStatus.Generated;
+        this.responseStatus = ResponseStatus.UnderConsideration;
         this.creationDate = LocalDate.now();
         this.stageResults = new ArrayList<>();
     }
