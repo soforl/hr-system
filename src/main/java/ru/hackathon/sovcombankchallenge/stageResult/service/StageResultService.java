@@ -9,8 +9,8 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public interface StageResultService {
-    void createTestStageResult(Question question, String answer);
-    StageResult createInterviewResult(String summary, LocalDate date, String linkToZoom);
+    void createTestStageResult(UUID stageID, UUID userId, String answers);
+    StageResult createInterviewResult(UUID stageId, String summary, LocalDate date, String linkToZoom);
     StageResult getById(UUID resultId);
 
     StageResult findByVanacyAndStage(Vacancy vacancy, Stage stage);

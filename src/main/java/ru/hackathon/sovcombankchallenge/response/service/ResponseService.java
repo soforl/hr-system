@@ -19,4 +19,6 @@ public interface ResponseService {
     List<StageDtoForUser> convertToDtoTest(List<TestStage> stages);
 
     List<StageDtoForUser> convertToDtoInterview(List<InterviewResult> interviewResults);
+
+    void addStageResult(UUID responseId, UUID stageResultId);
 }

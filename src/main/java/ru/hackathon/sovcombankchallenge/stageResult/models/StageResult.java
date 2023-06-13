@@ -12,6 +12,14 @@ public abstract class StageResult {
     @OneToOne
     private Stage stage;
 
+    public StageResult(Stage stage) {
+        this.stage = stage;
+    }
+
+    public StageResult() {
+
+    }
+
     public UUID getId() {
         return id;
     }

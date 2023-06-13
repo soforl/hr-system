@@ -91,4 +91,14 @@ public class ResponseServiceImpl implements ResponseService{
         }
         return result;
     }
+
+    @Override
+    public void addStageResult(UUID responseId, UUID stageResultId) {
+        Response response = this.getById(responseId);
+        StageResult stageResult = stageResultService.getById(stageResultId);
+        var results = response.getStageResults();
+        results.add(stageResult);
+        response.setStageResults(results);
+        responseRepository.save(response);
+    }
 }

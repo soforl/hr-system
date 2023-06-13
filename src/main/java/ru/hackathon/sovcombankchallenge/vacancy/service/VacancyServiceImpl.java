@@ -10,6 +10,7 @@ import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
 import ru.hackathon.sovcombankchallenge.stage.service.StageService;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.VacancySpecificDto;
+import ru.hackathon.sovcombankchallenge.vacancy.enumeration.SphereType;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.WorkExperience;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
@@ -27,8 +28,9 @@ public class VacancyServiceImpl implements VacancyService{
     private final StageService stageService;
 
     @Override
-    public void create(String name, String description, VacancyStatus status, WorkExperience experience) {
-        Vacancy vacancy = new Vacancy(name, description, status, experience);
+    public void create(String name, String description, VacancyStatus status, WorkExperience experience,
+                       SphereType sphere) {
+        Vacancy vacancy = new Vacancy(name, description, status, experience, sphere);
         vacancyRepository.save(vacancy);
     }
 
@@ -86,6 +88,7 @@ public class VacancyServiceImpl implements VacancyService{
                             .vacancyName(vacancy.getName())
                             .vacancyStatus(vacancy.getVacancyStatus())
                             .workExperience(vacancy.getWorkExperience())
+                            .sphere(vacancy.getSphere())
                             .build()
             );
         }
@@ -103,6 +106,7 @@ public class VacancyServiceImpl implements VacancyService{
                             .description(vacancy.getDescription())
                             .vacancyStatus(vacancy.getVacancyStatus())
                             .workExperience(vacancy.getWorkExperience())
+                            .sphereType(vacancy.getSphere())
                             .build()
             );
         }

@@ -51,7 +51,8 @@ public class VacancyController {
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> createVacancy(@RequestBody CreateVacancyDto dto) {
         try {
-            vacancyService.create(dto.getName(), dto.getDescription(), dto.getVacancyStatus(), dto.getWorkExperience());
+            vacancyService.create(dto.getName(), dto.getDescription(), dto.getVacancyStatus(), dto.getWorkExperience(),
+                    dto.getSphereType());
         }
         catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

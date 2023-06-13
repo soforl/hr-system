@@ -5,6 +5,7 @@ import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.VacancySpecificDto;
+import ru.hackathon.sovcombankchallenge.vacancy.enumeration.SphereType;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.WorkExperience;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface VacancyService {
-    void create(String name, String description, VacancyStatus status, WorkExperience experience);
+    void create(String name, String description, VacancyStatus status, WorkExperience experience, SphereType sphere);
     void addStage(UUID vacancyId, UUID stageId);
     List<Vacancy> getAll();
     Vacancy getById(UUID vacancyId);
