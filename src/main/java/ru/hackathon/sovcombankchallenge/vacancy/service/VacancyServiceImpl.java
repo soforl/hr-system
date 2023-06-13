@@ -2,13 +2,8 @@ package ru.hackathon.sovcombankchallenge.vacancy.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hackathon.sovcombankchallenge.response.dto.StageDtoForUser;
-import ru.hackathon.sovcombankchallenge.response.models.Response;
-import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
 import ru.hackathon.sovcombankchallenge.stage.models.*;
 import ru.hackathon.sovcombankchallenge.stage.service.StageService;
-import ru.hackathon.sovcombankchallenge.stage.task.dto.QuestionDto;
-import ru.hackathon.sovcombankchallenge.stage.task.dto.ReturnStageDto;
 import ru.hackathon.sovcombankchallenge.user.dto.ResponseDto;
 import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
@@ -107,6 +102,31 @@ public class VacancyServiceImpl implements VacancyService{
     public void updateStatus(UUID vacancyId, VacancyStatus status) {
         Vacancy vacancy = this.getById(vacancyId);
         vacancy.setVacancyStatus(status);
+        vacancyRepository.save(vacancy);
+    }
+
+    @Override
+    public void updateName(UUID vacancyId, String name) {
+        Vacancy vacancy = this.getById(vacancyId);
+        vacancy.setName(name);
+        vacancyRepository.save(vacancy);
+    }
+    @Override
+    public void updateDescription(UUID vacancyId, String description) {
+        Vacancy vacancy = this.getById(vacancyId);
+        vacancy.setDescription(description);
+        vacancyRepository.save(vacancy);
+    }
+    @Override
+    public void updateWorkExperience(UUID vacancyId, WorkExperience workExperience) {
+        Vacancy vacancy = this.getById(vacancyId);
+        vacancy.setWorkExperience(workExperience);
+        vacancyRepository.save(vacancy);
+    }
+    @Override
+    public void updateSphere(UUID vacancyId, SphereType sphere) {
+        Vacancy vacancy = this.getById(vacancyId);
+        vacancy.setSphere(sphere);
         vacancyRepository.save(vacancy);
     }
 
