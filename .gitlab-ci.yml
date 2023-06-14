@@ -1,0 +1,50 @@
+image: outg.bia.tech:5050/itm23s/cheescake-hr-system-back:release-20220110-280642-e065822b
+
+variables:
+  GIT_SUBMODULE_STRATEGY: normal
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+
+stages:
+  - build-image
+  - deploy
+
+main:
+  stage: build-image
+  script:
+    - IMAGE_NAME="$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+    - docker build -t $IMAGE_NAME .
+    - docker push $IMAGE_NAME
+  only:
+    - main
+    - development
+
+
+# deploy-production:
+#   stage: deploy
+#   script:
+#     - IMAGE_NAME="$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+#     - docker pull $IMAGE_NAME
+#     - ./deploy/production/deploy.sh $IMAGE_NAME
+#   environment:
+#     name: production
+#     url: https://ckhr.biacorp.ru
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+#       when: manual
+
+deploy-development:
+  stage: deploy
+  script:
+    - IMAGE_NAME="$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+    - docker pull $IMAGE_NAME
+    - ./deploy/development/deploy.sh $IMAGE_NAME
+  only:
+    - development
+  environment:
+    name: development
+    url: https://dev.ckhr.biacorp.ru
+  except:
+    - main
+
