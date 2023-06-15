@@ -7,7 +7,10 @@ import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.repository.ResponseRepository;
 import ru.hackathon.sovcombankchallenge.stage.models.Interview;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.stage.models.StageWithAccess;
 import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
+import ru.hackathon.sovcombankchallenge.stage.repository.StageWithAccessRepository;
+import ru.hackathon.sovcombankchallenge.stage.service.StageService;
 import ru.hackathon.sovcombankchallenge.stageResult.models.InterviewResult;
 import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.models.TestStageResult;
@@ -26,9 +29,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ResponseServiceImpl implements ResponseService{
     private final ResponseRepository responseRepository;
+    private final StageWithAccessRepository stageWithAccessRepository;
     private final UserService userService;
     private final VacancyService vacancyService;
     private final StageResultService stageResultService;
+    private final StageService stageService;
 
     @Override
     public void create(UUID candidateId, UUID vacancyId) {
@@ -96,5 +101,14 @@ public class ResponseServiceImpl implements ResponseService{
         results.add(stageResult);
         response.setStageResults(results);
         responseRepository.save(response);
+    }
+    @Override
+    public void openAccess(UUID stageId, UUID responseId) {
+        Stage stage = stageService.getById(stageId);
+        Response response = this.getById(responseId);
+        StageWithAccess access = (StageWithAccess) response.getAccess().stream().filter(item ->
+                item.getStage().equals(stage));
+        access.setAccess(true);
+        stageWithAccessRepository.save(access);
     }
 }
