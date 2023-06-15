@@ -20,4 +20,5 @@ public interface ResponseService {
     List<StageDtoForUser> convertToStageDto(List<Stage> stages);
 
     void addStageResult(UUID responseId, UUID stageResultId);
+    void openAccess(UUID stageId, UUID responseId);
 }

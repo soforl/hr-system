@@ -8,7 +8,7 @@ import java.util.UUID;
 @Entity
 @Getter
 public abstract class Stage {
-   @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 

@@ -2,6 +2,7 @@ package ru.hackathon.sovcombankchallenge.stage.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.stage.models.*;
 import ru.hackathon.sovcombankchallenge.stage.repository.StageRepository;
 import ru.hackathon.sovcombankchallenge.stage.task.dto.QuestionDto;
