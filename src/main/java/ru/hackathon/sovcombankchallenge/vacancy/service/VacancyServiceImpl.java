@@ -80,7 +80,8 @@ public class VacancyServiceImpl implements VacancyService{
                                 response.getCandidate().getPhoneNumber(),
                                 response.getCandidate().getImage_url()))
                         .creationDate(response.getCreationDate())
-                        .stageWithAccessDtos(response.getAccess().stream().map(item->new StageWithAccessDto(item.getId(), item.isAccess())).collect(Collectors.toList()))
+                        .stageWithAccessDtos(response.getAccess().stream().map(item ->
+                                new StageWithAccessDto(item.getId(), item.getAccess())).collect(Collectors.toList()))
                         .results(response.getStageResults().stream().map(res ->
                                 new StageResultForVacDto(
                                         res.getId(),
