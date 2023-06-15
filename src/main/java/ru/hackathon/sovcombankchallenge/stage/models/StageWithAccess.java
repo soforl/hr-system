@@ -3,7 +3,7 @@ package ru.hackathon.sovcombankchallenge.stage.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import ru.hackathon.sovcombankchallenge.response.models.Response;
+import ru.hackathon.sovcombankchallenge.stage.enumeration.AccessType;
 
 import java.util.UUID;
 
@@ -16,11 +16,12 @@ public class StageWithAccess{
     private UUID id;
     @ManyToOne
     private Stage stage;
-    private boolean access;
+    @Enumerated(EnumType.STRING)
+    private AccessType access;
 
     public StageWithAccess(Stage stage) {
         this.stage = stage;
-        this.access = false;
+        this.access = AccessType.Opened;
     }
 
     public StageWithAccess() {
