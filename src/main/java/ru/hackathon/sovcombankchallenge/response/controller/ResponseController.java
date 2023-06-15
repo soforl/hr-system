@@ -66,7 +66,6 @@ public class ResponseController {
                 .user(new UserInfoDto(resp.getCandidate().getUsername(),
                                 resp.getCandidate().getName(),
                                 resp.getCandidate().getPhoneNumber(),
-                                resp.getCandidate().getRole(),
                                 resp.getCandidate().getImage_url())
                 )
                 .creationDate(resp.getCreationDate())
