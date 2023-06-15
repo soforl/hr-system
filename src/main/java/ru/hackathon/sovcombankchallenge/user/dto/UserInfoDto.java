@@ -10,6 +10,5 @@ public class UserInfoDto {
     private String email;
     private String name;
     private String phoneNumber;
-    private Role role;
     private String image_url;
 }
