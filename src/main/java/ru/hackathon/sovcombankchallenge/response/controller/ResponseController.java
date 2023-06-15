@@ -66,11 +66,10 @@ public class ResponseController {
                 .user(new UserInfoDto(resp.getCandidate().getUsername(),
                                 resp.getCandidate().getName(),
                                 resp.getCandidate().getPhoneNumber(),
-                                resp.getCandidate().getRole(),
                                 resp.getCandidate().getImage_url())
                 )
                 .creationDate(resp.getCreationDate())
-                .stages(responseService.convertToStageDto(resp.getVacancy().getStages()))
+                .stages(responseService.convertToStageDto(resp.getAccessStages()))
 //                .results() // todo: может добавить? убрать стейдж и добавить резалтс
                 .build());
         return ResponseEntity.status(HttpStatus.OK).body(result);

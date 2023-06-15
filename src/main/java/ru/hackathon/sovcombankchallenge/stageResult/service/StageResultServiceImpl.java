@@ -68,7 +68,6 @@ public class StageResultServiceImpl implements StageResultService{
                     .user(new UserInfoDto(result.getCandidate().getUsername(),
                                     result.getCandidate().getName(),
                                     result.getCandidate().getPhoneNumber(),
-                                    result.getCandidate().getRole(),
                                     result.getCandidate().getImage_url())
                     )
                     .answers(((TestStageResult) result).getAnswers())
@@ -81,7 +80,6 @@ public class StageResultServiceImpl implements StageResultService{
                     .user(new UserInfoDto(result.getCandidate().getUsername(),
                             result.getCandidate().getName(),
                             result.getCandidate().getPhoneNumber(),
-                            result.getCandidate().getRole(),
                             result.getCandidate().getImage_url())
                     )
                     .summary(((InterviewResult) result).getSummary())

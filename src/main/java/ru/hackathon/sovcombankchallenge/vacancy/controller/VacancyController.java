@@ -217,7 +217,6 @@ public class VacancyController {
     @Operation(summary = "update Vacancy parameters, such as status, name and etc")
     @PutMapping("/updateVacancyInfo")
     public ResponseEntity<?> updateVacancyInfo(@RequestBody UpdateVacancyInfoDto dto){
-        Vacancy vacancy = vacancyService.getById(dto.getVacancyId());
         if (dto.getName() != null)
             vacancyService.updateName(dto.getVacancyId(), dto.getName());
         if (dto.getDescription() != null)
@@ -228,7 +227,7 @@ public class VacancyController {
             vacancyService.updateWorkExperience(dto.getVacancyId(), dto.getWorkExperience());
         if (dto.getSphereType() != null)
             vacancyService.updateSphere(dto.getVacancyId(), dto.getSphereType());
-        vacancy = vacancyService.getById(dto.getVacancyId());
+        Vacancy vacancy = vacancyService.getById(dto.getVacancyId());
         ReturnVacancyDto vac = ReturnVacancyDto.builder()
                 .vacancyId(vacancy.getId())
                 .vacancyName(vacancy.getName())

@@ -5,8 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import ru.hackathon.sovcombankchallenge.response.dto.StageDtoForUser;
 import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
+import ru.hackathon.sovcombankchallenge.stage.models.StageWithAccess;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.StageResultDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.StageResultForVacDto;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.StageWithAccessDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,6 +24,7 @@ public class ResponseDto {
     private UserInfoDto user;
     private LocalDate creationDate;
     private List<StageDtoForUser> stages;
+    private List<StageWithAccessDto> stageWithAccessDtos;
     private List<StageResultForVacDto> results;
 
 }

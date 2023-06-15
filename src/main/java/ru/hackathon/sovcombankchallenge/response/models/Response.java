@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
+import ru.hackathon.sovcombankchallenge.stage.enumeration.AccessType;
+import ru.hackathon.sovcombankchallenge.stage.models.Stage;
+import ru.hackathon.sovcombankchallenge.stage.models.StageWithAccess;
 import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.StageResultDto;
 import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
@@ -35,14 +38,16 @@ public class Response {
     public Response(CustomUser candidate, Vacancy vacancy) {
         this.candidate = candidate;
         this.vacancy = vacancy;
-        this.stageResults = new ArrayList<>();
         this.responseStatus = ResponseStatus.UnderConsideration;
         this.creationDate = LocalDate.now();
         this.stageResults = new ArrayList<>();
+        this.access = this.vacancy.getStages().stream().map(StageWithAccess::new).collect(Collectors.toList());
     }
-
     @OneToMany(fetch = FetchType.EAGER)
     private List<StageResult> stageResults;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<StageWithAccess> access;
     @Enumerated(EnumType.STRING)
     private ResponseStatus responseStatus;
     private LocalDate creationDate;
@@ -51,5 +56,10 @@ public class Response {
         this.stageResults.add(stage);
     }
 
-
+    public List<Stage> getAccessStages() {
+        List<Stage> stages = this.vacancy.getStages();
+        var stagesWithAccess = this.access.stream().filter(item ->
+                item.getAccess().equals(AccessType.Opened) || item.getAccess().equals(AccessType.Completed)).toList();
+        return stagesWithAccess.stream().map(StageWithAccess::getStage).collect(Collectors.toList());
+    }
 }
