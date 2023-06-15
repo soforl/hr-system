@@ -8,6 +8,7 @@ import ru.hackathon.sovcombankchallenge.user.dto.ResponseDto;
 import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.StageResultForVacDto;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.StageWithAccessDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.VacancySpecificDto;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.SphereType;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
@@ -79,6 +80,7 @@ public class VacancyServiceImpl implements VacancyService{
                                 response.getCandidate().getPhoneNumber(),
                                 response.getCandidate().getImage_url()))
                         .creationDate(response.getCreationDate())
+                        .stageWithAccessDtos(response.getAccess().stream().map(item->new StageWithAccessDto(item.getId(), item.isAccess())).collect(Collectors.toList()))
                         .results(response.getStageResults().stream().map(res ->
                                 new StageResultForVacDto(
                                         res.getId(),
