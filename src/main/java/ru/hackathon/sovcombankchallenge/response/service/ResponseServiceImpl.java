@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.hackathon.sovcombankchallenge.response.dto.StageDtoForUser;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.repository.ResponseRepository;
+import ru.hackathon.sovcombankchallenge.stage.enumeration.AccessType;
 import ru.hackathon.sovcombankchallenge.stage.models.Interview;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stage.models.StageWithAccess;
@@ -108,7 +109,7 @@ public class ResponseServiceImpl implements ResponseService{
         Response response = this.getById(responseId);
         StageWithAccess access = (StageWithAccess) response.getAccess().stream().filter(item ->
                 item.getStage().equals(stage));
-        access.setAccess(true);
+        access.setAccess(AccessType.Opened);
         stageWithAccessRepository.save(access);
     }
 }

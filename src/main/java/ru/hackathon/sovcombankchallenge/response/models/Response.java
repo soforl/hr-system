@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
+import ru.hackathon.sovcombankchallenge.stage.enumeration.AccessType;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stage.models.StageWithAccess;
 import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
@@ -42,7 +43,6 @@ public class Response {
         this.stageResults = new ArrayList<>();
         this.access = this.vacancy.getStages().stream().map(StageWithAccess::new).collect(Collectors.toList());
     }
-
     @OneToMany(fetch = FetchType.EAGER)
     private List<StageResult> stageResults;
 
@@ -56,10 +56,10 @@ public class Response {
         this.stageResults.add(stage);
     }
 
-
     public List<Stage> getAccessStages() {
         List<Stage> stages = this.vacancy.getStages();
-        var stagesWithAccess = this.access.stream().filter(StageWithAccess::isAccess).toList();
+        var stagesWithAccess = this.access.stream().filter(item ->
+                item.getAccess().equals(AccessType.Opened) || item.getAccess().equals(AccessType.Completed)).toList();
         return stagesWithAccess.stream().map(StageWithAccess::getStage).collect(Collectors.toList());
     }
 }
