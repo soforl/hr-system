@@ -2,6 +2,7 @@ package ru.hackathon.sovcombankchallenge.vacancy.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import ru.hackathon.sovcombankchallenge.stage.enumeration.AccessType;
 
 import java.util.UUID;
 
@@ -9,5 +10,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class StageWithAccessDto {
     private UUID stageId;
-    private Boolean access;
+    private AccessType access;
 }
