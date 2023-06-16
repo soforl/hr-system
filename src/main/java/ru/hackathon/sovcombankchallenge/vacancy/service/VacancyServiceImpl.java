@@ -140,6 +140,7 @@ public class VacancyServiceImpl implements VacancyService{
                     ReturnVacancyDto.builder()
                             .vacancyId(vacancy.getId())
                             .vacancyName(vacancy.getName())
+                            .description(vacancy.getDescription())
                             .vacancyStatus(vacancy.getVacancyStatus())
                             .workExperience(vacancy.getWorkExperience())
                             .sphere(vacancy.getSphere())

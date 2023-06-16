@@ -205,7 +205,7 @@ public class VacancyController {
     })
     @PutMapping("/updateVacancyStatus")
 //    @PreAuthorize("hasRole('HR')")
-    public ResponseEntity<?> updateVacancyStatus(@RequestParam UpdateVacancyStatusDto dto){
+    public ResponseEntity<?> updateVacancyStatus(@RequestBody UpdateVacancyStatusDto dto){
         try{
             vacancyService.updateStatus(dto.getVacancyId(), dto.getVacancyStatus());
         } catch (Exception e) {
