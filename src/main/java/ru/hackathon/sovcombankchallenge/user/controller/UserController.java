@@ -6,12 +6,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.response.dto.CreateResponseDto;
 import ru.hackathon.sovcombankchallenge.response.dto.StageDtoForUser;
@@ -83,7 +83,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Password changed"
+                    description = "Email changed"
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -92,7 +92,7 @@ public class UserController {
     })
     @PatchMapping("/changeEmail")
 //    @PreAuthorize("hasAnyRole('HR', 'USER')")
-    public ResponseEntity<?> changeEmail(@RequestParam ChangeUserInfoDto dto){
+    public ResponseEntity<?> changeEmail(@RequestBody ChangeUserInfoDto dto){
         try {
             userService.updateUserEmailNumber(dto.getUserId(), dto.getPhoneOrEmail());
         }
@@ -241,7 +241,7 @@ public class UserController {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = CustomUser.class)))
+                                    array = @ArraySchema(schema = @Schema(implementation = UserInfoDto.class)))
                     }
             ),
             @ApiResponse(
