@@ -28,7 +28,7 @@ import java.util.UUID;
 public class LoginController {
     private final UserService userService;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    private final String secretKey = this.getSecretKey();
+    private final String secretKey = "goodluck";
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginUserDto request) {
         CustomUser user = userService.findUserByUsername(request.getEmail());
