@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class SovcombankChallengeApplication {
+public class CheesecakeHRSystemBackApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SovcombankChallengeApplication.class, args);
+        SpringApplication.run(CheesecakeHRSystemBackApplication.class, args);
     }
 
 }

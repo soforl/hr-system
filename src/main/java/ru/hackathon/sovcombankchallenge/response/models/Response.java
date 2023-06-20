@@ -57,7 +57,6 @@ public class Response {
     }
 
     public List<Stage> getAccessStages() {
-        List<Stage> stages = this.vacancy.getStages();
         var stagesWithAccess = this.access.stream().filter(item ->
                 item.getAccess().equals(AccessType.Opened) || item.getAccess().equals(AccessType.Completed)).toList();
         return stagesWithAccess.stream().map(StageWithAccess::getStage).collect(Collectors.toList());
