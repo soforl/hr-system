@@ -85,8 +85,8 @@ public class VacancyController {
             )
     })
     @GetMapping("/allVacancies")
-//    @PreAuthorize("hasAnyRole('HR', 'USER')")
-    public ResponseEntity<?> getAllVacancies(){
+//    @PreAuthorize("hasAnyRole('HR')")
+    public ResponseEntity<?> getAllVacancies(){ // todo: делать метод allVac для user(например, без вак которые в архиве)
         return ResponseEntity.status(HttpStatus.OK).body(vacancyService.convertToDtoVacancy(vacancyService.getAll()));
     }
 
