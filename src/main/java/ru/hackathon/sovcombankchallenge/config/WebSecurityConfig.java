@@ -76,7 +76,6 @@ public class WebSecurityConfig {
 
                         .anyRequest().permitAll()
                 )
-                .formLogin(Customizer.withDefaults())
                 .logout(LogoutConfigurer::permitAll);
 
         return http.build();
