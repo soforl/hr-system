@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  pg:
+    image: postgres:11.14-alpine
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: "cheescake"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_MULTIPLE_DATABASES: "postgres"
+    restart: always
+
+  app: &app
+    image: "${DOCKER_IMAGE}"
+    ports:
+      - 8080:8080
+    env_file:
+      - env.common
+    links:
+      - pg
+    depends_on:
+      - pg
+    entrypoint: ["java","-Dspring.profiles.active=prod","-Djava.security.egd=file:/dev/./urandom","-jar","/home/gradle/project/SovcombankChallenge-0.0.1.jar"]
+    restart: always
