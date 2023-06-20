@@ -151,21 +151,9 @@ public class VacancyServiceImpl implements VacancyService{
     }
 
     @Override
-    public List<VacancySpecificDto> returnSpecDto(List<Vacancy> vacancies){
-        var result = new ArrayList<VacancySpecificDto>();
-
-        for(var vacancy: vacancies){
-            result.add(
-                    VacancySpecificDto.builder()
-                            .vacancyName(vacancy.getName())
-                            .description(vacancy.getDescription())
-                            .vacancyStatus(vacancy.getVacancyStatus())
-                            .workExperience(vacancy.getWorkExperience())
-                            .sphereType(vacancy.getSphere())
-                            .build()
-            );
-        }
-        return result;
+    public List<ReturnVacancyDto> returnVacForUser(List<Vacancy> vacancies){
+        var result = vacancies.stream().filter(vac -> vac.getVacancyStatus().equals(VacancyStatus.Opened)).toList();
+        return this.convertToDtoVacancy(result);
     }
 
 }
