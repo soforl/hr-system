@@ -30,12 +30,12 @@ public class LoginController {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final String secretKey =  System.getProperty("SECRET_KEY", ".env.dev");
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginUserDto request) {
+    public ResponseEntity<?> login(@RequestBody LoginUserDto request) {
         CustomUser user = userService.findUserByUsername(request.getEmail());
         if (user != null) {
             if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 String token = generateToken(user.getId());
-                return ResponseEntity.ok(token);
+                return ResponseEntity.status(HttpStatus.OK).body(new TokenDto(token));
             }
         }
 
