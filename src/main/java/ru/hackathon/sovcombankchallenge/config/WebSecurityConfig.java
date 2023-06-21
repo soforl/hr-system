@@ -31,9 +31,7 @@ public class WebSecurityConfig {
                         // Доступ к контроллеру User
                         .requestMatchers("/api/user/registrationUser", "/api/user/registrationHR").permitAll()
 
-                        .requestMatchers("/api/vacancy/createVacancy", "api/vacancy/allVacancies",
-                                "/hr-page").hasRole("HR")
-                        //.requestMatchers().hasRole("USER")
+                        .anyRequest().permitAll()
 
                 )
                 .logout(LogoutConfigurer::permitAll);
