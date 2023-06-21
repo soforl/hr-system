@@ -6,9 +6,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
@@ -55,6 +58,7 @@ public class ResponseController {
             )
     })
     @PostMapping("/responseSpecification")
+    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> specification(@RequestBody List<SearchCriteria> searchCriteria) {
         CustomSpecification<Response> responseSpecification = new CustomSpecification<>();
         searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(responseSpecification::add);
@@ -92,13 +96,14 @@ public class ResponseController {
             )
     })
     @GetMapping("/getResponseStatus")
-//    @PreAuthorize("hasRole('HR')")
+    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> getResponseStatus(@RequestBody UUID responseId){
         return ResponseEntity.status(HttpStatus.OK).body(responseService.getById(responseId).getResponseStatus());
     }
 
     @Operation(summary = "counting active responses")
     @PostMapping("/countActiveResponses")
+    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<Long> countActiveResponses(){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(responseService.getAll().stream()
