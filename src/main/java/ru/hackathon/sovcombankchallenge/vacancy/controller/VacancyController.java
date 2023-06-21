@@ -68,7 +68,7 @@ public class VacancyController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(summary = "get all vacancies")
+    @Operation(summary = "get all vacancies for HR")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -84,10 +84,31 @@ public class VacancyController {
                     description = "Bad Request"
             )
     })
-    @GetMapping("/allVacancies")
+    @GetMapping("/allVacanciesForHR")
 //    @PreAuthorize("hasAnyRole('HR')")
     public ResponseEntity<?> getAllVacancies(){ // todo: делать метод allVac для user(например, без вак которые в архиве)
         return ResponseEntity.status(HttpStatus.OK).body(vacancyService.convertToDtoVacancy(vacancyService.getAll()));
+    }
+
+    @Operation(summary = "get all vacancies for user")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Vacancies were found",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ReturnVacancyDto.class)))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request"
+            )
+    })
+    @GetMapping("/allVacanciesForUser")
+    public ResponseEntity<?> getAllVacanciesForUser(){
+        return ResponseEntity.status(HttpStatus.OK).body(vacancyService.returnVacForUser(vacancyService.getAll()));
     }
 
     @Operation(summary = "get responses for certain vacancy")
