@@ -11,4 +11,5 @@ public class UserInfoDto {
     private String name;
     private String phoneNumber;
     private String image_url;
+    private String role;
 }
