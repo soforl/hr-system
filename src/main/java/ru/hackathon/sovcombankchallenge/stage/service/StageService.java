@@ -16,4 +16,5 @@ public interface StageService {
     List<Question> getQuestions(UUID stageId);
     Stage getById(UUID stageId);
     ReturnStageDto convertToStageDto(Stage stage);
+    void deleteQuestionFromStage(UUID question, UUID stage);
 }

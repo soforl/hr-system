@@ -99,6 +99,12 @@ public class StageServiceImpl implements StageService{
         return dto;
     }
 
+    @Override
+    public void deleteQuestionFromStage(UUID question, UUID stage){
+        this.getQuestions(stage).remove(questionService.getById(question));
+        questionService.deleteQuestion(question);
+    }
+
 //    public void saveStageResults(UUID stageId, List<Answer> answers, UUID responseId){
 //        stageRepository.findById(stageId)
 //    }

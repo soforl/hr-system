@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.apache.tomcat.websocket.MessageHandlerResultType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -61,7 +63,7 @@ public class StageController {
     @PostMapping("/createTestStageInVacancy")
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> addTestStageToVacancy(@RequestBody CreateTestStageDto dto){
-        Stage stage = stageService.createTestStage(dto.getStageName(), dto.getDeadline(), dto.getDuration_sec());
+        Stage stage = stageService.createTestStage(dto.getStageName(), null, null);
         vacancyService.addStage(dto.getVacancyId(), stage.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(stage); // или нужно возвращать инфу про вакансию?
     }
@@ -216,5 +218,22 @@ public class StageController {
         List<Stage> msGenreList = stageRepository.findAll(stageSpecification);
         var result = msGenreList.stream().map(stageService::convertToStageDto);
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @PostMapping("/saveAllTestInfo")
+    public ResponseEntity<?> saveAllTestInfo(@RequestBody StageDto dto){
+        Stage stage = stageService.getById(dto.getStageId());
+        stage.setName(dto.getStageName());
+        if (stage instanceof TestStage){
+            ((TestStage) stage).setDeadline(dto.getDeadline());
+            ((TestStage) stage).setDuration(Duration.ofSeconds(dto.getDuration_sec()));
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteQuestionFromStage")
+    public ResponseEntity<?> deleteQuestion(@RequestBody DeleteQuestionDto dto){
+        stageService.deleteQuestionFromStage(dto.getQuestionId(), dto.getStageId());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
