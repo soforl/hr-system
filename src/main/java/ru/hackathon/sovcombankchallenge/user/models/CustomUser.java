@@ -43,7 +43,7 @@ public class CustomUser implements UserDetails {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.role = role;
-        this.image_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fbia-tech.ru%2Fabout-us%2F&psig=AOvVaw3X4tqazXlvjQsuGfWeU5bv&ust=1687516256550000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCIDFyIzW1v8CFQAAAAAdAAAAABAE";
+        this.image_url = "https://bia-tech.ru/wp-content/uploads/2021/06/BIA-Technologies.png";
     }
 
     public UUID getId() {
