@@ -34,7 +34,7 @@ public class Vacancy {
     @Enumerated(EnumType.STRING)
     private WorkExperience workExperience;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "vacancy")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "vacancy", cascade = CascadeType.ALL)
     private List<Response> responses;
 
     @Enumerated(EnumType.STRING)
