@@ -156,5 +156,9 @@ public class VacancyServiceImpl implements VacancyService{
         var result = vacancies.stream().filter(vac -> vac.getVacancyStatus().equals(VacancyStatus.Opened)).toList();
         return this.convertToDtoVacancy(result);
     }
+    @Override
+    public void deleteAllVacancies(){
+        vacancyRepository.deleteAll();
+    }
 
 }

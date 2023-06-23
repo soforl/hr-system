@@ -310,4 +310,11 @@ public class VacancyController {
                                 .filter(vac -> vac.getVacancyStatus().equals(VacancyStatus.Opened))
                                 .count());
     }
+
+    @Operation(summary = "delete all vacancies")
+    @DeleteMapping("/deleteAllVacancies")
+    public ResponseEntity<?> deleteAllVacancies() {
+        vacancyService.deleteAllVacancies();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

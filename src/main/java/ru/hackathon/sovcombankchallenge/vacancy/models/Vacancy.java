@@ -25,6 +25,7 @@ public class Vacancy {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
+    @Column(columnDefinition = "text")
     private String description;
     @Enumerated(EnumType.STRING)
     private VacancyStatus vacancyStatus;

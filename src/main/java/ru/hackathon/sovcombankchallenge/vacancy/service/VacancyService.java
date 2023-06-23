@@ -36,5 +36,6 @@ public interface VacancyService {
     List<ReturnVacancyDto> returnVacForUser(List<Vacancy> vacancies);
 //    List<Vacancy> getByStatus(VacancyStatus status);
 //    List<Vacancy> getByName(String name);
+    void deleteAllVacancies();
 
 }
