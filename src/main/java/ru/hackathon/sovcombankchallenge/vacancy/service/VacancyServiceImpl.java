@@ -161,4 +161,9 @@ public class VacancyServiceImpl implements VacancyService{
         vacancyRepository.deleteAll();
     }
 
+    @Override
+    public void deleteVacancy(UUID vacancyId) {
+        vacancyRepository.deleteById(vacancyId);
+    }
+
 }

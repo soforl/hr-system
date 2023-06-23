@@ -34,8 +34,6 @@ public interface VacancyService {
     List<ReturnVacancyDto> convertToDtoVacancy(List<Vacancy> vacancies);
     List<ResponseDto> getResponsesByVacancy(UUID vacancyId);
     List<ReturnVacancyDto> returnVacForUser(List<Vacancy> vacancies);
-//    List<Vacancy> getByStatus(VacancyStatus status);
-//    List<Vacancy> getByName(String name);
     void deleteAllVacancies();
-
+    void deleteVacancy(UUID vacancyId);
 }

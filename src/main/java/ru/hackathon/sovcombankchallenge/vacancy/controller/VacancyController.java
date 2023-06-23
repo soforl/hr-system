@@ -317,4 +317,11 @@ public class VacancyController {
         vacancyService.deleteAllVacancies();
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @Operation(summary = "delete vacancy")
+    @DeleteMapping("/deleteVacancy")
+    public ResponseEntity<?> deleteVacancy(@RequestParam UUID vacancyId) {
+        vacancyService.deleteVacancy(vacancyId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
