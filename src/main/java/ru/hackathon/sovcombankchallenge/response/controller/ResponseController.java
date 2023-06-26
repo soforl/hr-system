@@ -112,10 +112,10 @@ public class ResponseController {
     @PostMapping("/countAllResponsesForVacancy")
     public ResponseEntity<?> countAllResponsesForVacancy(@RequestParam UUID vacancyId){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(responseService.getAll().stream()
+                .body(new CountDto(responseService.getAll().stream()
                         .filter(response -> response.getVacancy().getId().equals(vacancyId))
                         .filter(resp -> resp.getResponseStatus().equals(ResponseStatus.UnderConsideration) ||
                                 resp.getResponseStatus().equals(ResponseStatus.Closed))
-                        .count());
+                        .count()));
     }
 }
