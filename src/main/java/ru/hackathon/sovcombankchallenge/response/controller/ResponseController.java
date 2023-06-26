@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
@@ -100,7 +101,7 @@ public class ResponseController {
     }
 
     @Operation(summary = "counting active responses")
-    @PostMapping("/countActiveResponses")
+    @GetMapping("/countActiveResponses")
     public ResponseEntity<?> countActiveResponses(){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CountDto(responseService.getAll().stream()
@@ -109,7 +110,8 @@ public class ResponseController {
     }
 
     @Operation(summary = "counting active responses for certain vacancy")
-    @PostMapping("/countAllResponsesForVacancy")
+    @GetMapping("/countAllResponsesForVacancy")
+//    @PreAuthorize("hasAuthority('ROLE_HR')")
     public ResponseEntity<?> countAllResponsesForVacancy(@RequestParam UUID vacancyId){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new CountDto(responseService.getAll().stream()

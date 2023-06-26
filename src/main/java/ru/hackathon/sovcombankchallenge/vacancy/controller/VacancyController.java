@@ -299,7 +299,7 @@ public class VacancyController {
     }
 
     @Operation(summary = "counting active vacancies")
-    @PostMapping("/countActiveVacancies")
+    @GetMapping("/countActiveVacancies")
     public ResponseEntity<?> countActiveVacancies(){
         return ResponseEntity.status(HttpStatus.OK)
                         .body(new CountDto(vacancyService.getAll().stream()
