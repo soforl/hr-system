@@ -16,10 +16,7 @@ import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
-import ru.hackathon.sovcombankchallenge.vacancy.dto.CreateVacancyDto;
-import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
-import ru.hackathon.sovcombankchallenge.vacancy.dto.UpdateVacancyInfoDto;
-import ru.hackathon.sovcombankchallenge.vacancy.dto.UpdateVacancyStatusDto;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.*;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.repository.VacancyRepository;
@@ -57,7 +54,6 @@ public class VacancyController {
             )
     })
     @PostMapping("/createVacancy")
-//    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> createVacancy(@RequestBody CreateVacancyDto dto) {
         try {
             vacancyService.create(dto.getName(), dto.getDescription(), dto.getVacancyStatus(), dto.getWorkExperience(), dto.getSphere());
@@ -304,11 +300,11 @@ public class VacancyController {
 
     @Operation(summary = "counting active vacancies")
     @PostMapping("/countActiveVacancies")
-    public ResponseEntity<Long> countActiveVacancies(){
+    public ResponseEntity<?> countActiveVacancies(){
         return ResponseEntity.status(HttpStatus.OK)
-                        .body(vacancyService.getAll().stream()
+                        .body(new CountDto(vacancyService.getAll().stream()
                                 .filter(vac -> vac.getVacancyStatus().equals(VacancyStatus.Opened))
-                                .count());
+                                .count()));
     }
 
     @Operation(summary = "delete all vacancies")

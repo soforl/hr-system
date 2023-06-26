@@ -21,6 +21,7 @@ import ru.hackathon.sovcombankchallenge.user.dto.ResponseDto;
 import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.CountDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 
@@ -100,10 +101,21 @@ public class ResponseController {
 
     @Operation(summary = "counting active responses")
     @PostMapping("/countActiveResponses")
-    public ResponseEntity<Long> countActiveResponses(){
+    public ResponseEntity<?> countActiveResponses(){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new CountDto(responseService.getAll().stream()
+                        .filter(resp -> resp.getResponseStatus().equals(ResponseStatus.UnderConsideration))
+                        .count()));
+    }
+
+    @Operation(summary = "counting active responses for certain vacancy")
+    @PostMapping("/countAllResponsesForVacancy")
+    public ResponseEntity<?> countAllResponsesForVacancy(@RequestParam UUID vacancyId){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(responseService.getAll().stream()
-                        .filter(resp -> resp.getResponseStatus().equals(ResponseStatus.UnderConsideration))
+                        .filter(response -> response.getVacancy().getId().equals(vacancyId))
+                        .filter(resp -> resp.getResponseStatus().equals(ResponseStatus.UnderConsideration) ||
+                                resp.getResponseStatus().equals(ResponseStatus.Closed))
                         .count());
     }
 }
