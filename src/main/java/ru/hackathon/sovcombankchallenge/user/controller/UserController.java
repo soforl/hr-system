@@ -117,7 +117,10 @@ public class UserController {
 //    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> makeResponse(@RequestBody CreateResponseDto dto){
         try {
-            responseService.create(dto.getUser(), dto.getVacancy());
+//            if (responseService.getAll().contains(Response(userService.getById(dto.getUser()),
+//                    vacancyService.getById(dto.getVacancy())))){
+                responseService.create(dto.getUser(), dto.getVacancy());
+
         }
         catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -193,7 +196,12 @@ public class UserController {
 //    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getUsersInfo(@RequestParam UUID userId){
         CustomUser customUser = userService.getById(userId);
-        UserInfoDto dto = new UserInfoDto(customUser.getUsername(), customUser.getName(), customUser.getPhoneNumber(), customUser.getImage_url(), customUser.getRole().getAuthority());
+        UserInfoDto dto = new UserInfoDto(customUser.getUsername(),
+                customUser.getName(),
+                customUser.getPhoneNumber(),
+                customUser.getImage_url(),
+                customUser.getRole().getAuthority(),
+                userId);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
@@ -259,7 +267,8 @@ public class UserController {
                 user.getName(),
                 user.getPhoneNumber(),
                 user.getImage_url(),
-                        user.getRole().getAuthority()))
+                        user.getRole().getAuthority(),
+                        user.getId()))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -283,7 +292,12 @@ public class UserController {
 //    @PreAuthorize("hasAnyRole('HR', 'USER')")
     public ResponseEntity<?> getUserInfo(Authentication authentication) {
         var user = userService.findUserByUsername(authentication.getName());
-        var userInfo = new UserInfoDto(user.getUsername(), user.getName(), user.getPhoneNumber(), user.getImage_url(), user.getRole().getAuthority());
+        var userInfo = new UserInfoDto(user.getUsername(),
+                user.getName(),
+                user.getPhoneNumber(),
+                user.getImage_url(),
+                user.getRole().getAuthority(),
+                user.getId());
         return ResponseEntity.ok().body(userInfo);
     }
 
@@ -309,7 +323,8 @@ public class UserController {
                 user.getName(),
                 user.getPhoneNumber(),
                 user.getImage_url(),
-                        user.getRole().getAuthority()))
+                        user.getRole().getAuthority(),
+                        user.getId()))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
