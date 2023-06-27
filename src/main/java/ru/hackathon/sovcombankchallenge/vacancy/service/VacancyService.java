@@ -36,4 +36,5 @@ public interface VacancyService {
     List<ReturnVacancyDto> returnVacForUser(List<Vacancy> vacancies);
     void deleteAllVacancies();
     void deleteVacancy(UUID vacancyId);
+    void save(Vacancy vacancy);
 }
