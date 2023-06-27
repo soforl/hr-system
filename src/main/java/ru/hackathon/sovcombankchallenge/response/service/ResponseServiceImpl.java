@@ -68,6 +68,7 @@ public class ResponseServiceImpl implements ResponseService{
                 .name(stage.getName())
                 .deadline(stage.getDeadline())
                 .duration(stage.getDuration())
+                .type(stage.getType())
                 .build();
         return result;
     }
@@ -90,6 +91,7 @@ public class ResponseServiceImpl implements ResponseService{
                 .id(stage.getId())
                 .name("Собеседование")
                 .comments(stage.getComments())
+                .type(stage.getType())
                 .build();
         return result;
     }
