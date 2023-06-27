@@ -16,6 +16,7 @@ public abstract class Stage {
     private UUID id;
 
     private String name;
+    @Enumerated(EnumType.STRING)
     private StageType type;
 
     public Stage(String name, StageType type) {
