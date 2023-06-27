@@ -10,6 +10,6 @@ import java.util.UUID;
 public class CreateTestStageDto {
     private String stageName;
     private UUID vacancyId;
-    private LocalDateTime deadline;
-    private Long duration_sec;
+//    private LocalDateTime deadline;
+//    private Long duration_sec;
 }
