@@ -23,10 +23,20 @@ public class StageServiceImpl implements StageService{
     private final QuestionService questionService;
 
     @Override
-    public Stage createTestStage(String name, LocalDateTime deadline, Long durationSec) {
-        var duration = Duration.ofSeconds(durationSec);
-        TestStage testStage = new TestStage(name, deadline, duration);
+    public Stage createTestStage(String name) {
+//        var duration = Duration.ofSeconds(durationSec);
+        TestStage testStage = new TestStage(name, null, null);
         return stageRepository.save(testStage);
+    }
+
+    public Stage saveTestInfo(UUID stageId, LocalDateTime deadline, Long duration_sec, String stageName){
+        Stage stage = this.getById(stageId);
+        stage.setName(stageName);
+        if (stage instanceof TestStage){
+            ((TestStage) stage).setDeadline(deadline);
+            ((TestStage) stage).setDuration(Duration.ofSeconds(duration_sec));
+        }
+        return stageRepository.save(stage);
     }
 
     @Override
