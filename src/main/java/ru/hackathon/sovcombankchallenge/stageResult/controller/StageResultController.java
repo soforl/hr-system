@@ -15,6 +15,7 @@ import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
 import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
+import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.CreateStageResultDto;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.ResultToUserDto;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.StageResultDto;
@@ -25,6 +26,7 @@ import ru.hackathon.sovcombankchallenge.stageResult.repository.StageResultReposi
 import ru.hackathon.sovcombankchallenge.stageResult.service.StageResultService;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.SaveUserAnswersToStageDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.CountDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
@@ -189,5 +191,15 @@ public class StageResultController {
         return ResponseEntity.status(HttpStatus.OK).body(msGenreList);
     }
 
+    @GetMapping("/countTestResult")
+    public ResponseEntity<?> countTestResult(@RequestParam UUID stageResultId){
+        StageResult stageResult = stageResultService.getById(stageResultId);
+        Stage stage = stageResult.getStage();
+        int count = 0;
+        if (stageResult instanceof TestStageResult){
+            count = ((TestStageResult) stageResult).countPoints();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new CountDto((long) count));
 
+    }
 }
