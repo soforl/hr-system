@@ -69,7 +69,8 @@ public class StageResultServiceImpl implements StageResultService{
                                     result.getCandidate().getName(),
                                     result.getCandidate().getPhoneNumber(),
                                     result.getCandidate().getImage_url(),
-                                    result.getCandidate().getRole().getAuthority())
+                                    result.getCandidate().getRole().getAuthority(),
+                                    result.getCandidate().getId())
                     )
                     .answers(((TestStageResult) result).getAnswers())
                     .points(((TestStageResult) result).getPoints())
@@ -82,7 +83,8 @@ public class StageResultServiceImpl implements StageResultService{
                             result.getCandidate().getName(),
                             result.getCandidate().getPhoneNumber(),
                             result.getCandidate().getImage_url(),
-                            result.getCandidate().getRole().getAuthority())
+                            result.getCandidate().getRole().getAuthority(),
+                            result.getCandidate().getId())
                     )
                     .summary(((InterviewResult) result).getSummary())
                     .date(((InterviewResult) result).getDate())

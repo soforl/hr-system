@@ -79,7 +79,8 @@ public class VacancyServiceImpl implements VacancyService{
                                 response.getCandidate().getName(),
                                 response.getCandidate().getPhoneNumber(),
                                 response.getCandidate().getImage_url(),
-                                response.getCandidate().getRole().getAuthority()))
+                                response.getCandidate().getRole().getAuthority(),
+                                response.getCandidate().getId()))
                         .creationDate(response.getCreationDate())
                         .stageWithAccessDtos(response.getAccess().stream().map(item ->
                                 new StageWithAccessDto(item.getId(), item.getAccess())).collect(Collectors.toList()))

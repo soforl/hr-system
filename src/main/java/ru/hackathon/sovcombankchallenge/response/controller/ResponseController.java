@@ -69,7 +69,8 @@ public class ResponseController {
                                 resp.getCandidate().getName(),
                                 resp.getCandidate().getPhoneNumber(),
                                 resp.getCandidate().getImage_url(),
-                                resp.getCandidate().getRole().getAuthority())
+                                resp.getCandidate().getRole().getAuthority(),
+                                resp.getCandidate().getId())
                 )
                 .creationDate(resp.getCreationDate())
                 .stages(responseService.convertToStageDto(resp.getAccessStages()))
