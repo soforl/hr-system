@@ -48,6 +48,7 @@ public class Vacancy {
         this.stages = new ArrayList<>();
         this.workExperience = workExperience;
         this.sphere = sphere;
+        this.responses = new ArrayList<>();
     }
 
 //    public List<StageResultDto> convertToDto(){

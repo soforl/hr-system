@@ -41,7 +41,11 @@ public class ResponseServiceImpl implements ResponseService{
         CustomUser candidate = userService.getById(candidateId);
         Vacancy vacancy = vacancyService.getById(vacancyId);
         Response response = new Response(candidate, vacancy);
+        List<Response> vacResponses = vacancy.getResponses();
+        vacResponses.add(response);
         responseRepository.save(response);
+        vacancy.setResponses(vacResponses);
+        vacancyService.save(vacancy);
     }
 
     @Override
