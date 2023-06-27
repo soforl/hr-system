@@ -18,7 +18,7 @@ import java.util.List;
 public class TestStage extends Stage {
     private LocalDateTime deadline;
     private Duration duration;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Question> questions;
 
     public TestStage(String name, StageType type, LocalDateTime deadline, Duration duration) {
