@@ -62,9 +62,9 @@ public class StageController {
     })
     @PostMapping("/createTestStageInVacancy")
 //    @PreAuthorize("hasRole('HR')")
-    public ResponseEntity<?> addTestStageToVacancy(@RequestBody UUID vacancyId){
-        Stage stage = stageService.createTestStage("Тестирование");
-        vacancyService.addStage(vacancyId, stage.getId());
+    public ResponseEntity<?> addTestStageToVacancy(@RequestBody CreateTestStageDto dto){
+        Stage stage = stageService.createTestStage("Тестирование", dto.getStageType());
+        vacancyService.addStage(dto.getVacancyId(), stage.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(stage); // или нужно возвращать инфу про вакансию?
     }
 
@@ -87,7 +87,7 @@ public class StageController {
     @PostMapping("/createInterviewStageInVacancy")
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> addInterviewStageToVacancy(@RequestBody CreateInterviewStageDto dto){
-        Stage stage = stageService.createInterview(dto.getStageName(), dto.getComments());
+        Stage stage = stageService.createInterview(dto.getStageName(), dto.getComments(), dto.getStageType());
         vacancyService.addStage(dto.getVacancyId(), stage.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(stage);
     }
