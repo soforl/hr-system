@@ -62,9 +62,9 @@ public class StageController {
     })
     @PostMapping("/createTestStageInVacancy")
 //    @PreAuthorize("hasRole('HR')")
-    public ResponseEntity<?> addTestStageToVacancy(@RequestBody CreateTestStageDto dto){
-        Stage stage = stageService.createTestStage(dto.getStageName());
-        vacancyService.addStage(dto.getVacancyId(), stage.getId());
+    public ResponseEntity<?> addTestStageToVacancy(@RequestBody UUID vacancyId){
+        Stage stage = stageService.createTestStage("Тестирование");
+        vacancyService.addStage(vacancyId, stage.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(stage); // или нужно возвращать инфу про вакансию?
     }
 
