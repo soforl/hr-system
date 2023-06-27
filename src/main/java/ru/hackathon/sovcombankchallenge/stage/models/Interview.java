@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import ru.hackathon.sovcombankchallenge.stage.enumeration.StageType;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -18,8 +19,8 @@ import java.util.ArrayList;
 public class Interview extends Stage {
     private String comments;
 
-    public Interview(String name, String comments) {
-        super(name);
+    public Interview(String name, StageType type, String comments) {
+        super(name, type);
         this.comments = comments;
     }
 }

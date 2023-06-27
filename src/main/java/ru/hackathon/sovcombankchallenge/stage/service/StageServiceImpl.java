@@ -3,6 +3,7 @@ package ru.hackathon.sovcombankchallenge.stage.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
+import ru.hackathon.sovcombankchallenge.stage.enumeration.StageType;
 import ru.hackathon.sovcombankchallenge.stage.models.*;
 import ru.hackathon.sovcombankchallenge.stage.repository.StageRepository;
 import ru.hackathon.sovcombankchallenge.stage.task.dto.QuestionDto;
@@ -23,9 +24,9 @@ public class StageServiceImpl implements StageService{
     private final QuestionService questionService;
 
     @Override
-    public Stage createTestStage(String name) {
+    public Stage createTestStage(String name, StageType type) {
 //        var duration = Duration.ofSeconds(durationSec);
-        TestStage testStage = new TestStage(name, null, null);
+        TestStage testStage = new TestStage(name, type,  null, null);
         return stageRepository.save(testStage);
     }
 
@@ -40,8 +41,8 @@ public class StageServiceImpl implements StageService{
     }
 
     @Override
-    public Stage createInterview(String name, String comments) {
-        Interview interview = new Interview(name, comments);
+    public Stage createInterview(String name, String comments, StageType type) {
+        Interview interview = new Interview(name, type, comments);
         return stageRepository.save(interview);
     }
 
