@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.hackathon.sovcombankchallenge.email.EmailDetails;
-import ru.hackathon.sovcombankchallenge.email.EmailService;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
 import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
@@ -43,14 +41,13 @@ public class StageResultController {
     private final StageResultService stageResultService;
     private final VacancyService vacancyService;
     private final ResponseService responseService;
-    private final EmailService emailService;
+//    private final EmailService emailService;
 
-    public StageResultController(StageResultRepository stageResultRepository, StageResultService stageResultService, VacancyService vacancyService, ResponseService responseService, EmailService emailService) {
+    public StageResultController(StageResultRepository stageResultRepository, StageResultService stageResultService, VacancyService vacancyService, ResponseService responseService) {
         this.stageResultRepository = stageResultRepository;
         this.stageResultService = stageResultService;
         this.vacancyService = vacancyService;
         this.responseService = responseService;
-        this.emailService = emailService;
     }
 
     @Operation(summary = "create result for interview")
@@ -76,7 +73,7 @@ public class StageResultController {
             CustomUser user = stageResultService.getById(dto.getStageResultId()).getCandidate();
             StageResult stage = stageResultService.createInterviewResult(dto.getStageResultId(), user.getId(), dto.getSummary(), dto.getDate(), dto.getLinkToZoom());
             responseService.getById(dto.getResponseId()).addStageResult(stage);
-            Response resp = responseService.getById(dto.getResponseId());
+//            Response resp = responseService.getById(dto.getResponseId());
 //            String status = emailService.sendSimpleMail(new EmailDetails(user.getUsername(),
 //                    "Информация о собеседование на вакансию \"" + resp.getVacancy().getName() +"\" обновилась! \n Проверьте в своем личном кабинете.",
 //                    "Обновление информации о собеседовании",

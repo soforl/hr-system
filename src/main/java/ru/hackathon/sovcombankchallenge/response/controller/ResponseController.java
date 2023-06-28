@@ -11,8 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.hackathon.sovcombankchallenge.email.EmailDetails;
-import ru.hackathon.sovcombankchallenge.email.EmailService;
+//import ru.hackathon.sovcombankchallenge.email.EmailDetails;
+//import ru.hackathon.sovcombankchallenge.email.EmailService;
 import ru.hackathon.sovcombankchallenge.response.dto.UpdateResponseStatusDto;
 import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
@@ -38,12 +38,10 @@ import java.util.UUID;
 public class ResponseController {
     private final ResponseRepository responseRepository;
     private final ResponseService responseService;
-    private final EmailService emailService;
 
-    public ResponseController(ResponseRepository responseRepository, ResponseService responseService, EmailService emailService) {
+    public ResponseController(ResponseRepository responseRepository, ResponseService responseService) {
         this.responseRepository = responseRepository;
         this.responseService = responseService;
-        this.emailService = emailService;
     }
 
     @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")
@@ -143,7 +141,7 @@ public class ResponseController {
     public ResponseEntity<?> changeResponseStatus(@RequestBody UpdateResponseStatusDto dto){
         try{
             responseService.updateStatus(dto.getResponseId(), dto.getResponseStatus());
-            Response response = responseService.getById(dto.getResponseId());
+//            Response response = responseService.getById(dto.getResponseId());
 //            emailService.sendSimpleMail(new EmailDetails(response.getCandidate().getUsername(),
 //                    "Статус отклика на вакансию \"" + response.getVacancy().getName() +"\" изменился! \n Проверьте в своем личном кабинете.",
 //                    "Обновление статуса отклика",
