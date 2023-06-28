@@ -231,7 +231,7 @@ public class StageController {
         stageService.deleteQuestionFromStage(dto.getQuestionId(), dto.getStageId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+    // todo: fix this
 //    @Operation(summary = "get questions for certain stage for user")
 //    @ApiResponses(value = {
 //            @ApiResponse(
