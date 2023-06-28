@@ -3,6 +3,7 @@ package ru.hackathon.sovcombankchallenge.response.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hackathon.sovcombankchallenge.response.dto.StageDtoForUser;
+import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.repository.ResponseRepository;
 import ru.hackathon.sovcombankchallenge.stage.enumeration.AccessType;
@@ -18,6 +19,7 @@ import ru.hackathon.sovcombankchallenge.stageResult.models.TestStageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.service.StageResultService;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
+import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
@@ -121,5 +123,12 @@ public class ResponseServiceImpl implements ResponseService{
                 item.getStage().equals(stage));
         access.setAccess(AccessType.Opened);
         stageWithAccessRepository.save(access);
+    }
+
+    @Override
+    public void updateStatus(UUID responseId, ResponseStatus status) {
+        Response response = this.getById(responseId);
+        response.setResponseStatus(status);
+        responseRepository.save(response);
     }
 }
