@@ -258,7 +258,7 @@ public class VacancyController {
 
 
     @Operation(summary = "delete stage in vacancy")
-    @DeleteMapping("/deleteStageInVacancy")
+    @PostMapping("/deleteStageInVacancy")
     public ResponseEntity<?> deleteStageInVacancy(@RequestBody DeleteStageInVacancyDto dto){
         vacancyService.removeStage(dto.getVacancyId(), dto.getStageId());
         return new ResponseEntity<>(HttpStatus.OK);

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ResponseService {
-    void create(UUID candidateId, UUID vacancyId);
+    void create(UUID candidateId, UUID vacancyId) throws Exception;
     List<Response> getAll();
     Response getById(UUID responseId);
     List<StageResult> getResults(UUID responseId);
