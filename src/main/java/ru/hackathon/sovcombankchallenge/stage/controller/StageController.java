@@ -231,4 +231,27 @@ public class StageController {
         stageService.deleteQuestionFromStage(dto.getQuestionId(), dto.getStageId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+//    @Operation(summary = "get questions for certain stage for user")
+//    @ApiResponses(value = {
+//            @ApiResponse(
+//                    responseCode = "200",
+//                    description = "Stage result was created",
+//                    content = {
+//                            @Content(
+//                                    mediaType = "application/json",
+//                                    array = @ArraySchema(schema = @Schema(implementation = QuestionDto.class)))
+//                    }
+//            ),
+//            @ApiResponse(
+//                    responseCode = "400",
+//                    description = "Bad Request"
+//            )
+//    })
+//    @GetMapping("/getQuestionsForCertainStage")
+//    public ResponseEntity<?> getQuestionsForCertainStageForUser(@RequestParam UUID stageId){
+//        Stage stage = stageService.getById(stageId);
+//        ReturnStageDto dto = stageService.convertToStageDto(stage);
+//        return ResponseEntity.status(HttpStatus.OK).body(dto.getQuestions());
+//    }
 }
