@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.hackathon.sovcombankchallenge.email.EmailDetails;
+import ru.hackathon.sovcombankchallenge.email.EmailService;
+import ru.hackathon.sovcombankchallenge.response.dto.UpdateResponseStatusDto;
 import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.repository.ResponseRepository;
@@ -33,12 +36,15 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/response")
 public class ResponseController {
-    @Autowired
-    private ResponseRepository responseRepository;
-    @Autowired
-    private ResponseService responseService;
-    @Autowired
-    private UserService userService;
+    private final ResponseRepository responseRepository;
+    private final ResponseService responseService;
+    private final EmailService emailService;
+
+    public ResponseController(ResponseRepository responseRepository, ResponseService responseService, EmailService emailService) {
+        this.responseRepository = responseRepository;
+        this.responseService = responseService;
+        this.emailService = emailService;
+    }
 
     @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")
     @ApiResponses(value = {
@@ -120,5 +126,31 @@ public class ResponseController {
                         .filter(resp -> resp.getResponseStatus().equals(ResponseStatus.UnderConsideration) ||
                                 resp.getResponseStatus().equals(ResponseStatus.Closed))
                         .count()));
+    }
+
+    @Operation(summary = "change response status")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "response status was updated"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad Request"
+            )
+    })
+    @PutMapping("/updateResponseStatus")
+    public ResponseEntity<?> changeResponseStatus(@RequestBody UpdateResponseStatusDto dto){
+        try{
+            responseService.updateStatus(dto.getResponseId(), dto.getResponseStatus());
+            Response response = responseService.getById(dto.getResponseId());
+            emailService.sendSimpleMail(new EmailDetails(response.getCandidate().getUsername(),
+                    "Статус отклика на вакансию \"" + response.getVacancy().getName() +"\" изменился! \n Проверьте в своем личном кабинете.",
+                    "Обновление статуса отклика",
+                    ""));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

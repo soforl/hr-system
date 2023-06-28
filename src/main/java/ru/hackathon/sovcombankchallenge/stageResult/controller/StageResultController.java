@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.hackathon.sovcombankchallenge.email.EmailDetails;
+import ru.hackathon.sovcombankchallenge.email.EmailService;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
 import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
@@ -37,14 +39,19 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/stageResult")
 public class StageResultController {
-    @Autowired
-    private StageResultRepository stageResultRepository;
-    @Autowired
-    private StageResultService stageResultService;
-    @Autowired
-    private VacancyService vacancyService;
-    @Autowired
-    private ResponseService responseService;
+    private final StageResultRepository stageResultRepository;
+    private final StageResultService stageResultService;
+    private final VacancyService vacancyService;
+    private final ResponseService responseService;
+    private final EmailService emailService;
+
+    public StageResultController(StageResultRepository stageResultRepository, StageResultService stageResultService, VacancyService vacancyService, ResponseService responseService, EmailService emailService) {
+        this.stageResultRepository = stageResultRepository;
+        this.stageResultService = stageResultService;
+        this.vacancyService = vacancyService;
+        this.responseService = responseService;
+        this.emailService = emailService;
+    }
 
     @Operation(summary = "create result for interview")
     @ApiResponses(value = {
@@ -66,9 +73,14 @@ public class StageResultController {
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> setInterviewResult(@RequestBody CreateStageResultDto dto){
         try{
-            UUID user = stageResultService.getById(dto.getStageResultId()).getCandidate().getId();
-            StageResult stage = stageResultService.createInterviewResult(dto.getStageResultId(), user, dto.getSummary(), dto.getDate(), dto.getLinkToZoom());
+            CustomUser user = stageResultService.getById(dto.getStageResultId()).getCandidate();
+            StageResult stage = stageResultService.createInterviewResult(dto.getStageResultId(), user.getId(), dto.getSummary(), dto.getDate(), dto.getLinkToZoom());
             responseService.getById(dto.getResponseId()).addStageResult(stage);
+            Response resp = responseService.getById(dto.getResponseId());
+            String status = emailService.sendSimpleMail(new EmailDetails(user.getUsername(),
+                    "Информация о собеседование на вакансию \"" + resp.getVacancy().getName() +"\" обновилась! \n Проверьте в своем личном кабинете.",
+                    "Обновление информации о собеседовании",
+                    null));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -199,6 +211,7 @@ public class StageResultController {
         if (stageResult instanceof TestStageResult){
             count = ((TestStageResult) stageResult).countPoints();
         }
+        CustomUser user = stageResult.getCandidate();
         return ResponseEntity.status(HttpStatus.OK).body(new CountDto((long) count));
 
     }
