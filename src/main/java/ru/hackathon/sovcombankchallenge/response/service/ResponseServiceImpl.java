@@ -3,6 +3,7 @@ package ru.hackathon.sovcombankchallenge.response.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hackathon.sovcombankchallenge.response.dto.StageDtoForUser;
+import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.repository.ResponseRepository;
 import ru.hackathon.sovcombankchallenge.stage.enumeration.AccessType;
@@ -18,6 +19,7 @@ import ru.hackathon.sovcombankchallenge.stageResult.models.TestStageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.service.StageResultService;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
+import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
@@ -37,11 +39,19 @@ public class ResponseServiceImpl implements ResponseService{
     private final StageService stageService;
 
     @Override
-    public void create(UUID candidateId, UUID vacancyId) {
+    public void create(UUID candidateId, UUID vacancyId) throws Exception {
+        if (responseRepository.findByVacancyAndCandidate(vacancyService.getById(vacancyId), userService.getById(candidateId)) != null){
+            throw new Exception("you already responded to this vacancy!");
+        }
+
         CustomUser candidate = userService.getById(candidateId);
         Vacancy vacancy = vacancyService.getById(vacancyId);
         Response response = new Response(candidate, vacancy);
+        List<Response> vacResponses = vacancy.getResponses();
+        vacResponses.add(response);
         responseRepository.save(response);
+        vacancy.setResponses(vacResponses);
+        vacancyService.save(vacancy);
     }
 
     @Override
@@ -68,6 +78,7 @@ public class ResponseServiceImpl implements ResponseService{
                 .name(stage.getName())
                 .deadline(stage.getDeadline())
                 .duration(stage.getDuration())
+                .type(stage.getType())
                 .build();
         return result;
     }
@@ -90,6 +101,7 @@ public class ResponseServiceImpl implements ResponseService{
                 .id(stage.getId())
                 .name("Собеседование")
                 .comments(stage.getComments())
+                .type(stage.getType())
                 .build();
         return result;
     }
@@ -111,5 +123,12 @@ public class ResponseServiceImpl implements ResponseService{
                 item.getStage().equals(stage));
         access.setAccess(AccessType.Opened);
         stageWithAccessRepository.save(access);
+    }
+
+    @Override
+    public void updateStatus(UUID responseId, ResponseStatus status) {
+        Response response = this.getById(responseId);
+        response.setResponseStatus(status);
+        responseRepository.save(response);
     }
 }

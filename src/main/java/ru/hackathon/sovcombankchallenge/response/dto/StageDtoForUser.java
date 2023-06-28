@@ -2,6 +2,7 @@ package ru.hackathon.sovcombankchallenge.response.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import ru.hackathon.sovcombankchallenge.stage.enumeration.StageType;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -15,4 +16,5 @@ public class StageDtoForUser {
     LocalDateTime deadline;
     Duration duration;
     String comments;
+    StageType type;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import ru.hackathon.sovcombankchallenge.stage.enumeration.StageType;
 import ru.hackathon.sovcombankchallenge.stage.task.dto.QuestionDto;
 
 import java.time.Duration;
@@ -17,11 +18,11 @@ import java.util.List;
 public class TestStage extends Stage {
     private LocalDateTime deadline;
     private Duration duration;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Question> questions;
 
-    public TestStage(String name, LocalDateTime deadline, Duration duration) {
-        super(name);
+    public TestStage(String name, StageType type, LocalDateTime deadline, Duration duration) {
+        super(name, type);
         this.deadline = deadline;
         this.duration = duration;
         this.questions = new ArrayList<>();

@@ -193,7 +193,12 @@ public class UserController {
 //    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getUsersInfo(@RequestParam UUID userId){
         CustomUser customUser = userService.getById(userId);
-        UserInfoDto dto = new UserInfoDto(customUser.getUsername(), customUser.getName(), customUser.getPhoneNumber(), customUser.getImage_url(), customUser.getRole().getAuthority());
+        UserInfoDto dto = new UserInfoDto(customUser.getUsername(),
+                customUser.getName(),
+                customUser.getPhoneNumber(),
+                customUser.getImage_url(),
+                customUser.getRole().getAuthority(),
+                userId);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
@@ -259,7 +264,8 @@ public class UserController {
                 user.getName(),
                 user.getPhoneNumber(),
                 user.getImage_url(),
-                        user.getRole().getAuthority()))
+                        user.getRole().getAuthority(),
+                        user.getId()))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -283,7 +289,12 @@ public class UserController {
 //    @PreAuthorize("hasAnyRole('HR', 'USER')")
     public ResponseEntity<?> getUserInfo(Authentication authentication) {
         var user = userService.findUserByUsername(authentication.getName());
-        var userInfo = new UserInfoDto(user.getUsername(), user.getName(), user.getPhoneNumber(), user.getImage_url(), user.getRole().getAuthority());
+        var userInfo = new UserInfoDto(user.getUsername(),
+                user.getName(),
+                user.getPhoneNumber(),
+                user.getImage_url(),
+                user.getRole().getAuthority(),
+                user.getId());
         return ResponseEntity.ok().body(userInfo);
     }
 
@@ -309,7 +320,8 @@ public class UserController {
                 user.getName(),
                 user.getPhoneNumber(),
                 user.getImage_url(),
-                        user.getRole().getAuthority()))
+                        user.getRole().getAuthority(),
+                        user.getId()))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }

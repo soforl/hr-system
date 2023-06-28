@@ -63,7 +63,7 @@ public class StageController {
     @PostMapping("/createTestStageInVacancy")
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> addTestStageToVacancy(@RequestBody CreateTestStageDto dto){
-        Stage stage = stageService.createTestStage(dto.getStageName(), null, null);
+        Stage stage = stageService.createTestStage("Тестирование", dto.getStageType());
         vacancyService.addStage(dto.getVacancyId(), stage.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(stage); // или нужно возвращать инфу про вакансию?
     }
@@ -87,7 +87,7 @@ public class StageController {
     @PostMapping("/createInterviewStageInVacancy")
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> addInterviewStageToVacancy(@RequestBody CreateInterviewStageDto dto){
-        Stage stage = stageService.createInterview(dto.getStageName(), dto.getComments());
+        Stage stage = stageService.createInterview(dto.getStageName(), dto.getComments(), dto.getStageType());
         vacancyService.addStage(dto.getVacancyId(), stage.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(stage);
     }
@@ -186,7 +186,7 @@ public class StageController {
                     description = "Bad Request"
             )
     })
-    @PostMapping("/getQuestionsForCertainStage")
+    @GetMapping("/getQuestionsForCertainStage")
     public ResponseEntity<?> getQuestionsForCertainStage(@RequestParam UUID stageId){
         Stage stage = stageService.getById(stageId);
         ReturnStageDto dto = stageService.convertToStageDto(stage);
@@ -222,16 +222,11 @@ public class StageController {
 
     @PostMapping("/saveAllTestInfo")
     public ResponseEntity<?> saveAllTestInfo(@RequestBody StageDto dto){
-        Stage stage = stageService.getById(dto.getStageId());
-        stage.setName(dto.getStageName());
-        if (stage instanceof TestStage){
-            ((TestStage) stage).setDeadline(dto.getDeadline());
-            ((TestStage) stage).setDuration(Duration.ofSeconds(dto.getDuration_sec()));
-        }
+        stageService.saveTestInfo(dto.getStageId(), dto.getDeadline(), dto.getDuration_sec(), dto.getStageName());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteQuestionFromStage")
+    @PostMapping("/deleteQuestionFromStage")
     public ResponseEntity<?> deleteQuestion(@RequestBody DeleteQuestionDto dto){
         stageService.deleteQuestionFromStage(dto.getQuestionId(), dto.getStageId());
         return new ResponseEntity<>(HttpStatus.OK);

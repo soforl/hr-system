@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import ru.hackathon.sovcombankchallenge.stage.enumeration.StageType;
 
 import java.util.UUID;
 @Entity
@@ -15,9 +16,12 @@ public abstract class Stage {
     private UUID id;
 
     private String name;
+    @Enumerated(EnumType.STRING)
+    private StageType type;
 
-    public Stage(String name) {
+    public Stage(String name, StageType type) {
         this.name = name;
+        this.type =  type;
     }
 
     public Stage() {

@@ -29,7 +29,7 @@ public class Vacancy {
     private String description;
     @Enumerated(EnumType.STRING)
     private VacancyStatus vacancyStatus;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Stage> stages;
     @Enumerated(EnumType.STRING)
     private WorkExperience workExperience;
@@ -48,6 +48,7 @@ public class Vacancy {
         this.stages = new ArrayList<>();
         this.workExperience = workExperience;
         this.sphere = sphere;
+        this.responses = new ArrayList<>();
     }
 
 //    public List<StageResultDto> convertToDto(){

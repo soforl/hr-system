@@ -3,6 +3,7 @@ package ru.hackathon.sovcombankchallenge.stage.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
+import ru.hackathon.sovcombankchallenge.stage.enumeration.StageType;
 import ru.hackathon.sovcombankchallenge.stage.models.*;
 import ru.hackathon.sovcombankchallenge.stage.repository.StageRepository;
 import ru.hackathon.sovcombankchallenge.stage.task.dto.QuestionDto;
@@ -23,15 +24,25 @@ public class StageServiceImpl implements StageService{
     private final QuestionService questionService;
 
     @Override
-    public Stage createTestStage(String name, LocalDateTime deadline, Long durationSec) {
-        var duration = Duration.ofSeconds(durationSec);
-        TestStage testStage = new TestStage(name, deadline, duration);
+    public Stage createTestStage(String name, StageType type) {
+//        var duration = Duration.ofSeconds(durationSec);
+        TestStage testStage = new TestStage(name, type,  null, Duration.ofSeconds(10000));
         return stageRepository.save(testStage);
     }
 
+    public Stage saveTestInfo(UUID stageId, LocalDateTime deadline, Long duration_sec, String stageName){
+        Stage stage = this.getById(stageId);
+        stage.setName(stageName);
+        if (stage instanceof TestStage){
+            ((TestStage) stage).setDeadline(deadline);
+            ((TestStage) stage).setDuration(Duration.ofSeconds(duration_sec));
+        }
+        return stageRepository.save(stage);
+    }
+
     @Override
-    public Stage createInterview(String name, String comments) {
-        Interview interview = new Interview(name, comments);
+    public Stage createInterview(String name, String comments, StageType type) {
+        Interview interview = new Interview(name, type, comments);
         return stageRepository.save(interview);
     }
 
@@ -82,13 +93,22 @@ public class StageServiceImpl implements StageService{
                                     .rightChoose(((CloseQuestion) q).getRightChoose())
                                     .build());
                     });
-            dto = ReturnStageDto.builder()
-                    .id(stage.getId())
-                    .stageName(stage.getName())
-                    .deadline(((TestStage) stage).getDeadline())
-                    .duration(((TestStage) stage).getDuration().toSeconds())
-                    .questions(questions)
-                    .build();
+            if (((TestStage) stage).getDeadline() != null && ((TestStage) stage).getDuration() != null){
+                dto = ReturnStageDto.builder()
+                        .id(stage.getId())
+                        .stageName(stage.getName())
+                        .deadline(((TestStage) stage).getDeadline())
+                        .duration(((TestStage) stage).getDuration().toSeconds())
+                        .questions(questions)
+                        .build();
+            }
+            else {
+                dto = ReturnStageDto.builder()
+                        .id(stage.getId())
+                        .stageName(stage.getName())
+                        .questions(questions)
+                        .build();
+            }
         } else if (stage instanceof Interview) {
             dto = ReturnStageDto.builder()
                     .id(stage.getId())
