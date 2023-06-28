@@ -26,7 +26,7 @@ public class StageServiceImpl implements StageService{
     @Override
     public Stage createTestStage(String name, StageType type) {
 //        var duration = Duration.ofSeconds(durationSec);
-        TestStage testStage = new TestStage(name, type,  null, null);
+        TestStage testStage = new TestStage(name, type,  null, Duration.ofSeconds(10000));
         return stageRepository.save(testStage);
     }
 
@@ -93,13 +93,22 @@ public class StageServiceImpl implements StageService{
                                     .rightChoose(((CloseQuestion) q).getRightChoose())
                                     .build());
                     });
-            dto = ReturnStageDto.builder()
-                    .id(stage.getId())
-                    .stageName(stage.getName())
-                    .deadline(((TestStage) stage).getDeadline())
-                    .duration(((TestStage) stage).getDuration().toSeconds())
-                    .questions(questions)
-                    .build();
+            if (((TestStage) stage).getDeadline() != null && ((TestStage) stage).getDuration() != null){
+                dto = ReturnStageDto.builder()
+                        .id(stage.getId())
+                        .stageName(stage.getName())
+                        .deadline(((TestStage) stage).getDeadline())
+                        .duration(((TestStage) stage).getDuration().toSeconds())
+                        .questions(questions)
+                        .build();
+            }
+            else {
+                dto = ReturnStageDto.builder()
+                        .id(stage.getId())
+                        .stageName(stage.getName())
+                        .questions(questions)
+                        .build();
+            }
         } else if (stage instanceof Interview) {
             dto = ReturnStageDto.builder()
                     .id(stage.getId())

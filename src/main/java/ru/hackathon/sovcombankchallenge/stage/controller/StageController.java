@@ -226,7 +226,7 @@ public class StageController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteQuestionFromStage")
+    @PostMapping("/deleteQuestionFromStage")
     public ResponseEntity<?> deleteQuestion(@RequestBody DeleteQuestionDto dto){
         stageService.deleteQuestionFromStage(dto.getQuestionId(), dto.getStageId());
         return new ResponseEntity<>(HttpStatus.OK);
