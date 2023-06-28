@@ -144,10 +144,10 @@ public class ResponseController {
         try{
             responseService.updateStatus(dto.getResponseId(), dto.getResponseStatus());
             Response response = responseService.getById(dto.getResponseId());
-            emailService.sendSimpleMail(new EmailDetails(response.getCandidate().getUsername(),
-                    "Статус отклика на вакансию \"" + response.getVacancy().getName() +"\" изменился! \n Проверьте в своем личном кабинете.",
-                    "Обновление статуса отклика",
-                    ""));
+//            emailService.sendSimpleMail(new EmailDetails(response.getCandidate().getUsername(),
+//                    "Статус отклика на вакансию \"" + response.getVacancy().getName() +"\" изменился! \n Проверьте в своем личном кабинете.",
+//                    "Обновление статуса отклика",
+//                    ""));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

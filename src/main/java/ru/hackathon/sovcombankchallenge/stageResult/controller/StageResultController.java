@@ -77,10 +77,10 @@ public class StageResultController {
             StageResult stage = stageResultService.createInterviewResult(dto.getStageResultId(), user.getId(), dto.getSummary(), dto.getDate(), dto.getLinkToZoom());
             responseService.getById(dto.getResponseId()).addStageResult(stage);
             Response resp = responseService.getById(dto.getResponseId());
-            String status = emailService.sendSimpleMail(new EmailDetails(user.getUsername(),
-                    "Информация о собеседование на вакансию \"" + resp.getVacancy().getName() +"\" обновилась! \n Проверьте в своем личном кабинете.",
-                    "Обновление информации о собеседовании",
-                    null));
+//            String status = emailService.sendSimpleMail(new EmailDetails(user.getUsername(),
+//                    "Информация о собеседование на вакансию \"" + resp.getVacancy().getName() +"\" обновилась! \n Проверьте в своем личном кабинете.",
+//                    "Обновление информации о собеседовании",
+//                    null));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
