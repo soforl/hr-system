@@ -186,7 +186,7 @@ public class StageController {
                     description = "Bad Request"
             )
     })
-    @PostMapping("/getQuestionsForCertainStage")
+    @GetMapping("/getQuestionsForCertainStage")
     public ResponseEntity<?> getQuestionsForCertainStage(@RequestParam UUID stageId){
         Stage stage = stageService.getById(stageId);
         ReturnStageDto dto = stageService.convertToStageDto(stage);
