@@ -220,7 +220,7 @@ public class VacancyController {
                     description = "Bad Request"
             )
     })
-    @PutMapping("/updateVacancyStatus")
+    @PostMapping("/updateVacancyStatus")
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> updateVacancyStatus(@RequestBody UpdateVacancyStatusDto dto){
         try{
@@ -232,7 +232,7 @@ public class VacancyController {
     }
 
     @Operation(summary = "update Vacancy parameters, such as status, name and etc")
-    @PutMapping("/updateVacancyInfo")
+    @PostMapping("/updateVacancyInfo")
     public ResponseEntity<?> updateVacancyInfo(@RequestBody UpdateVacancyInfoDto dto){
         if (dto.getName() != null)
             vacancyService.updateName(dto.getVacancyId(), dto.getName());
@@ -308,14 +308,14 @@ public class VacancyController {
     }
 
     @Operation(summary = "delete all vacancies")
-    @DeleteMapping("/deleteAllVacancies")
+    @PostMapping("/deleteAllVacancies")
     public ResponseEntity<?> deleteAllVacancies() {
         vacancyService.deleteAllVacancies();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Operation(summary = "delete vacancy")
-    @DeleteMapping("/deleteVacancy")
+    @PostMapping("/deleteVacancy")
     public ResponseEntity<?> deleteVacancy(@RequestParam UUID vacancyId) {
         vacancyService.deleteVacancy(vacancyId);
         return new ResponseEntity<>(HttpStatus.OK);
