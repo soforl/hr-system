@@ -37,7 +37,11 @@ public class ResponseServiceImpl implements ResponseService{
     private final StageService stageService;
 
     @Override
-    public void create(UUID candidateId, UUID vacancyId) {
+    public void create(UUID candidateId, UUID vacancyId) throws Exception {
+        if (responseRepository.findByVacancyAndCandidate(vacancyService.getById(vacancyId), userService.getById(candidateId)) != null){
+            throw new Exception("you already responded to this vacancy!");
+        }
+
         CustomUser candidate = userService.getById(candidateId);
         Vacancy vacancy = vacancyService.getById(vacancyId);
         Response response = new Response(candidate, vacancy);

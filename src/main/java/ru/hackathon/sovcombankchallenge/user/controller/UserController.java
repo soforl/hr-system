@@ -117,10 +117,7 @@ public class UserController {
 //    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> makeResponse(@RequestBody CreateResponseDto dto){
         try {
-//            if (responseService.getAll().contains(Response(userService.getById(dto.getUser()),
-//                    vacancyService.getById(dto.getVacancy())))){
-                responseService.create(dto.getUser(), dto.getVacancy());
-
+            responseService.create(dto.getUser(), dto.getVacancy());
         }
         catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
