@@ -35,50 +35,50 @@ public class WebSecurityConfig {
                         // Доступ к контроллеру User
                         .requestMatchers("/api/user/registrationUser", "/api/user/registrationHR").permitAll()
 
-                        // HR
-                        .requestMatchers(
-                                "/api/response/countActiveResponses",
-                                "/api/response/responseSpecification",
-                                "/api/vacancy/createVacancy",
-                                "/api/vacancy/allVacanciesForHR",
-                                "/api/vacancy/getResponsesByVacancy",
-                                "/api/vacancy/getCandidatesByVacancy",
-                                "/api/vacancy/updateVacancyStatus",
-                                "/api/vacancy/updateVacancyInfo",
-                                "/api/vacancy/deleteStageInVacancy",
-                                "/api/vacancy/countActiveVacancies",
-                                "/api/userInfo/userSpecification",
-                                "/api/userInfo/allUsers",
-                                "/api/stageResult/setInterviewResult",
-                                "/api/stageResult/stageResultSpecification",
-                                "/api/stage/createTestStageInVacancy",
-                                "/api/stage/createInterviewStageInVacancy",
-                                "/api/stage/addTask/open",
-                                "/api/stage/addTask/close",
-                                "/api/stage/stageSpecification").hasAuthority("ROLE_HR")
-
-                        // User
-                        .requestMatchers(
-                                "/api/response/countActiveResponses",
-                                "/api/vacancy/allVacanciesForUser",
-                                "/api/userInfo/createResponseForUser",
-                                "/api/userInfo/getUsersResponses",
-                                "/api/userInfo/getUsersChallenges",
-                                "/api/stageResult/saveUserAnswersToStage").hasAuthority("ROLE_USER")
-
-//                        // HR & User
+//                        // HR
 //                        .requestMatchers(
-//                                "/api/response/getResponseStatus",
-//                                "/api/vacancy/getVacancyInfo",
-//                                "/api/vacancy/getVacancyStages",
-//                                "/api/vacancy/vacancySpecification",
-//                                "/api/userInfo/changePhoneNumber",
-//                                "/api/userInfo/changeEmail",
-//                                "/api/userInfo/getUsersInfo",
-//                                "/api/userInfo/getUserInformation",
-//                                "/api/stageResult/getTestResult",
-//                                "/api/stage/getQuestionsForCertainStage",
-//                                "/api/stage/getStageById").hasAnyRole("USER", "HR")
+//                                "/api/response/countActiveResponses",
+//                                "/api/response/responseSpecification",
+//                                "/api/vacancy/createVacancy",
+//                                "/api/vacancy/allVacanciesForHR",
+//                                "/api/vacancy/getResponsesByVacancy",
+//                                "/api/vacancy/getCandidatesByVacancy",
+//                                "/api/vacancy/updateVacancyStatus",
+//                                "/api/vacancy/updateVacancyInfo",
+//                                "/api/vacancy/deleteStageInVacancy",
+//                                "/api/vacancy/countActiveVacancies",
+//                                "/api/userInfo/userSpecification",
+//                                "/api/userInfo/allUsers",
+//                                "/api/stageResult/setInterviewResult",
+//                                "/api/stageResult/stageResultSpecification",
+//                                "/api/stage/createTestStageInVacancy",
+//                                "/api/stage/createInterviewStageInVacancy",
+//                                "/api/stage/addTask/open",
+//                                "/api/stage/addTask/close",
+//                                "/api/stage/stageSpecification").hasAuthority("ROLE_HR")
+//
+//                        // User
+//                        .requestMatchers(
+//                                "/api/response/countActiveResponses",
+//                                "/api/vacancy/allVacanciesForUser",
+//                                "/api/userInfo/createResponseForUser",
+//                                "/api/userInfo/getUsersResponses",
+//                                "/api/userInfo/getUsersChallenges",
+//                                "/api/stageResult/saveUserAnswersToStage").hasAuthority("ROLE_USER")
+//
+////                        // HR & User
+////                        .requestMatchers(
+////                                "/api/response/getResponseStatus",
+////                                "/api/vacancy/getVacancyInfo",
+////                                "/api/vacancy/getVacancyStages",
+////                                "/api/vacancy/vacancySpecification",
+////                                "/api/userInfo/changePhoneNumber",
+////                                "/api/userInfo/changeEmail",
+////                                "/api/userInfo/getUsersInfo",
+////                                "/api/userInfo/getUserInformation",
+////                                "/api/stageResult/getTestResult",
+////                                "/api/stage/getQuestionsForCertainStage",
+////                                "/api/stage/getStageById").hasAnyRole("USER", "HR")
                         .anyRequest().permitAll()
                 )
                 .logout(LogoutConfigurer::permitAll);
