@@ -55,7 +55,7 @@ public class WebSecurityConfig {
                                 "/api/stage/createInterviewStageInVacancy",
                                 "/api/stage/addTask/open",
                                 "/api/stage/addTask/close",
-                                "/api/stage/stageSpecification").hasRole("HR")
+                                "/api/stage/stageSpecification").hasAuthority("HR")
 
                         // User
                         .requestMatchers(
@@ -64,7 +64,7 @@ public class WebSecurityConfig {
                                 "/api/userInfo/createResponseForUser",
                                 "/api/userInfo/getUsersResponses",
                                 "/api/userInfo/getUsersChallenges",
-                                "/api/stageResult/saveUserAnswersToStage").hasRole("USER")
+                                "/api/stageResult/saveUserAnswersToStage").hasAuthority("USER")
 
 //                        // HR & User
 //                        .requestMatchers(
