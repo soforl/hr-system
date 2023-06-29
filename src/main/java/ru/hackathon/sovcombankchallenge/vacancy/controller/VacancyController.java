@@ -16,10 +16,7 @@ import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
-import ru.hackathon.sovcombankchallenge.vacancy.dto.CreateVacancyDto;
-import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
-import ru.hackathon.sovcombankchallenge.vacancy.dto.UpdateVacancyInfoDto;
-import ru.hackathon.sovcombankchallenge.vacancy.dto.UpdateVacancyStatusDto;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.*;
 import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.repository.VacancyRepository;
@@ -57,7 +54,6 @@ public class VacancyController {
             )
     })
     @PostMapping("/createVacancy")
-//    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> createVacancy(@RequestBody CreateVacancyDto dto) {
         try {
             vacancyService.create(dto.getName(), dto.getDescription(), dto.getVacancyStatus(), dto.getWorkExperience(), dto.getSphere());
@@ -224,7 +220,7 @@ public class VacancyController {
                     description = "Bad Request"
             )
     })
-    @PutMapping("/updateVacancyStatus")
+    @PostMapping("/updateVacancyStatus")
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> updateVacancyStatus(@RequestBody UpdateVacancyStatusDto dto){
         try{
@@ -236,7 +232,7 @@ public class VacancyController {
     }
 
     @Operation(summary = "update Vacancy parameters, such as status, name and etc")
-    @PutMapping("/updateVacancyInfo")
+    @PostMapping("/updateVacancyInfo")
     public ResponseEntity<?> updateVacancyInfo(@RequestBody UpdateVacancyInfoDto dto){
         if (dto.getName() != null)
             vacancyService.updateName(dto.getVacancyId(), dto.getName());
@@ -262,10 +258,9 @@ public class VacancyController {
 
 
     @Operation(summary = "delete stage in vacancy")
-    @DeleteMapping("/deleteStageInVacancy")
-    public ResponseEntity<?> deleteStageInVacancy(@RequestParam UUID stageId,
-                                                  @RequestParam UUID vacancyId){
-        vacancyService.removeStage(vacancyId, stageId);
+    @PostMapping("/deleteStageInVacancy")
+    public ResponseEntity<?> deleteStageInVacancy(@RequestBody DeleteStageInVacancyDto dto){
+        vacancyService.removeStage(dto.getVacancyId(), dto.getStageId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -303,11 +298,25 @@ public class VacancyController {
     }
 
     @Operation(summary = "counting active vacancies")
-    @PostMapping("/countActiveVacancies")
-    public ResponseEntity<Long> countActiveVacancies(){
+    @GetMapping("/countActiveVacancies")
+    public ResponseEntity<?> countActiveVacancies(){
         return ResponseEntity.status(HttpStatus.OK)
-                        .body(vacancyService.getAll().stream()
+                        .body(new CountDto(vacancyService.getAll().stream()
                                 .filter(vac -> vac.getVacancyStatus().equals(VacancyStatus.Opened))
-                                .count());
+                                .count()));
+    }
+
+    @Operation(summary = "delete all vacancies")
+    @PostMapping("/deleteAllVacancies")
+    public ResponseEntity<?> deleteAllVacancies() {
+        vacancyService.deleteAllVacancies();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "delete vacancy")
+    @PostMapping("/deleteVacancy")
+    public ResponseEntity<?> deleteVacancy(@RequestParam UUID vacancyId) {
+        vacancyService.deleteVacancy(vacancyId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

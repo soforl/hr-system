@@ -43,10 +43,10 @@ public class Response {
         this.stageResults = new ArrayList<>();
         this.access = this.vacancy.getStages().stream().map(StageWithAccess::new).collect(Collectors.toList());
     }
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<StageResult> stageResults;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<StageWithAccess> access;
     @Enumerated(EnumType.STRING)
     private ResponseStatus responseStatus;

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.hackathon.sovcombankchallenge.user.models.Role;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 public class UserInfoDto {
@@ -11,4 +13,6 @@ public class UserInfoDto {
     private String name;
     private String phoneNumber;
     private String image_url;
+    private String role;
+    private UUID userId;
 }

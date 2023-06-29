@@ -1,6 +1,7 @@
 package ru.hackathon.sovcombankchallenge.response.service;
 
 import ru.hackathon.sovcombankchallenge.response.dto.StageDtoForUser;
+import ru.hackathon.sovcombankchallenge.response.enumeration.ResponseStatus;
 import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stage.models.TestStage;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ResponseService {
-    void create(UUID candidateId, UUID vacancyId);
+    void create(UUID candidateId, UUID vacancyId) throws Exception;
     List<Response> getAll();
     Response getById(UUID responseId);
     List<StageResult> getResults(UUID responseId);
@@ -21,4 +22,5 @@ public interface ResponseService {
 
     void addStageResult(UUID responseId, UUID stageResultId);
     void openAccess(UUID stageId, UUID responseId);
+    void updateStatus(UUID responseId, ResponseStatus status);
 }

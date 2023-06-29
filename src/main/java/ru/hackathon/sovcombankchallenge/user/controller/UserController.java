@@ -143,12 +143,12 @@ public class UserController {
             )
     })
 //    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getUsersResponses(Authentication authentication){
-        var user = userService.findUserByUsername(authentication.getName());
+    public ResponseEntity<?> getUsersResponses(@RequestParam UUID userId){
+        var user = userService.getById(userId);
         List<Response> userResponses = new ArrayList<>();
         List<ResponseDto> dtos = new ArrayList<>();
         for (Response response: responseService.getAll()) {
-            if (response.getCandidate().getId().equals(user.getId())){
+            if (response.getCandidate().getId().equals(userId)){
                 userResponses.add(response);
             }
         }
@@ -193,7 +193,12 @@ public class UserController {
 //    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getUsersInfo(@RequestParam UUID userId){
         CustomUser customUser = userService.getById(userId);
-        UserInfoDto dto = new UserInfoDto(customUser.getUsername(), customUser.getName(), customUser.getPhoneNumber(), customUser.getImage_url());
+        UserInfoDto dto = new UserInfoDto(customUser.getUsername(),
+                customUser.getName(),
+                customUser.getPhoneNumber(),
+                customUser.getImage_url(),
+                customUser.getRole().getAuthority(),
+                userId);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
@@ -258,7 +263,9 @@ public class UserController {
         var result = msGenreList.stream().map(user -> new UserInfoDto(user.getUsername(),
                 user.getName(),
                 user.getPhoneNumber(),
-                user.getImage_url()))
+                user.getImage_url(),
+                        user.getRole().getAuthority(),
+                        user.getId()))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -282,7 +289,12 @@ public class UserController {
 //    @PreAuthorize("hasAnyRole('HR', 'USER')")
     public ResponseEntity<?> getUserInfo(Authentication authentication) {
         var user = userService.findUserByUsername(authentication.getName());
-        var userInfo = new UserInfoDto(user.getUsername(), user.getName(), user.getPhoneNumber(), user.getImage_url());
+        var userInfo = new UserInfoDto(user.getUsername(),
+                user.getName(),
+                user.getPhoneNumber(),
+                user.getImage_url(),
+                user.getRole().getAuthority(),
+                user.getId());
         return ResponseEntity.ok().body(userInfo);
     }
 
@@ -307,7 +319,9 @@ public class UserController {
         var users = userService.getAll().stream().map(user -> new UserInfoDto(user.getUsername(),
                 user.getName(),
                 user.getPhoneNumber(),
-                user.getImage_url()))
+                user.getImage_url(),
+                        user.getRole().getAuthority(),
+                        user.getId()))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }

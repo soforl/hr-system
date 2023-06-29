@@ -15,6 +15,7 @@ import ru.hackathon.sovcombankchallenge.response.models.Response;
 import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
 import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
+import ru.hackathon.sovcombankchallenge.stage.models.Stage;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.CreateStageResultDto;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.ResultToUserDto;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.StageResultDto;
@@ -25,6 +26,7 @@ import ru.hackathon.sovcombankchallenge.stageResult.repository.StageResultReposi
 import ru.hackathon.sovcombankchallenge.stageResult.service.StageResultService;
 import ru.hackathon.sovcombankchallenge.stageResult.dto.SaveUserAnswersToStageDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
+import ru.hackathon.sovcombankchallenge.vacancy.dto.CountDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
@@ -35,14 +37,18 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/stageResult")
 public class StageResultController {
-    @Autowired
-    private StageResultRepository stageResultRepository;
-    @Autowired
-    private StageResultService stageResultService;
-    @Autowired
-    private VacancyService vacancyService;
-    @Autowired
-    private ResponseService responseService;
+    private final StageResultRepository stageResultRepository;
+    private final StageResultService stageResultService;
+    private final VacancyService vacancyService;
+    private final ResponseService responseService;
+//    private final EmailService emailService;
+
+    public StageResultController(StageResultRepository stageResultRepository, StageResultService stageResultService, VacancyService vacancyService, ResponseService responseService) {
+        this.stageResultRepository = stageResultRepository;
+        this.stageResultService = stageResultService;
+        this.vacancyService = vacancyService;
+        this.responseService = responseService;
+    }
 
     @Operation(summary = "create result for interview")
     @ApiResponses(value = {
@@ -64,9 +70,14 @@ public class StageResultController {
 //    @PreAuthorize("hasRole('HR')")
     public ResponseEntity<?> setInterviewResult(@RequestBody CreateStageResultDto dto){
         try{
-            UUID user = stageResultService.getById(dto.getStageResultId()).getCandidate().getId();
-            StageResult stage = stageResultService.createInterviewResult(dto.getStageResultId(), user, dto.getSummary(), dto.getDate(), dto.getLinkToZoom());
+            CustomUser user = stageResultService.getById(dto.getStageResultId()).getCandidate();
+            StageResult stage = stageResultService.createInterviewResult(dto.getStageResultId(), user.getId(), dto.getSummary(), dto.getDate(), dto.getLinkToZoom());
             responseService.getById(dto.getResponseId()).addStageResult(stage);
+//            Response resp = responseService.getById(dto.getResponseId());
+//            String status = emailService.sendSimpleMail(new EmailDetails(user.getUsername(),
+//                    "Информация о собеседование на вакансию \"" + resp.getVacancy().getName() +"\" обновилась! \n Проверьте в своем личном кабинете.",
+//                    "Обновление информации о собеседовании",
+//                    null));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -189,5 +200,16 @@ public class StageResultController {
         return ResponseEntity.status(HttpStatus.OK).body(msGenreList);
     }
 
+    @GetMapping("/countTestResult")
+    public ResponseEntity<?> countTestResult(@RequestParam UUID stageResultId){
+        StageResult stageResult = stageResultService.getById(stageResultId);
+        Stage stage = stageResult.getStage();
+        int count = 0;
+        if (stageResult instanceof TestStageResult){
+            count = ((TestStageResult) stageResult).countPoints();
+        }
+        CustomUser user = stageResult.getCandidate();
+        return ResponseEntity.status(HttpStatus.OK).body(new CountDto((long) count));
 
+    }
 }

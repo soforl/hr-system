@@ -78,7 +78,9 @@ public class VacancyServiceImpl implements VacancyService{
                                 response.getCandidate().getUsername(),
                                 response.getCandidate().getName(),
                                 response.getCandidate().getPhoneNumber(),
-                                response.getCandidate().getImage_url()))
+                                response.getCandidate().getImage_url(),
+                                response.getCandidate().getRole().getAuthority(),
+                                response.getCandidate().getId()))
                         .creationDate(response.getCreationDate())
                         .stageWithAccessDtos(response.getAccess().stream().map(item ->
                                 new StageWithAccessDto(item.getId(), item.getAccess())).collect(Collectors.toList()))
@@ -154,6 +156,20 @@ public class VacancyServiceImpl implements VacancyService{
     public List<ReturnVacancyDto> returnVacForUser(List<Vacancy> vacancies){
         var result = vacancies.stream().filter(vac -> vac.getVacancyStatus().equals(VacancyStatus.Opened)).toList();
         return this.convertToDtoVacancy(result);
+    }
+    @Override
+    public void deleteAllVacancies(){
+        vacancyRepository.deleteAll();
+    }
+
+    @Override
+    public void deleteVacancy(UUID vacancyId) {
+        vacancyRepository.deleteById(vacancyId);
+    }
+
+    @Override
+    public void save(Vacancy vacancy){
+        vacancyRepository.save(vacancy);
     }
 
 }

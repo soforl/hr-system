@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.cglib.core.Local;
+import ru.hackathon.sovcombankchallenge.stage.enumeration.StageType;
 import ru.hackathon.sovcombankchallenge.stage.models.Question;
 
 import java.time.Duration;
@@ -22,4 +23,5 @@ public class ReturnStageDto {
     private long duration;
     private List<QuestionDto> questions;
     private String comments;
+    private StageType type;
 }

@@ -43,7 +43,7 @@ public class CustomUser implements UserDetails {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.role = role;
-        this.image_url = "https://static.rustore.ru/apk/5503167/content/ICON/585ea7fe-2cea-43e8-8575-5af080a5891c.png";
+        this.image_url = "https://bia-tech.ru/wp-content/uploads/2021/06/BIA-Technologies.png";
     }
 
     public UUID getId() {

@@ -25,15 +25,16 @@ public class Vacancy {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
+    @Column(columnDefinition = "text")
     private String description;
     @Enumerated(EnumType.STRING)
     private VacancyStatus vacancyStatus;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Stage> stages;
     @Enumerated(EnumType.STRING)
     private WorkExperience workExperience;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "vacancy")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "vacancy", cascade = CascadeType.ALL)
     private List<Response> responses;
 
     @Enumerated(EnumType.STRING)
@@ -47,6 +48,7 @@ public class Vacancy {
         this.stages = new ArrayList<>();
         this.workExperience = workExperience;
         this.sphere = sphere;
+        this.responses = new ArrayList<>();
     }
 
 //    public List<StageResultDto> convertToDto(){
