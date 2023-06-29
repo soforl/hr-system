@@ -62,7 +62,7 @@ public class UserService implements UserDetailsService {
     public CustomUser createUser(String username, String password, String name, String phoneNumber, String roleName)
             throws Exception {
         var role = roleRepository.getRoleByName(roleName);
-        if(role == null){
+        if (role == null){
             role = new Role(roleName);
             roleRepository.save(role);
         }
