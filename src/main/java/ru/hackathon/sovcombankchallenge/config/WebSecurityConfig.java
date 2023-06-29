@@ -35,15 +35,10 @@ public class WebSecurityConfig {
                         // Доступ к контроллеру User
                         .requestMatchers("/api/user/registrationUser", "/api/user/registrationHR").permitAll()
 
-                        // For Response
+                        // HR
                         .requestMatchers(
                                 "/api/response/countActiveResponses",
                                 "/api/response/responseSpecification").hasRole("HR")
-                        .requestMatchers(
-                                "/api/response/countActiveResponses").hasRole("USER")
-                        .requestMatchers(
-                                "/api/response/getResponseStatus").hasAnyRole("HR", "USER")
-                        // For Vacancy
                         .requestMatchers(
                                 "/api/vacancy/createVacancy",
                                 "/api/vacancy/allVacanciesForHR",
@@ -53,48 +48,54 @@ public class WebSecurityConfig {
                                 "/api/vacancy/updateVacancyInfo",
                                 "/api/vacancy/deleteStageInVacancy",
                                 "/api/vacancy/countActiveVacancies").hasRole("HR")
-
-                        .requestMatchers(
-                                "/api/vacancy/allVacanciesForUser").hasRole("USER")
-
-                        .requestMatchers(
-                                "/api/vacancy/getVacancyInfo",
-                                "/api/vacancy/getVacancyStages",
-                                "/api/vacancy/vacancySpecification").hasAnyRole("USER", "HR")
-                        // For User
                         .requestMatchers(
                                 "/api/userInfo/userSpecification",
                                 "/api/userInfo/allUsers").hasRole("HR")
-
-                        .requestMatchers(
-                                "/api/userInfo/createResponseForUser",
-                                "/api/userInfo/getUsersResponses",
-                                "/api/userInfo/getUsersChallenges").hasRole("User")
-
-                        .requestMatchers(
-                                "/api/userInfo/changePhoneNumber",
-                                "/api/userInfo/changeEmail",
-                                "/api/userInfo/getUsersInfo",
-                                "/api/userInfo/getUserInformation").hasAnyRole("USER", "HR")
-                        // For StageResult
                         .requestMatchers(
                                 "/api/stageResult/setInterviewResult",
                                 "/api/stageResult/stageResultSpecification").hasRole("HR")
-                        .requestMatchers(
-                                "/api/stageResult/saveUserAnswersToStage").hasRole("USER")
-                        .requestMatchers(
-                                "/api/stageResult/getTestResult").hasAnyRole("USER", "HR")
-                        // For Stage
+
                         .requestMatchers(
                                 "/api/stage/createTestStageInVacancy",
                                 "/api/stage/createInterviewStageInVacancy",
                                 "/api/stage/addTask/open",
                                 "/api/stage/addTask/close",
                                 "/api/stage/stageSpecification").hasRole("HR")
+
+                        // User
+
+                        .requestMatchers(
+                                "/api/response/countActiveResponses").hasRole("USER")
+                        .requestMatchers(
+                                "/api/vacancy/allVacanciesForUser").hasRole("USER")
+                        .requestMatchers(
+                                "/api/userInfo/createResponseForUser",
+                                "/api/userInfo/getUsersResponses",
+                                "/api/userInfo/getUsersChallenges").hasRole("User")
+                        .requestMatchers(
+                                "/api/stageResult/saveUserAnswersToStage").hasRole("USER")
+
+
+
+
+                        // HR & User
+                        .requestMatchers(
+                                "/api/response/getResponseStatus").hasAnyRole("HR", "USER")
+                        .requestMatchers(
+                                "/api/vacancy/getVacancyInfo",
+                                "/api/vacancy/getVacancyStages",
+                                "/api/vacancy/vacancySpecification").hasAnyRole("USER", "HR")
+                        .requestMatchers(
+                                "/api/userInfo/changePhoneNumber",
+                                "/api/userInfo/changeEmail",
+                                "/api/userInfo/getUsersInfo",
+                                "/api/userInfo/getUserInformation").hasAnyRole("USER", "HR")
+                        .requestMatchers(
+                                "/api/stageResult/getTestResult").hasAnyRole("USER", "HR")
+
                         .requestMatchers(
                                 "/api/stage/getQuestionsForCertainStage",
                                 "/api/stage/getStageById").hasAnyRole("USER", "HR")
-                        // For
                         .anyRequest().permitAll()
 
                 )
