@@ -69,7 +69,7 @@ public class StageServiceImpl implements StageService{
     }
 
     @Override
-    public ReturnStageDto convertToStageDto(Stage stage) {
+    public ReturnStageDto convertToStageDto(Stage stage, String role) {
         ReturnStageDto dto = null;
         if (stage instanceof TestStage) {
             var questions = new ArrayList<QuestionDto>();
@@ -82,16 +82,30 @@ public class StageServiceImpl implements StageService{
                                     .type("Open")
                                     .build());
                         else if (q instanceof CloseQuestion)
-                            questions.add(QuestionDto.builder()
-                                    .question(q.getText())
-                                    .id(q.getId())
-                                    .type("Close")
-                                    .var1(((CloseQuestion) q).getVar1())
-                                    .var2(((CloseQuestion) q).getVar2())
-                                    .var3(((CloseQuestion) q).getVar3())
-                                    .var4(((CloseQuestion) q).getVar4())
-                                    .rightChoose(((CloseQuestion) q).getRightChoose())
-                                    .build());
+                            if(role.equals("HR")){
+                                questions.add(QuestionDto.builder()
+                                        .question(q.getText())
+                                        .id(q.getId())
+                                        .type("Close")
+                                        .var1(((CloseQuestion) q).getVar1())
+                                        .var2(((CloseQuestion) q).getVar2())
+                                        .var3(((CloseQuestion) q).getVar3())
+                                        .var4(((CloseQuestion) q).getVar4())
+                                        .rightChoose(((CloseQuestion) q).getRightChoose())
+                                        .build());
+                            }
+                            else{
+                                questions.add(QuestionDto.builder()
+                                        .question(q.getText())
+                                        .id(q.getId())
+                                        .type("Close")
+                                        .var1(((CloseQuestion) q).getVar1())
+                                        .var2(((CloseQuestion) q).getVar2())
+                                        .var3(((CloseQuestion) q).getVar3())
+                                        .var4(((CloseQuestion) q).getVar4())
+                                        .build());
+                            }
+
                     });
             dto = buildReturnStageDto(stage, questions);
         } else if (stage instanceof Interview) {
@@ -113,41 +127,6 @@ public class StageServiceImpl implements StageService{
 
 //    public void saveStageResults(UUID stageId, List<Answer> answers, UUID responseId){
 //        stageRepository.findById(stageId)
-//    }
-
-//    @Override
-//    public ReturnStageDto convertToStageDtoForUser(Stage stage) {
-//        ReturnStageDto dto = null;
-//        if (stage instanceof TestStage) {
-//            var questions = new ArrayList<QuestionDto>();
-//            ((TestStage) stage).getQuestions()
-//                    .forEach(q -> {
-//                        if (q instanceof OpenQuestion)
-//                            questions.add(QuestionDto.builder()
-//                                    .question(q.getText())
-//                                    .id(q.getId())
-//                                    .type("Open")
-//                                    .build());
-//                        else if (q instanceof CloseQuestion)
-//                            questions.add(QuestionDto.builder()
-//                                    .question(q.getText())
-//                                    .id(q.getId())
-//                                    .type("Close")
-//                                    .var1(((CloseQuestion) q).getVar1())
-//                                    .var2(((CloseQuestion) q).getVar2())
-//                                    .var3(((CloseQuestion) q).getVar3())
-//                                    .var4(((CloseQuestion) q).getVar4())
-//                                    .build());
-//                    });
-//            dto = buildReturnStageDto(stage, questions);
-//        } else if (stage instanceof Interview) {
-//            dto = ReturnStageDto.builder()
-//                    .id(stage.getId())
-//                    .stageName(stage.getName())
-//                    .comments(((Interview) stage).getComments())
-//                    .build();
-//        }
-//        return dto;
 //    }
 
     private ReturnStageDto buildReturnStageDto(Stage stage, ArrayList<QuestionDto> questions) {

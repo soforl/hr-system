@@ -16,7 +16,7 @@ public interface StageService {
     void addQuestion(UUID stageId, UUID questionId);
     List<Question> getQuestions(UUID stageId);
     Stage getById(UUID stageId);
-    ReturnStageDto convertToStageDto(Stage stage);
+    ReturnStageDto convertToStageDto(Stage stage, String role);
     void deleteQuestionFromStage(UUID question, UUID stage);
     Stage saveTestInfo(UUID stageId, LocalDateTime deadline, Long duration_sec, String stageName);
 }

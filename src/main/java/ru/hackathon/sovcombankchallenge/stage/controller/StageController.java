@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.apache.tomcat.websocket.MessageHandlerResultType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +17,13 @@ import ru.hackathon.sovcombankchallenge.stage.repository.StageRepository;
 import ru.hackathon.sovcombankchallenge.stage.service.QuestionService;
 import ru.hackathon.sovcombankchallenge.stage.service.StageService;
 import ru.hackathon.sovcombankchallenge.stage.task.dto.*;
-import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
+import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
+import ru.hackathon.sovcombankchallenge.user.service.UserService;
 import ru.hackathon.sovcombankchallenge.vacancy.models.Vacancy;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/stage")
@@ -35,13 +32,15 @@ public class StageController {
     private final StageService stageService;
     private final VacancyService vacancyService;
     private final QuestionService questionService;
+    private final UserService userService;
 
     @Autowired
-    public StageController(StageRepository stageRepository, StageService stageService, VacancyService vacancyService, QuestionService questionService) {
+    public StageController(StageRepository stageRepository, StageService stageService, VacancyService vacancyService, QuestionService questionService, UserService userService) {
         this.stageRepository = stageRepository;
         this.stageService = stageService;
         this.vacancyService = vacancyService;
         this.questionService = questionService;
+        this.userService = userService;
     }
 
     @Operation(summary = "add test stage to vacancy")
@@ -160,12 +159,13 @@ public class StageController {
                     description = "Bad Request"
             )
     })
-    @GetMapping("/getStageById")
+    @PostMapping("/getStageById")
 //    @PreAuthorize("hasRole('HR')")
-    public ResponseEntity<?> getStageById(@RequestParam UUID stageId){
-        Stage stage = stageService.getById(stageId);
-        ReturnStageDto dto = stageService.convertToStageDto(stage);
-        return ResponseEntity.status(HttpStatus.OK).body(dto);
+    public ResponseEntity<?> getStageById(@RequestBody StageQuestionsDto dto){
+        CustomUser user = userService.getById(dto.getUserId());
+        Stage stage = stageService.getById(dto.getStageId());
+        ReturnStageDto returnDto = stageService.convertToStageDto(stage, user.getRole().getAuthority());
+        return ResponseEntity.status(HttpStatus.OK).body(returnDto);
     } // todo throw exception
     // TODO: make method save all
 
@@ -186,39 +186,40 @@ public class StageController {
                     description = "Bad Request"
             )
     })
-    @GetMapping("/getQuestionsForCertainStage")
-    public ResponseEntity<?> getQuestionsForCertainStage(@RequestParam UUID stageId){
-        Stage stage = stageService.getById(stageId);
-        ReturnStageDto dto = stageService.convertToStageDto(stage);
-        return ResponseEntity.status(HttpStatus.OK).body(dto.getQuestions());
+    @PostMapping("/getQuestionsForCertainStage")
+    public ResponseEntity<?> getQuestionsForCertainStage(@RequestBody StageQuestionsDto dto){
+        CustomUser user= userService.getById(dto.getUserId());
+        Stage stage = stageService.getById(dto.getStageId());
+        ReturnStageDto returnDto = stageService.convertToStageDto(stage, user.getRole().getAuthority());
+        return ResponseEntity.status(HttpStatus.OK).body(returnDto.getQuestions());
     }
 
-    @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Result was found",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = Stage.class)))
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Bad Request"
-            )
-    })
-    @PostMapping("/stageSpecification")
-//    @PreAuthorize("hasRole('HR')")
-    public ResponseEntity<?> specification(@RequestBody List<SearchCriteria> searchCriteria) {
-        CustomSpecification<Stage> stageSpecification = new CustomSpecification<>();
-        searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(stageSpecification::add);
-        searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(stageSpecification::add);
-        List<Stage> msGenreList = stageRepository.findAll(stageSpecification);
-        var result = msGenreList.stream().map(stageService::convertToStageDto);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
-    }
+//    @Operation(summary = "if u use enum, then use LIKE or it won't work =) ")
+//    @ApiResponses(value = {
+//            @ApiResponse(
+//                    responseCode = "200",
+//                    description = "Result was found",
+//                    content = {
+//                            @Content(
+//                                    mediaType = "application/json",
+//                                    array = @ArraySchema(schema = @Schema(implementation = Stage.class)))
+//                    }
+//            ),
+//            @ApiResponse(
+//                    responseCode = "400",
+//                    description = "Bad Request"
+//            )
+//    })
+//    @PostMapping("/stageSpecification")
+////    @PreAuthorize("hasRole('HR')")
+//    public ResponseEntity<?> specification(@RequestBody List<SearchCriteria> searchCriteria) {
+//        CustomSpecification<Stage> stageSpecification = new CustomSpecification<>();
+//        searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(stageSpecification::add);
+//        searchCriteria.stream().map(searchCriterion -> new SearchCriteria(searchCriterion.getKey(), searchCriterion.getValue(), searchCriterion.getOperation())).forEach(stageSpecification::add);
+//        List<Stage> msGenreList = stageRepository.findAll(stageSpecification);
+//        var result = msGenreList.stream().map(stageService::convertToStageDto);
+//        return ResponseEntity.status(HttpStatus.OK).body(result);
+//    }
 
     @PostMapping("/saveAllTestInfo")
     public ResponseEntity<?> saveAllTestInfo(@RequestBody StageDto dto){
