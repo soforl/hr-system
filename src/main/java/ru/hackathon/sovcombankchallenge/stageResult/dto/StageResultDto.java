@@ -22,4 +22,5 @@ public class StageResultDto {
     private String summary;
     private LocalDate date;
     private String linkToZoom;
+    private List<String> questions;
 }

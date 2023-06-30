@@ -16,15 +16,12 @@ import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
 import ru.hackathon.sovcombankchallenge.specificationInfo.CustomSpecification;
 import ru.hackathon.sovcombankchallenge.specificationInfo.SearchCriteria;
 import ru.hackathon.sovcombankchallenge.stage.models.Stage;
-import ru.hackathon.sovcombankchallenge.stageResult.dto.CreateStageResultDto;
-import ru.hackathon.sovcombankchallenge.stageResult.dto.ResultToUserDto;
-import ru.hackathon.sovcombankchallenge.stageResult.dto.StageResultDto;
+import ru.hackathon.sovcombankchallenge.stageResult.dto.*;
 import ru.hackathon.sovcombankchallenge.stageResult.models.InterviewResult;
 import ru.hackathon.sovcombankchallenge.stageResult.models.StageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.models.TestStageResult;
 import ru.hackathon.sovcombankchallenge.stageResult.repository.StageResultRepository;
 import ru.hackathon.sovcombankchallenge.stageResult.service.StageResultService;
-import ru.hackathon.sovcombankchallenge.stageResult.dto.SaveUserAnswersToStageDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.CountDto;
 import ru.hackathon.sovcombankchallenge.vacancy.dto.ReturnVacancyDto;
@@ -71,8 +68,7 @@ public class StageResultController {
     public ResponseEntity<?> setInterviewResult(@RequestBody CreateStageResultDto dto){
         try{
             CustomUser user = stageResultService.getById(dto.getStageResultId()).getCandidate();
-            StageResult stage = stageResultService.createInterviewResult(dto.getStageResultId(), user.getId(), dto.getSummary(), dto.getDate(), dto.getLinkToZoom());
-            responseService.getById(dto.getResponseId()).addStageResult(stage);
+            stageResultService.createInterviewResult(dto.getStageResultId(), user.getId(), dto.getSummary(), dto.getDate(), dto.getLinkToZoom(), dto.getResponseId());
 //            Response resp = responseService.getById(dto.getResponseId());
 //            String status = emailService.sendSimpleMail(new EmailDetails(user.getUsername(),
 //                    "Информация о собеседование на вакансию \"" + resp.getVacancy().getName() +"\" обновилась! \n Проверьте в своем личном кабинете.",
@@ -119,7 +115,7 @@ public class StageResultController {
             )
     })
     public ResponseEntity<?> saveUserAnswersToStage(@RequestBody SaveUserAnswersToStageDto dto){
-        stageResultService.createTestStageResult(dto.getStageId(), dto.getCustomerId(), dto.getAnswers());
+        stageResultService.createTestStageResult(dto.getStageId(), dto.getCustomerId(), dto.getAnswers(), dto.getResponseId());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -141,9 +137,10 @@ public class StageResultController {
             )
     })
     @PostMapping("/getTestResult")
-    public ResponseEntity<?> getTestResult(@RequestParam UUID responseId){
-        return ResponseEntity.status(HttpStatus.OK).body(responseService.getById(responseId)
-                .getStageResults().stream().map(stageResultService::convertToStageResultDto));
+    public ResponseEntity<?> getTestResult(@RequestBody TestResultDto dto){
+        Response response = responseService.getById(dto.getResponseId());
+        StageResult result = response.getStageResults().stream().filter(res -> res.getStage().getId().equals(dto.getStageId())).toList().get(0);
+        return ResponseEntity.status(HttpStatus.OK).body(stageResultService.convertToStageResultDto(result));
     }
 
 //    @Operation(summary = "give to User result of all tests: offer or else")

@@ -35,7 +35,6 @@ public class ResponseServiceImpl implements ResponseService{
     private final StageWithAccessRepository stageWithAccessRepository;
     private final UserService userService;
     private final VacancyService vacancyService;
-    private final StageResultService stageResultService;
     private final StageService stageService;
 
     @Override
@@ -107,9 +106,8 @@ public class ResponseServiceImpl implements ResponseService{
     }
 
     @Override
-    public void addStageResult(UUID responseId, UUID stageResultId) {
+    public void addStageResult(UUID responseId, StageResult stageResult) {
         Response response = this.getById(responseId);
-        StageResult stageResult = stageResultService.getById(stageResultId);
         var results = response.getStageResults();
         results.add(stageResult);
         response.setStageResults(results);
