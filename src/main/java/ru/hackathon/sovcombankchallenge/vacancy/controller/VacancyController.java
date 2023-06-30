@@ -104,7 +104,7 @@ public class VacancyController {
             )
     })
     @GetMapping("/allVacanciesForUser")
-    @PreAuthorize("hasRole('ROLE_USER')")
+//    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<?> getAllVacanciesForUser(){
         return ResponseEntity.status(HttpStatus.OK).body(vacancyService.returnVacForUser(vacancyService.getAll()));
     }
