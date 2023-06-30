@@ -2,6 +2,7 @@ package ru.hackathon.sovcombankchallenge.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -34,6 +35,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**" ).permitAll()
                         // Доступ к контроллеру User
                         .requestMatchers("/api/user/registrationUser", "/api/user/registrationHR").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/vacancy/allVacanciesForUser").hasRole("USER")
 
 //                        // HR
 //                        .requestMatchers(
