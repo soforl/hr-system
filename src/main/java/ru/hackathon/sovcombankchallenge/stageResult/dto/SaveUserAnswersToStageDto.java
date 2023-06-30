@@ -13,4 +13,5 @@ public class SaveUserAnswersToStageDto {
     private UUID stageId;
     private UUID customerId;
     private List<String> answers;
+    private UUID responseId;
 }

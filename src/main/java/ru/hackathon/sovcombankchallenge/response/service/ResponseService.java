@@ -20,7 +20,7 @@ public interface ResponseService {
 
     List<StageDtoForUser> convertToStageDto(List<Stage> stages);
 
-    void addStageResult(UUID responseId, UUID stageResultId);
+    void addStageResult(UUID responseId, StageResult stageResult);
     void openAccess(UUID stageId, UUID responseId);
     void updateStatus(UUID responseId, ResponseStatus status);
 }

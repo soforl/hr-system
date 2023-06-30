@@ -2,6 +2,7 @@ package ru.hackathon.sovcombankchallenge.stageResult.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.hackathon.sovcombankchallenge.response.service.ResponseService;
 import ru.hackathon.sovcombankchallenge.stage.models.*;
 import ru.hackathon.sovcombankchallenge.stage.service.StageService;
 import ru.hackathon.sovcombankchallenge.stage.task.dto.QuestionDto;
@@ -29,22 +30,25 @@ public class StageResultServiceImpl implements StageResultService{
     private final StageResultRepository stageResultRepository;
     private final StageService stageService;
     private final UserService userService;
+    private final ResponseService responseService;
 
 
     @Override
-    public void createTestStageResult(UUID stageId, UUID userId, List<String> answers) {
+    public void createTestStageResult(UUID stageId, UUID userId, List<String> answers, UUID responseId) {
         Stage stage = stageService.getById(stageId);
         CustomUser user = userService.getById(userId);
         TestStageResult result = new TestStageResult(stage, user, answers);
-        stageResultRepository.save(result);
+        StageResult res = stageResultRepository.save(result);
+        responseService.addStageResult(responseId, res);
     }
 
     @Override
-    public StageResult createInterviewResult(UUID stageId, UUID userId, String summary, LocalDate date, String linkToZoom) {
+    public void createInterviewResult(UUID stageId, UUID userId, String summary, LocalDate date, String linkToZoom, UUID responseId) {
         Stage stage = stageService.getById(stageId);
         CustomUser user = userService.getById(userId);
         InterviewResult interviewResult = new InterviewResult(stage, user, summary, date, linkToZoom);
-        return stageResultRepository.save(interviewResult);
+        StageResult result = stageResultRepository.save(interviewResult);
+        responseService.addStageResult(responseId, result);
     }
 
     @Override
@@ -61,7 +65,7 @@ public class StageResultServiceImpl implements StageResultService{
     @Override
     public StageResultDto convertToStageResultDto(StageResult result) {
         StageResultDto dto = null;
-        if (result instanceof TestStageResult) {
+        if (result instanceof TestStageResult && result.getStage() instanceof TestStage) {
             dto = StageResultDto.builder()
                     .stage(result.getStage().getId())
                     .stageName(result.getStage().getName())
@@ -74,6 +78,7 @@ public class StageResultServiceImpl implements StageResultService{
                     )
                     .answers(((TestStageResult) result).getAnswers())
                     .points(((TestStageResult) result).getPoints())
+                    .questions(((TestStage) result.getStage()).getQuestions().stream().map(Question::getText).toList())
                     .build();
         } else if (result instanceof InterviewResult) {
             dto = StageResultDto.builder()
