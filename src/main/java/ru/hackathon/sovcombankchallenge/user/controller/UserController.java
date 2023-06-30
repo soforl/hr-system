@@ -29,6 +29,7 @@ import ru.hackathon.sovcombankchallenge.user.dto.UserInfoDto;
 import ru.hackathon.sovcombankchallenge.user.models.CustomUser;
 import ru.hackathon.sovcombankchallenge.user.repository.UserRepository;
 import ru.hackathon.sovcombankchallenge.user.service.UserService;
+import ru.hackathon.sovcombankchallenge.vacancy.enumeration.VacancyStatus;
 import ru.hackathon.sovcombankchallenge.vacancy.service.VacancyService;
 
 import java.util.ArrayList;
@@ -148,7 +149,7 @@ public class UserController {
         List<Response> userResponses = new ArrayList<>();
         List<ResponseDto> dtos = new ArrayList<>();
         for (Response response: responseService.getAll()) {
-            if (response.getCandidate().getId().equals(userId)){
+            if (response.getCandidate().getId().equals(userId) && response.getVacancy().getVacancyStatus().equals(VacancyStatus.Opened)){
                 userResponses.add(response);
             }
         }
