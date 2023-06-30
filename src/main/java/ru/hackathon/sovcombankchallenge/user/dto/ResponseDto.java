@@ -26,5 +26,5 @@ public class ResponseDto {
     private List<StageDtoForUser> stages;
     private List<StageWithAccessDto> stageWithAccessDtos;
     private List<StageResultForVacDto> results;
-
+    private UUID responseId;
 }
