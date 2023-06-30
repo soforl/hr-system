@@ -197,7 +197,7 @@ public class StageResultController {
         return ResponseEntity.status(HttpStatus.OK).body(msGenreList);
     }
 
-    @GetMapping("/countTestResult")
+    @PostMapping("/countTestResult")
     public ResponseEntity<?> countTestResult(@RequestBody TestResultDto dto){
         Response response = responseService.getById(dto.getResponseId());
         StageResult result = response.getStageResults().stream().filter(res -> res.getStage().getId().equals(dto.getStageId())).toList().get(0);
