@@ -162,11 +162,12 @@ public class UserController {
 
             dtos.add(ResponseDto.builder()
                             .responseStatus(response.getResponseStatus())
-                                    .creationDate(response.getCreationDate())
-                                            .stages(stageDtoForUsers)
-                                                    .vacancyId(response.getVacancy().getId())
-                                                            .vacancyName(response.getVacancy().getName())
-                                                                    .build()
+                            .creationDate(response.getCreationDate())
+                            .stages(stageDtoForUsers)
+                            .vacancyId(response.getVacancy().getId())
+                            .vacancyName(response.getVacancy().getName())
+                            .responseId(response.getId())
+                            .build()
                     );
         }
 
