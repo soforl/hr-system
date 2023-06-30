@@ -198,14 +198,13 @@ public class StageResultController {
     }
 
     @GetMapping("/countTestResult")
-    public ResponseEntity<?> countTestResult(@RequestParam UUID stageResultId){
-        StageResult stageResult = stageResultService.getById(stageResultId);
-        Stage stage = stageResult.getStage();
+    public ResponseEntity<?> countTestResult(@RequestBody TestResultDto dto){
+        Response response = responseService.getById(dto.getResponseId());
+        StageResult result = response.getStageResults().stream().filter(res -> res.getStage().getId().equals(dto.getStageId())).toList().get(0);
         int count = 0;
-        if (stageResult instanceof TestStageResult){
-            count = ((TestStageResult) stageResult).countPoints();
+        if (result instanceof TestStageResult){
+            count = ((TestStageResult) result).countPoints();
         }
-        CustomUser user = stageResult.getCandidate();
         return ResponseEntity.status(HttpStatus.OK).body(new CountDto((long) count));
 
     }
