@@ -66,7 +66,6 @@ public class UserService implements UserDetailsService {
         var role = roleRepository.getRoleByName(roleName);
         if (role == null){
             role = new Role(roleName);
-            var grantedAuthority = new SimpleGrantedAuthority(roleName);
             roleRepository.save(role);
         }
         if (checkingUser(username)) {
