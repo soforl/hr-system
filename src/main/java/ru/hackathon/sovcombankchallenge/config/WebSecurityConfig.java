@@ -35,6 +35,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**" ).permitAll()
                         // Доступ к контроллеру User
                         .requestMatchers("/api/user/registrationUser", "/api/user/registrationHR").permitAll()
+                        .requestMatchers("/api/vacancy/allVacanciesForHR").hasRole("HR")
 
 //                        // HR
 //                        .requestMatchers(

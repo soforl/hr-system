@@ -1,5 +1,7 @@
 package ru.hackathon.sovcombankchallenge.user.service;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -64,6 +66,7 @@ public class UserService implements UserDetailsService {
         var role = roleRepository.getRoleByName(roleName);
         if (role == null){
             role = new Role(roleName);
+            var grantedAuthority = new SimpleGrantedAuthority(roleName);
             roleRepository.save(role);
         }
         if (checkingUser(username)) {
