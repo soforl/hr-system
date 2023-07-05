@@ -56,7 +56,7 @@ public class VacancyController {
             )
     })
     @PostMapping("/createVacancy")
-    @RolesAllowed("HR")
+//    @RolesAllowed("HR")
     public ResponseEntity<?> createVacancy(@RequestBody CreateVacancyDto dto) {
         try {
             vacancyService.create(dto.getName(), dto.getDescription(), dto.getVacancyStatus(), dto.getWorkExperience(), dto.getSphere());

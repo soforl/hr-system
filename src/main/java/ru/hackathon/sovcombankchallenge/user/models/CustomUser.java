@@ -91,8 +91,7 @@ public class CustomUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        var authority = new SimpleGrantedAuthority(role.getName());
-		return Collections.singleton(authority);
+        return role.getAuthorities();
     }
 
     @Override
